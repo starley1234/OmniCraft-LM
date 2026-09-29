@@ -32,11 +32,12 @@ def chamfer_distance_masked(
 ) -> torch.Tensor:
     """Symmetric Chamfer distance; GT rows dropped by ``target_mask`` never contribute."""
     distances = torch.cdist(predicted.float(), target.float())  # (B, P, T)
-    invalid = ~target_mask
-    distances = distances.masked_fill(invalid.unsqueeze(1), float("inf"))
+    distances = distances.masked_fill(~target_mask.unsqueeze(1), float("inf"))
     pred_to_gt = distances.amin(dim=2).mean(dim=1)  # every prediction pulls to the cloud
     gt_to_pred = distances.amin(dim=1)  # every GT node is covered
-    gt_to_pred = (gt_to_pred * target_mask).sum(dim=1) / target_mask.sum(dim=1).clamp_min(1)
+    # masked_fill (not mask multiplication): inf * 0 would be NaN.
+    gt_to_pred = gt_to_pred.masked_fill(~target_mask, 0.0)
+    gt_to_pred = gt_to_pred.sum(dim=1) / target_mask.sum(dim=1).clamp_min(1)
     return (pred_to_gt + gt_to_pred).mean()
 
 

@@ -52,7 +52,7 @@ SPATIAL_TOKENS: dict[str, str] = {
 @dataclass(slots=True)
 class TrainerConfig:
     layer: str
-    data: Path
+    data: Path | None = None  # required by train(); not needed for inference shells
     backbone_dir: Path = Path("checkpoints") / "baseline_qwen35_2b"
     zero_point_dir: Path = Path("checkpoints") / "zero_point"
     output_dir: Path = Path("checkpoints")
@@ -100,6 +100,7 @@ class SpatialTrainer:
         self.hook.attach_to_backbone(self.backbone)
         set_active_adapter(self.backbone, config.layer)
         freeze_inactive_adapters(self.backbone, config.layer)
+        self._thaw_spatial_token_rows(self.backbone)
         self.optimizer = torch.optim.AdamW(
             self._trainable_parameters(), lr=config.lr, weight_decay=config.weight_decay
         )
@@ -135,9 +136,11 @@ class SpatialTrainer:
             backbone_dir, dtype=self.dtype, local_files_only=True
         )
         old_vocab = int(model.get_input_embeddings().weight.shape[0])
-        target_vocab = len(self.tokenizer)
-        if target_vocab > old_vocab:
-            model.resize_token_embeddings(target_vocab)
+        needed_vocab = max(
+            int(self.tokenizer.convert_tokens_to_ids(token)) for token in SPATIAL_TOKENS.values()
+        ) + 1
+        if needed_vocab > old_vocab:
+            model.resize_token_embeddings(needed_vocab)
         model.to(device=self.device, dtype=self.dtype)
         freeze_module(model)
         model = attach_lora_adapters(model, layers=(self.config.layer,), seed=self.zero_point.seed)
@@ -145,17 +148,19 @@ class SpatialTrainer:
         if self.config.gradient_checkpointing:
             model.gradient_checkpointing_enable()
             model.enable_input_require_grads()
-        self._thaw_new_embedding_rows(model, old_vocab)
         return model, old_vocab
 
-    def _thaw_new_embedding_rows(self, model: nn.Module, old_vocab: int) -> None:
-        """Only token rows added for ``<|spatial_*|>`` learn; the base vocab stays frozen."""
+    def _thaw_spatial_token_rows(self, model: nn.Module) -> None:
+        """Only the ``<|spatial_*|>`` embedding rows learn; the base vocab stays frozen."""
         weight = model.get_input_embeddings().weight
-        if weight.shape[0] <= old_vocab:
-            raise RuntimeError("spatial token rows were not added to the embedding matrix")
+        token_ids = [
+            int(self.tokenizer.convert_tokens_to_ids(token)) for token in SPATIAL_TOKENS.values()
+        ]
+        if max(token_ids) >= weight.shape[0]:
+            raise RuntimeError("spatial token rows are missing from the embedding matrix")
         weight.requires_grad_(True)
         row_mask = torch.zeros_like(weight, dtype=torch.float32)
-        row_mask[old_vocab:] = 1.0
+        row_mask[token_ids] = 1.0
 
         def _mask_gradient(gradient: torch.Tensor) -> torch.Tensor:
             return gradient * row_mask.to(device=gradient.device, dtype=gradient.dtype)
@@ -171,8 +176,13 @@ class SpatialTrainer:
         return stack
 
     def _trainable_parameters(self) -> list[nn.Parameter]:
-        return self.stack.trainable_parameters(self.config.layer) + adapter_parameters(
-            self.backbone, self.config.layer
+        # The shared embedding weight appears once; its gradient is row-masked
+        # down to the <|spatial_*|> rows by the hook registered in __init__.
+        embedding_weight = self.backbone.get_input_embeddings().weight
+        return (
+            self.stack.trainable_parameters(self.config.layer)
+            + adapter_parameters(self.backbone, self.config.layer)
+            + [embedding_weight]
         )
 
     # ------------------------------------------------------------- sequences
@@ -266,6 +276,8 @@ class SpatialTrainer:
         return lm_loss, aux
 
     def train(self) -> list[dict[str, float]]:
+        if self.config.data is None or not Path(self.config.data).is_file():
+            raise ValueError(f"training data not found: {self.config.data}")
         dataset = CADJsonlDataset(
             Path(self.config.data),
             tokenizer=None,
@@ -287,8 +299,8 @@ class SpatialTrainer:
                 lm_loss, aux = self.forward_loss(sample)
                 total = (lm_loss + self.config.lambda_geom * aux) / self.config.accumulate
                 total.backward()
-                step_lm += float(lm_loss)
-                step_aux += float(aux)
+                step_lm += float(lm_loss.detach())
+                step_aux += float(aux.detach())
             torch.nn.utils.clip_grad_norm_(
                 [p for p in self._trainable_parameters() if p.grad is not None],
                 self.config.grad_clip,
@@ -344,14 +356,40 @@ class SpatialTrainer:
         return layer_dir
 
     def rollback(self) -> None:
-        """Restore the stack to the zero point, recreate the adapter, reset the optimizer."""
-        load_zero_point(self.stack, self.config.zero_point_dir)
-        self.stack.to(device=self.device, dtype=self.dtype)
+        """Restore the stack to the zero point, recreate the adapter, reset the optimizer.
+
+        The stack is rebuilt in fp32 and swapped in whole: loading fp32 anchors
+        into bf16 modules in place would silently round the restored weights.
+        """
+        self.stack = self._load_verified_stack()
         self._reset_adapter()
         self.optimizer = torch.optim.AdamW(
             self._trainable_parameters(), lr=self.config.lr, weight_decay=self.config.weight_decay
         )
         self.history.clear()
+
+    def load_trained_checkpoint(self, layer_dir: Path) -> None:
+        """Load artifacts saved by :meth:`save` for inference or resumption."""
+        layer_dir = Path(layer_dir)
+        bundle = self.stack.bundles[self.config.layer]
+        for submodule_name in SUBMODULE_NAMES:
+            target = layer_dir / f"{submodule_name}.pt"
+            if not target.is_file():
+                raise FileNotFoundError(f"checkpoint file missing: {target}")
+            state = torch.load(target, map_location="cpu", weights_only=True)
+            getattr(bundle, submodule_name).load_state_dict(state, strict=True)
+        self.stack.to(device=self.device, dtype=self.dtype)
+        lora_dir = layer_dir / "lora"
+        if lora_dir.is_dir():
+            load_adapter = getattr(self.backbone, "load_adapter", None)
+            if load_adapter is None:
+                raise TypeError("backbone is not PEFT-wrapped; cannot load a trained adapter")
+            trained_name = adapter_name(self.config.layer) + "_trained"
+            existing = getattr(self.backbone, "peft_config", {})
+            if trained_name in existing:
+                self.backbone.delete_adapter(trained_name)
+            self.backbone.load_adapter(lora_dir, adapter_name=trained_name)
+            self.backbone.set_adapter(trained_name)
 
     def _reset_adapter(self) -> None:
         """Drop the trained adapter and recreate it (lora_B = 0 → gradient identity)."""

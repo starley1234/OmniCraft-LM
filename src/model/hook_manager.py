@@ -66,23 +66,27 @@ class SpatialHookManager:
         )
 
     def _search_decoder_layers(self, backbone: nn.Module) -> nn.ModuleList | None:
-        """Breadth-first search for the transformer decoder's ModuleList."""
-        best: nn.ModuleList | None = None
-        queue: list[nn.Module] = [backbone]
-        visited: set[int] = set()
-        while queue:
-            module = queue.pop(0)
-            if id(module) in visited:
+        """Find the text decoder's ModuleList; never confuse it with a vision tower.
+
+        Multimodal shells expose several attention block lists side by side
+        (e.g. ``visual.blocks`` next to ``language_model.layers``). Candidates
+        under a ``language_model``/``text`` path are preferred; ties resolve to
+        the longest list.
+        """
+        scored: list[tuple[int, int, nn.ModuleList]] = []
+        for qualified_name, module in backbone.named_modules():
+            if not isinstance(module, nn.ModuleList) or len(module) <= self.layer_index:
                 continue
-            visited.add(id(module))
-            for child in module.children():
-                if isinstance(child, nn.ModuleList) and len(child) > self.layer_index:
-                    first = child[0]
-                    if any("attn" in name or "attention" in name for name, _ in first.named_children()):
-                        if best is None or len(child) > len(best):
-                            best = child
-                queue.append(child)
-        return best
+            first = module[0]
+            if not any("attn" in name or "attention" in name for name, _ in first.named_children()):
+                continue
+            name = qualified_name.lower()
+            priority = 2 if "language_model" in name else 1 if "text" in name else 0
+            scored.append((priority, len(module), module))
+        if not scored:
+            return None
+        scored.sort(key=lambda item: (item[0], item[1]), reverse=True)
+        return scored[0][2]
 
     def remove(self) -> None:
         if self._handle is not None:

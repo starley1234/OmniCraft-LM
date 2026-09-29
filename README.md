@@ -62,6 +62,45 @@ The OpenSCAD integration test is skipped when the executable is not installed. S
 
 `system_check` probes CUDA name/VRAM/compute capability (expecting sm_120), native bfloat16 support, the offline Hugging Face variables, the OpenSCAD version, and a real `--backend=manifold` probe compile.
 
+## Train a spatial layer (GPU)
+
+Weights live locally and read-only at `checkpoints/baseline_qwen35_2b/` (Qwen3.5-2B, pinned revision `15852e8c`). The deterministic **zero point** sits at `checkpoints/zero_point/` (recorded via `tools/save_zero_point.py`, integrity-checked by SHA-256 per module) and anchors every rollback.
+
+```bash
+python tools/train_spatial.py --layer voxel --data data/processed/splits/train.jsonl --steps 20
+python tools/train_spatial.py --layer wire  --data data/processed/splits/train.jsonl --steps 50
+```
+
+The trainer freezes the backbone, mounts an isolated `lora_<layer>` adapter (r=16, alpha=32), and lets `L_LM` gradients flow through `In-Projector -> Canvas -> Out-Projector` via the prefill hook at layer 12 in a single pass. The wire layer additionally optimizes `L_aux = Chamfer(nodes) + BCE(edges)` with `lambda_geom = 0.1`. Trained artifacts land in `checkpoints/<layer>/` (bundle state, PEFT adapter, `trainer_state.json`).
+
+Rollback after a failed run restores the zero point bit-exactly and recreates the adapter (`lora_B = 0` is the gradient-identity state):
+
+```bash
+python tools/train_spatial.py --layer voxel --rollback-only
+```
+
+## Import external corpora and evaluate generation
+
+External OpenSCAD corpora (e.g. `optional_data/`) are canonicalized to the `$fn = 32;` schema and then validated with the same trust pipeline (mesh verdicts only — no generator provenance):
+
+```bash
+python tools/import_external_scad.py \
+  --domain-expansion optional_data/data/domain_expansion.jsonl \
+  --parts-dir optional_data/data/parts --fill-bbox-with-openscad --workers 8 \
+  --output data/processed/external_candidates.jsonl
+python tools/validate_dataset.py --input data/processed/external_candidates.jsonl --backend openscad --workers 12
+```
+
+Greedy-decode a trained layer against a held-out prompt set and verify every output with the manifold runner (compile rate, watertight share, bbox error):
+
+```bash
+python tools/evaluate_generation.py \
+  --layer voxel --checkpoint checkpoints/voxel \
+  --eval-set optional_data/data/heldout_eval.jsonl
+```
+
+`heldout_eval.jsonl` stays hold-out only — never merge it into training splits.
+
 ## Canvas benchmark
 
 ```bash
