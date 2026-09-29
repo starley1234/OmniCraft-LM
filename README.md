@@ -2,6 +2,8 @@
 
 CPU-first scaffolding for the Qwen3.5-2B spatial bridge, procedural OpenSCAD data, and trust-aware CAD validation. CUDA and OpenSCAD are optional at import/test time; validated mesh production uses OpenSCAD's manifold backend when installed.
 
+**Hardware status:** verified end-to-end on the target workstation — NVIDIA GeForce RTX 5060 Ti (sm_120, 15.93 GiB VRAM, native bfloat16) + OpenSCAD 2025.12.17 with the Manifold backend. All spatial canvases run on CUDA in bfloat16 (`tests/test_cuda_smoke.py`) and peak canvas activation memory stays around ~250 MiB at batch 64, far below the 14.2 GiB VRAM budget reserved for the frozen backbone.
+
 ## Install
 
 Choose the PyTorch wheel for the target machine first. For a CPU-only Python environment:
@@ -56,4 +58,14 @@ python -m pytest -q
 python -m src.utils.system_check
 ```
 
-The OpenSCAD integration test is skipped when the executable is not installed. Static/analytic validation and the deterministic mock backend remain usable on CPU-only machines.
+The OpenSCAD integration test is skipped when the executable is not installed. Static/analytic validation and the deterministic mock backend remain usable on CPU-only machines. The CUDA smoke suite (`tests/test_cuda_smoke.py`) is skipped without a GPU; on the target RTX 5060 Ti it verifies bfloat16 execution of the full spatial stack, backward-gradient flow, and prefill-only hook injection.
+
+`system_check` probes CUDA name/VRAM/compute capability (expecting sm_120), native bfloat16 support, the offline Hugging Face variables, the OpenSCAD version, and a real `--backend=manifold` probe compile.
+
+## Canvas benchmark
+
+```bash
+python tools/benchmark_canvases.py --device cuda --batch-sizes 1 16 64 --iterations 30
+```
+
+Measures per-module latency, throughput, and peak VRAM with the project device policy (bfloat16 on CUDA, float32 on CPU). On the RTX 5060 Ti every canvas keeps batch-1 latency in the low single-digit milliseconds; the heaviest modules (VoxelCanvas, WireCanvas) stay under ~8 ms, and peak VRAM at batch 64 is ~250 MiB.

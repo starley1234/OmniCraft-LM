@@ -1,0 +1,44 @@
+# Backbone and adapter parameters. Keep synchronized with ARCHITECTURE.md sections 3 and 5.
+backbone:
+  name: Qwen/Qwen3.5-2B
+  load_in_4bit: false
+  llm_dim: 2048
+  num_layers: 24
+  attention_layout: "3x Gated DeltaNet : 1x Gated Attention"  # linear O(N) hybrid attention
+  early_multimodal_fusion: true
+  freeze: true                  # 100% frozen; only bridges, canvases, and LoRA trains
+  trust_remote_code: false
+  offline_only: true            # requires HF_HUB_OFFLINE=1 and pre-staged weights
+injection:
+  layer_index: 12               # mid-network latent synthesis point
+  prefill_only: true            # hook is transparent during KV-cache decode steps
+  residual: true                # h_mid + h_spatial
+spatial_trigger_tokens:         # one routing token per canvas
+  voxel: "<|spatial_voxel|>"
+  wire: "<|spatial_wire|>"
+  sketch: "<|spatial_sketch|>"
+  brep: "<|spatial_brep|>"
+  assembly: "<|spatial_assembly|>"
+lora:
+  rank: 16
+  alpha: 32
+  dropout: 0.0
+  target_modules: [q_proj, k_proj, v_proj, o_proj]
+  adapters:                     # isolated gradient path per canvas; see Multi-LoRA policy
+    - lora_voxel
+    - lora_wire
+    - lora_sketch
+    - lora_brep
+    - lora_assembly
+training:
+  gradient_checkpointing: true  # phase 3 context curriculum
+  mixed_precision: bfloat16     # autocast on CUDA; float32 on CPU
+  batch_size: 1
+  gradient_accumulation_steps: 16
+  auxiliary_loss_weight: 0.1    # L = L_LM + lambda_geom * L_aux
+inference:
+  use_triton: false             # Triton runtime is unavailable on the target OS
+  use_static_cache: false       # no static KV cache implementation
+  cuda_graphs:
+    enabled: true
+    isolated_per_adapter: true  # one captured graph per LoRA adapter; prefill stays outside the graph
