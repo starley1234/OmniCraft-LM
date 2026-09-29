@@ -384,11 +384,18 @@ class SpatialTrainer:
             load_adapter = getattr(self.backbone, "load_adapter", None)
             if load_adapter is None:
                 raise TypeError("backbone is not PEFT-wrapped; cannot load a trained adapter")
+            # PEFT nests per-adapter directories when saving selected adapters.
+            adapter_dir = lora_dir
+            if not (adapter_dir / "adapter_config.json").is_file():
+                nested = lora_dir / adapter_name(self.config.layer)
+                if not (nested / "adapter_config.json").is_file():
+                    raise FileNotFoundError(f"no adapter_config.json under {lora_dir}")
+                adapter_dir = nested
             trained_name = adapter_name(self.config.layer) + "_trained"
             existing = getattr(self.backbone, "peft_config", {})
             if trained_name in existing:
                 self.backbone.delete_adapter(trained_name)
-            self.backbone.load_adapter(lora_dir, adapter_name=trained_name)
+            self.backbone.load_adapter(adapter_dir, adapter_name=trained_name)
             self.backbone.set_adapter(trained_name)
 
     def _reset_adapter(self) -> None:

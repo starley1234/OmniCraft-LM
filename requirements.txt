@@ -3,3 +3,7 @@ torch>=2.5
 pydantic>=2.0
 trimesh>=4.0
 PyYAML>=6.0
+# Training stack (backbone runs strictly offline from checkpoints/baseline_qwen35_2b)
+transformers>=5.0
+peft>=0.15
+accelerate>=1.0
