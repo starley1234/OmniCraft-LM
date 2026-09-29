@@ -1,0 +1,32 @@
+{
+  "summary": {
+    "parts": 1606,
+    "by_source": {
+      "data\\parts": 1130,
+      "data\\domain_expansion.jsonl": 476
+    },
+    "by_category": {
+      "standard_part": 1130,
+      "enclosure_lid": 125,
+      "adapter_flange": 125,
+      "mounting_plate_bracket": 122,
+      "mechanical_element": 104
+    },
+    "with_english_prompt": 476,
+    "with_through_holes": 1406
+  },
+  "sources": {
+    "data\\parts": {
+      "seen": 1130,
+      "kept": 1130,
+      "duplicates": 0,
+      "rejected": {}
+    },
+    "data\\domain_expansion.jsonl": {
+      "seen": 500,
+      "kept": 476,
+      "duplicates": 24,
+      "rejected": {}
+    }
+  }
+}

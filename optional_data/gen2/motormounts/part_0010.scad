@@ -1,0 +1,42 @@
+$fn = 32;
+
+// ----------------------------------------------------------------------
+// Motor mount plate: NEMA23, 71.14 x 71.14 x 55 mm
+// ----------------------------------------------------------------------
+
+// --- parameters (mm) ---
+mount_w = 71.14;          // plate length, X
+mount_d = 71.14;          // plate width, Y
+mat_t = 5;                // plate thickness
+motor_pitch = 47.14;      // NEMA23 bolt spacing
+motor_d = 5.5;            // NEMA23 screw clearance
+center_bore = 38.1;       // pilot boss bore
+second_d = 5.5;           // second fastener hole
+wall_h = 50;              // upright height
+wall_t = 6;               // upright thickness
+
+module plate() {
+  translate([-mount_w / 2, -mount_d / 2, 0]) cube([mount_w, mount_d, mat_t]);
+}
+
+module motor_holes() {
+  for (sx = [-1, 1]) for (sy = [-1, 1])
+    translate([sx * motor_pitch / 2, sy * motor_pitch / 2, -1])
+      cylinder(h = mat_t + 2, d = motor_d);
+}
+module upright() {
+  /* wall sunk 1 mm into the plate for a positive overlap */
+  translate([mount_w / 2 - wall_t, -mount_d / 2 + wall_t, mat_t - 1])
+    cube([wall_t, mount_d - 2 * wall_t, wall_h - mat_t + 1]);
+}
+
+difference() {
+  union() {
+    plate();
+    upright();
+  }
+  motor_holes();
+  translate([0, 0, -1]) cylinder(h = mat_t + 2, d = center_bore);
+  for (i = [0 : 2])
+    translate([mount_w / 2 - wall_t - 1, (i - 1) * wall_h * 0.3, mat_t + wall_h * 0.45]) rotate([0, 90, 0]) cylinder(h = wall_t + 2, d = second_d);
+}

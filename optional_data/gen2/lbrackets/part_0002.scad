@@ -1,0 +1,40 @@
+$fn = 32;
+
+// ----------------------------------------------------------------------
+// L-bracket: 45 x 40 x 80 mm
+// ----------------------------------------------------------------------
+
+// --- parameters (mm) ---
+arm_x = 45;               // horizontal leg, X
+arm_z = 80;               // vertical leg, Z
+width = 40;               // bracket depth, Y
+wall = 3.5;               // plate thickness
+hole_d = 9;               // clearance for M8
+rib_leg = 25.2;           // gusset leg
+rib_sink = 0.9;           // gusset overlap into the plates
+
+module hole_z(px, py) {
+  translate([px, py, -0.5]) cylinder(h = wall + 1, d = hole_d);
+}
+module hole_x(pz, py) {
+  translate([-0.5, py, pz]) rotate([0, 90, 0]) cylinder(h = wall + 1, d = hole_d);
+}
+module gusset() {
+  translate([0, width - rib_sink, 0])
+    rotate([90, 0, 0])
+      linear_extrude(height = width - 2 * rib_sink)
+        polygon(points = [[rib_sink, rib_sink], [rib_leg, rib_sink], [rib_sink, rib_leg]]);
+}
+
+difference() {
+  union() {
+    /* horizontal leg */
+    cube([arm_x, width, wall]);
+    /* vertical leg, overlapping the corner block */
+    cube([wall, width, arm_z]);
+    gusset();
+  }
+  hole_z(22.5, 20);
+  hole_x(18, 20);
+  hole_x(62, 20);
+}
