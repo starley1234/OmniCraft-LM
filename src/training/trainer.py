@@ -99,6 +99,14 @@ class SpatialTrainer:
         if self.device.type == "cuda" and not torch.cuda.is_available():
             raise RuntimeError("CUDA requested for training but is unavailable")
         self.dtype = torch.bfloat16 if self.device.type == "cuda" else torch.float32
+        if self.device.type == "cuda" and config.max_vram_gb > 0:
+            # Hard allocation cap: the ceiling is enforcement, not a log marker.
+            # The allocator raises OutOfMemoryError (our per-chunk guard skips it)
+            # instead of letting WSL2/WDDM silently spill into system RAM.
+            device_index = self.device.index if self.device.index is not None else torch.cuda.current_device()
+            total_gb = torch.cuda.get_device_properties(device_index).total_memory / 1024**3
+            fraction = min(0.98, config.max_vram_gb / total_gb)
+            torch.cuda.set_per_process_memory_fraction(fraction, device=device_index)
         self.zero_point = load_manifest(config.zero_point_dir)
         torch.manual_seed(self.zero_point.seed)
 
