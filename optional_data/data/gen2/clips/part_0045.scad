@@ -1,0 +1,35 @@
+$fn = 32;
+
+// ----------------------------------------------------------------------
+// Cable clip: cable 8 mm, clamp 13 mm, base 33 mm
+// ----------------------------------------------------------------------
+
+// --- parameters (mm) ---
+plate_x = 33;             // base length, X
+plate_y = 19;             // base width, Y
+plate_t = 6;              // base thickness
+wire_seat_d = 13;         // clamp outside diameter
+clip_t = 2.5;             // clamp wall
+cable_d = 8;              // cable opening
+ring_w = 8;               // clamp width along the cable
+screw_d = 5.5;            // screw clearance
+sink = 1;                 // overlap of the clamp into the base
+
+module base() {
+  cube([plate_x, plate_y, plate_t]);
+}
+
+module clamp() {
+  translate([plate_x / 2, plate_y / 2, plate_t + wire_seat_d / 2 - sink]) rotate([0, 90, 0])
+    cylinder(h = ring_w, d = wire_seat_d, center = true);
+}
+
+difference() {
+  union() {
+    base();
+    clamp();
+  }
+  translate([plate_x / 2, plate_y / 2, plate_t + wire_seat_d / 2 - sink]) rotate([0, 90, 0]) translate([0, 0, -ring_w / 2 - 1]) cylinder(h = ring_w + 2, d = cable_d);
+  translate([8.25, plate_y / 2, -1]) cylinder(h = plate_t + 2, d = screw_d);
+  translate([24.75, plate_y / 2, -1]) cylinder(h = plate_t + 2, d = screw_d);
+}

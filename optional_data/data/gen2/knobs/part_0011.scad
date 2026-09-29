@@ -1,0 +1,36 @@
+$fn = 32;
+
+// ----------------------------------------------------------------------
+// Hand knob: 35 x 35 x 13.5 mm
+// ----------------------------------------------------------------------
+
+// --- parameters (mm) ---
+head_d = 35;              // knob diameter
+head_h = 10;              // knob height
+hole_d = 10;              // shaft bore
+set_d = 4.5;              // set screw tap hole
+notch_d = 1.52;           // knurl groove diameter
+lobes = 4;                // grip lobes
+cap_h = 3.5;              // raised centre cap
+cap_d = 17.5;             // centre cap diameter
+
+module body() {
+  cylinder(h = head_h, d = head_d);
+  for (i = [0 : lobes - 1])
+    rotate([0, 0, i * 360 / lobes])
+      translate([head_d * 0.42, 0, 0])
+        cylinder(h = head_h, d = head_d * 0.3);
+}
+
+module cap() {
+  translate([0, 0, head_h - 1]) cylinder(h = cap_h + 1, d = cap_d);
+}
+
+difference() {
+  union() {
+    body();
+    cap();
+  }
+  translate([0, 0, -1]) cylinder(h = head_h + cap_h + 2, d = hole_d);
+  translate([-head_d / 2 - 1, 0, head_h * 0.5]) rotate([0, 90, 0]) cylinder(h = head_d / 2 + 2, d = set_d);
+}
