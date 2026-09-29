@@ -140,6 +140,8 @@ wsl -d Ubuntu -- bash -c "rsync -a ~/omnicraft/repo/checkpoints/voxel/ /mnt/c/gi
 | Скачивание с huggingface.co виснет на 0 байт | CDN частично блокируется | зеркало `hf-mirror.com` (команда выше), `curl -C -` докачивает |
 | VRAM 15+ GB и всё вязнет без ошибки OOM | Windows WDDM молча переливает в ОЗУ | в логе строки `vram a/b GiB`; снизить `--max-tokens-per-forward`; не запускать 2 прогона сразу |
 | CPU ~40%, GPU ~15% при обучении на Windows | запуск ядер по 32 мкс (WDDM) | это ожидаемо на Windows; для скорости — WSL2 (×5.8) |
+| В WSL ОЗУ растёт, потом OOM в логе CUDA | длинные wire-батчи × референс-DeltaNet; VRAM переливается в ОЗУ (WSL oversubscription) | wire: `--max-tokens-per-forward 1200` (вшито в wsl_train.sh); желательно `uv pip install flash-linear-attention` |
+| `CUBLAS_STATUS_EXECUTION_FAILED` на смешанном прогоне | транзиент torch 2.14+sm_120; под подозрением Triton-ядра | повторный прогон от снимка; если стабильно то же место — сообщить с шагом/логом |
 | `openscad: command not found` в WSL | PATH без `~/bin` | запускать через `bash -lc` или `tools/wsl_check.sh` |
 | `bad interpreter`/`$'\r'` ошибка в WSL | CRLF в .sh после чекаутa | в `.gitattributes` есть `*.sh text eol=lf`; `git checkout -- tools/` |
 | Обучение «замерло» надолго без лога | смотреть `it/s` в последнем логе | if 0 → убито внешне; рестарт от последнего снимка или якоря |

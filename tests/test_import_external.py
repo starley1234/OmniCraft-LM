@@ -55,6 +55,33 @@ def test_import_domain_expansion_roundtrip(tmp_path: Path) -> None:
     assert sample.metadata["source"] == "domain_expansion_import"
 
 
+def test_import_parts_maps_family_and_graph_to_wire(tmp_path: Path) -> None:
+    import json
+
+    parts = tmp_path / "gen2"
+    (parts / "trusses").mkdir(parents=True)
+    code = "$fn = 32;\nhull() { sphere(2); translate([10, 0, 0]) sphere(2); }\n"
+    (parts / "trusses" / "part_0001.scad").write_text(code, encoding="utf-8")
+    entry = {
+        "file": "trusses/part_0001.scad",
+        "family": "trusses",
+        "prompt_ru": "стержень",
+        "prompt_en": "strut",
+        "expected_bbox_mm": [14, 4, 4],
+        "graph": {"nodes": [[0, 0, 0], [10, 0, 0]], "edges": [[0, 1]]},
+        "parameters": {"length": 10},
+    }
+    (parts / "manifest.jsonl").write_text(json.dumps(entry) + "\n", encoding="utf-8")
+    samples = import_parts(parts, record_prefix="gen2")
+    assert len(samples) == 1
+    sample = samples[0]
+    assert sample.id == "gen2_00000"
+    assert sample.layer == "wire"
+    assert sample.metadata["origin"] == "trusses"
+    assert sample.auxiliary_ground_truth.nodes == [(0.0, 0.0, 0.0), (10.0, 0.0, 0.0)]
+    assert sample.auxiliary_ground_truth.edges == [(0, 1)]
+
+
 def test_import_parts_skips_missing_bbox(tmp_path: Path) -> None:
     parts = tmp_path / "parts"
     parts.mkdir()

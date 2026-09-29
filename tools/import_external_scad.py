@@ -29,7 +29,7 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 if str(REPOSITORY_ROOT) not in sys.path:
     sys.path.insert(0, str(REPOSITORY_ROOT))
 
-from src.data.schema import CADSample, SampleVerification, write_jsonl
+from src.data.schema import AuxiliaryGroundTruth, CADSample, SampleVerification, write_jsonl
 
 _HEADER = "$fn = 32;"
 _FN_ASSIGNMENT = re.compile(r"^\s*\$fn\s*=\s*[0-9]+\s*;\s*$", re.MULTILINE)
@@ -54,6 +54,24 @@ def _target_bbox(raw: object) -> tuple[float, float, float] | None:
     return values  # type: ignore[return-value]
 
 
+def _graph_ground_truth(raw: object) -> AuxiliaryGroundTruth | None:
+    """Manifest ``graph`` block -> aux GT (wire families only; see DATASET_REQUEST)."""
+    if not isinstance(raw, dict):
+        return None
+    nodes = raw.get("nodes")
+    edges = raw.get("edges")
+    if not isinstance(nodes, list) or not nodes or not isinstance(edges, list) or not edges:
+        return None
+    try:
+        node_t = [tuple(float(c) for c in node) for node in nodes]
+        edge_t = [tuple(int(i) for i in edge) for edge in edges]
+    except (TypeError, ValueError):
+        return None
+    if any(len(n) != 3 for n in node_t) or any(len(e) != 2 for e in edge_t):
+        return None
+    return AuxiliaryGroundTruth(nodes=node_t, edges=edge_t)  # type: ignore[arg-type]
+
+
 def _make_sample(
     *,
     record_id: str,
@@ -62,17 +80,20 @@ def _make_sample(
     target_bbox: tuple[float, float, float] | None,
     source: str,
     origin: str,
+    graph: AuxiliaryGroundTruth | None = None,
 ) -> CADSample | None:
     code = _clean_code(code)
     if target_bbox is None:
         # Cannot train scale injection without a target box; skip the record.
         return None
+    layer = "wire" if graph is not None else "voxel"
     return CADSample(
         id=record_id,
-        layer="voxel",
+        layer=layer,
         prompts={k: v for k, v in prompts.items() if v},
         code=code,
         verification=SampleVerification(target_bbox=target_bbox),
+        auxiliary_ground_truth=graph or AuxiliaryGroundTruth(),
         metadata={
             "source": source,
             "origin": origin,
@@ -100,7 +121,13 @@ def import_domain_expansion(path: Path) -> list[CADSample]:
     return samples
 
 
-def import_parts(parts_dir: Path, *, fill_bbox_with_openscad: bool = False, workers: int = 1) -> list[CADSample]:
+def import_parts(
+    parts_dir: Path,
+    *,
+    fill_bbox_with_openscad: bool = False,
+    workers: int = 1,
+    record_prefix: str = "ext_part",
+) -> list[CADSample]:
     manifest_path = parts_dir / "manifest.jsonl"
     manifest = [json.loads(line) for line in manifest_path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
@@ -145,8 +172,9 @@ def import_parts(parts_dir: Path, *, fill_bbox_with_openscad: bool = False, work
         if not scad_path.is_file():
             continue
         target = _target_bbox(entry.get("expected_bbox_mm")) or compiled_bbox.get(str(entry["file"]))
+        origin = entry.get("family") or entry.get("category") or "?"
         sample = _make_sample(
-            record_id=f"ext_part_{index:05d}",
+            record_id=f"{record_prefix}_{index:05d}",
             prompts={
                 "ru": str(entry.get("prompt_ru", "")),
                 "en": str(entry.get("prompt_en", "") or entry.get("name", "")),
@@ -154,7 +182,8 @@ def import_parts(parts_dir: Path, *, fill_bbox_with_openscad: bool = False, work
             code=scad_path.read_text(encoding="utf-8"),
             target_bbox=target,
             source="parts_import",
-            origin=str(entry.get("category", "?")),
+            origin=str(origin),
+            graph=_graph_ground_truth(entry.get("graph")),
         )
         if sample is not None and sample.prompts:
             samples.append(sample)
@@ -172,6 +201,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="measure missing target bboxes by compiling the part with OpenSCAD first",
     )
     parser.add_argument("--workers", type=int, default=8)
+    parser.add_argument("--record-prefix", default="ext_part", help="id prefix for imported records")
     return parser
 
 
@@ -186,7 +216,10 @@ def main() -> int:
         samples.extend(imported)
     if args.parts_dir is not None:
         imported = import_parts(
-            args.parts_dir, fill_bbox_with_openscad=args.fill_bbox_with_openscad, workers=args.workers
+            args.parts_dir,
+            fill_bbox_with_openscad=args.fill_bbox_with_openscad,
+            workers=args.workers,
+            record_prefix=args.record_prefix,
         )
         print(f"parts: {len(imported)} records")
         samples.extend(imported)
