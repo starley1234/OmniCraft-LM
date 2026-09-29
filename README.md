@@ -62,6 +62,17 @@ The OpenSCAD integration test is skipped when the executable is not installed. S
 
 `system_check` probes CUDA name/VRAM/compute capability (expecting sm_120), native bfloat16 support, the offline Hugging Face variables, the OpenSCAD version, and a real `--backend=manifold` probe compile.
 
+## WSL2 (recommended for training on Windows hosts)
+
+On WDDM the host→GPU kernel dispatch costs ~32 µs per launch (Linux: ~5 µs); the Qwen3.5 hybrid attention is dispatch-heavy, so training on raw Windows starves the GPU at ~15% utilization. WSL2 removes that tax (see `docs/hardware-notes.md` §4). One-time setup, then identical commands:
+
+```powershell
+wsl -d Ubuntu -- bash /mnt/c/github/OmniCraft-LM/tools/wsl_bootstrap.sh   # once
+wsl -d Ubuntu -- bash tools/wsl_train.sh                                  # from ~/omnicraft/repo runs
+```
+
+The workspace lives at `~/omnicraft/repo` (a copy — checkpoints there are Linux-side; pull trained artifacts back with `rsync -a ~/omnicraft/repo/checkpoints/<layer>/ /mnt/c/github/OmniCraft-LM/checkpoints/<layer>/`). Data regenerates identically inside WSL (generators are seed-deterministic), including the `$fn = 32;` invariant, with OpenSCAD 2025.12.17 parity. Run `python -m src.utils.system_check` inside WSL to verify CUDA + manifold before any long run.
+
 ## Train a spatial layer (GPU)
 
 Weights live locally and read-only at `checkpoints/baseline_qwen35_2b/` (Qwen3.5-2B, pinned revision `15852e8c`). The deterministic **zero point** sits at `checkpoints/zero_point/` (recorded via `tools/save_zero_point.py`, integrity-checked by SHA-256 per module) and anchors every rollback.
