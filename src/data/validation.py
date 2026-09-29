@@ -392,14 +392,22 @@ class DatasetValidator:
         warnings.append("analytic descriptor does not provide exact solid-volume/topology metrics")
         return {"actual_bbox": bbox, "bbox_relative_error": error}, errors, warnings
 
-    @staticmethod
-    def _verify_generator_provenance(sample: CADSample, descriptor: dict[str, Any]) -> str | None:
+    _SUPPORTED_GENERATOR_VERSIONS: dict[str, tuple[int, ...]] = {
+        "voxel": (1,),
+        "wire": (1, 2),
+    }
+
+    @classmethod
+    def _verify_generator_provenance(cls, sample: CADSample, descriptor: dict[str, Any]) -> str | None:
         """Recreate generated source by seed/index before trusting analytic labels."""
         source_by_layer = {"voxel": "voxel_csg_gen", "wire": "wire_truss_gen"}
         expected_source = source_by_layer.get(sample.layer)
         if expected_source is None:
             return f"analytic descriptors are not implemented for layer {sample.layer!r}"
-        if sample.metadata.get("source") != expected_source or sample.metadata.get("generator_version") != 1:
+        supported_versions = cls._SUPPORTED_GENERATOR_VERSIONS.get(sample.layer, ())
+        if sample.metadata.get("source") != expected_source or sample.metadata.get(
+            "generator_version"
+        ) not in supported_versions:
             return "analytic metrics require provenance from a supported generator/version"
         if not sample.metadata.get("code_sha256"):
             return "analytic metrics require a source code_sha256"

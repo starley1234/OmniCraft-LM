@@ -61,9 +61,15 @@ class WireTrussGenerator:
         ]
         for start, end in edges:
             lines.append(f"  strut({_point(nodes[start])}, {_point(nodes[end])}, {_fmt(radius)});")
-        # These collars overlap the lower longitudinal struts and stay inside bounds.
+        # Mounting collars cross the lower longitudinal struts at quarter-span
+        # positions. Endpoint placement inscribed each collar tangentially around
+        # the strut's end sphere, a degenerate contact that the manifold backend
+        # resolves non-deterministically (flipping between one and two
+        # components); the quarter-span crossing is transversal and robust.
+        quarter_a = radius + inner_length * 0.25
+        quarter_b = radius + inner_length * 0.75
         lines.append(
-            f"  for (x = [{_fmt(radius)}, {_fmt(inner_length + radius)}]) "
+            f"  for (x = [{_fmt(quarter_a)}, {_fmt(quarter_b)}]) "
             f"translate([x, {_fmt(radius)}, 0]) cylinder(h={_fmt(radius * 2)}, r={_fmt(radius)});"
         )
         lines.append("}")
@@ -82,7 +88,7 @@ class WireTrussGenerator:
             auxiliary_ground_truth=AuxiliaryGroundTruth(nodes=nodes, edges=edges),
             metadata={
                 "source": "wire_truss_gen",
-                "generator_version": 1,
+                "generator_version": 2,
                 "generator_seed": self.seed,
                 "generator_index": index,
                 "kind": "truss",

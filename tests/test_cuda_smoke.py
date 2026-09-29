@@ -110,7 +110,14 @@ def test_backward_pass_flows_through_cuda_canvases() -> None:
     target_bbox = torch.tensor([[60.0, 30.0, 20.0], [120.0, 45.0, 30.0]], device=DEVICE)
     llm_hidden = torch.randn(BATCH, LLM_DIM, device=DEVICE, dtype=DTYPE)
     z_in = projector_in(llm_hidden, scale(target_bbox))
-    total = projector_out(voxel(z_in)).sum() + projector_out(wire(z_in)).sum()
+    # Wire uses the training path so the edge-adjacency head also receives gradients.
+    wire_z, positions, edge_logits = wire.forward_graph(z_in)
+    total = (
+        projector_out(voxel(z_in)).sum()
+        + projector_out(wire_z).sum()
+        + positions.sum()
+        + edge_logits.float().sum()
+    )
     total.float().backward()
 
     for name, module in (
