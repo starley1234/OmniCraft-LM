@@ -1,0 +1,27 @@
+dataset:
+  format: jsonl
+  path: data/processed/train.jsonl
+  image_root: data/images
+  max_prompt_tokens: 2048
+  max_code_tokens: 4096
+  require_facet_header: true
+validation:
+  backend: auto # auto | openscad | analytic | mock
+  max_bbox_relative_error: 0.15
+  max_volume_relative_error: 0.05
+  require_watertight: true
+  require_single_component: true
+  accept_exact_analytic: false
+split:
+  strategy: kind-and-dimension
+  train_ratio: 0.8
+  validation_ratio: 0.1
+  test_ratio: 0.1
+  bucket_size_mm: 20.0
+  seed: 1234
+generation:
+  seed: 1234
+  voxel_csg_samples: 10000
+  wire_truss_samples: 10000
+  minimum_dimension_mm: 5.0
+  maximum_dimension_mm: 200.0

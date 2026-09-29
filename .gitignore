@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.env
+
+# Generated datasets, CAD meshes, and temporary training artifacts
+data/processed/
+data/images/
+*.validation-cache.json
+*.validation-cache.json.tmp
+checkpoints/
+*.stl
+*.3mf
+*.step
+*.stp

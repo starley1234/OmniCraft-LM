@@ -1,0 +1,36 @@
+# Core architecture invariants. Keep synchronized with ARCHITECTURE.md.
+model:
+  backbone: Qwen/Qwen3.5-2B
+  llm_dim: 2048
+  injection_layer: 12
+  canvas_dim: 512
+  compute_dtype: bfloat16
+  cpu_fallback_dtype: float32
+  device: auto
+  use_triton: false
+  use_static_cache: false
+  scale_mlp:
+    input_dim: 3
+    hidden_dim: 64
+    output_dim: 128
+  voxel_canvas:
+    grid_size: 16
+    feature_channels: 32
+    residual_blocks: 3
+  wire_canvas:
+    vertices: 32
+    edgeconv_layers: 3
+cad:
+  backend: mock
+  openscad_executable: openscad
+  openscad_backend: manifold
+  facet_header: "$fn = 32;"
+  validation:
+    max_bbox_relative_error: 0.15
+    max_volume_relative_error: 0.05
+    require_watertight: true
+    require_single_component: true
+    mock_results_are_accepted: false
+training:
+  auxiliary_loss_weight: 0.1
+  max_bbox_relative_error: 0.15

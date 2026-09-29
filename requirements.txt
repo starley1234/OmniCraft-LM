@@ -1,0 +1,5 @@
+# PyTorch CPU or CUDA wheels should be selected from https://pytorch.org/get-started/locally/.
+torch>=2.5
+pydantic>=2.0
+trimesh>=4.0
+PyYAML>=6.0
