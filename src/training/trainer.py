@@ -61,6 +61,9 @@ class TrainerConfig:
     accumulate: int = 1
     microbatch: int = 8  # hard cap on samples per forward
     max_tokens_per_forward: int = 2700  # B*S budget; logits cost ~3 MB per (B*S) token on a 248320 vocab
+    seq_bucket: int = 128  # pad sequences to this quantum: the CUDA allocator keeps per-shape pools,
+    # and hundreds of distinct lengths balloon reserved VRAM until WSL2 spills to system RAM
+    empty_cache_every: int = 50  # release fragmented allocator pools periodically; 0 disables
     lr: float = 1e-4
     weight_decay: float = 0.0
     grad_clip: float = 1.0
@@ -255,13 +258,21 @@ class SpatialTrainer:
     # -------------------------------------------------------------- training
 
     def _collate(self, builds: list[dict[str, torch.Tensor]]) -> dict[str, torch.Tensor]:
-        """Pad per-sample builds into one microbatch (left side free, right padded)."""
+        """Pad per-sample builds into one microbatch, quantized to seq buckets.
+
+        Padding to a fixed quantum (``seq_bucket``) keeps the CUDA caching
+        allocator on a handful of stable logits shapes instead of one pool per
+        observed length — the previous free-form padding ballooned reserved VRAM
+        past the card over a few hundred steps.
+        """
         batch = len(builds)
         max_len = max(build["input_ids"].shape[1] for build in builds)
+        quantum = max(1, self.config.seq_bucket)
+        target_len = ((max_len + quantum - 1) // quantum) * quantum
         pad_id = self.tokenizer.pad_token_id or 0
-        input_ids = torch.full((batch, max_len), pad_id, dtype=torch.long)
-        attention_mask = torch.zeros(batch, max_len, dtype=torch.long)
-        labels = torch.full((batch, max_len), -100, dtype=torch.long)
+        input_ids = torch.full((batch, target_len), pad_id, dtype=torch.long)
+        attention_mask = torch.zeros(batch, target_len, dtype=torch.long)
+        labels = torch.full((batch, target_len), -100, dtype=torch.long)
         for index, build in enumerate(builds):
             length = build["input_ids"].shape[1]
             input_ids[index, :length] = build["input_ids"][0]
@@ -408,6 +419,15 @@ class SpatialTrainer:
             self._apply_warmup(step)
             self.optimizer.step()
             self.optimizer.zero_grad(set_to_none=True)
+            if (
+                self.device.type == "cuda"
+                and self.config.empty_cache_every > 0
+                and step % self.config.empty_cache_every == 0
+            ):
+                # Contract the fragmented allocator pools back to the driver; the
+                # pools regrow from a handful of bucketed shapes instead of
+                # accumulating one pool per observed sequence length.
+                torch.cuda.empty_cache()
             metrics = {
                 "step": float(step),
                 "lm_loss": float(step_lm) / len(chunk_index_groups),
@@ -415,13 +435,14 @@ class SpatialTrainer:
             }
             self.history.append(metrics)
             if step % self.config.log_every == 0 or step == self.config.max_steps:
-                vram_now, vram_peak = 0.0, 0.0
+                vram_now, vram_peak, vram_reserved = 0.0, 0.0, 0.0
                 if self.device.type == "cuda":
                     vram_now = torch.cuda.memory_allocated() / 1024**3
                     vram_peak = torch.cuda.max_memory_allocated() / 1024**3
+                    vram_reserved = torch.cuda.memory_reserved() / 1024**3
                 breach = (
                     f"  !! over the {self.config.max_vram_gb:g} GiB ceiling"
-                    if vram_peak > self.config.max_vram_gb
+                    if vram_peak > self.config.max_vram_gb or vram_reserved > self.config.max_vram_gb
                     else ""
                 )
                 now = _time.monotonic()
@@ -430,7 +451,8 @@ class SpatialTrainer:
                 print(
                     f"step {step:4d}/{self.config.max_steps} | "
                     f"lm {metrics['lm_loss']:.4f} | aux {metrics['aux_loss']:.4f} | "
-                    f"{steps_per_sec:.2f} it/s | vram {vram_now:.1f}/{vram_peak:.1f} GiB{breach}",
+                    f"{steps_per_sec:.2f} it/s | vram {vram_now:.1f}/{vram_peak:.1f} GiB, "
+                    f"reserved {vram_reserved:.1f} GiB{breach}",
                     flush=True,
                 )
             if self.config.save_every and step % self.config.save_every == 0:
