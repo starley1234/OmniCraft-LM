@@ -1,0 +1,58 @@
+$fn = 32;
+
+// ----------------------------------------------------------------------
+// Slotted panel: 150 x 100 mm, 6 рядов of slots
+// ----------------------------------------------------------------------
+
+// --- parameters (mm) ---
+panel_w = 150;            // panel width
+panel_d = 100;            // panel depth
+thick = 8;                // panel thickness
+slot_w = 5;               // slot width
+pitch0 = 9;               // first row pitch
+pitch_step = 2.4;         // pitch increase per row
+margin = 10;              // margin around the slot field
+rows = 6;                 // number of slot rows
+mount_d = 6.6;            // mounting holes
+mount_x = 60;             // mounting hole offset
+
+difference() {
+  union() {
+    cube([panel_w, panel_d, thick]);
+  }
+  /* slot rows: stadium shaped cutters, 2.5 mm clear of both faces */
+  /* row 0: pitch 9, length 91 */
+  hull() {
+    translate([29.5, 12.5, -2.5]) cylinder(h = thick + 5, d = slot_w);
+    translate([120.5, 12.5, -2.5]) cylinder(h = thick + 5, d = slot_w);
+  }
+  /* row 1: pitch 11.4, length 97.5 */
+  hull() {
+    translate([26.25, 21.5, -2.5]) cylinder(h = thick + 5, d = slot_w);
+    translate([123.75, 21.5, -2.5]) cylinder(h = thick + 5, d = slot_w);
+  }
+  /* row 2: pitch 13.8, length 104 */
+  hull() {
+    translate([23, 32.9, -2.5]) cylinder(h = thick + 5, d = slot_w);
+    translate([127, 32.9, -2.5]) cylinder(h = thick + 5, d = slot_w);
+  }
+  /* row 3: pitch 16.2, length 110.5 */
+  hull() {
+    translate([19.75, 46.7, -2.5]) cylinder(h = thick + 5, d = slot_w);
+    translate([130.25, 46.7, -2.5]) cylinder(h = thick + 5, d = slot_w);
+  }
+  /* row 4: pitch 18.6, length 117 */
+  hull() {
+    translate([16.5, 62.9, -2.5]) cylinder(h = thick + 5, d = slot_w);
+    translate([133.5, 62.9, -2.5]) cylinder(h = thick + 5, d = slot_w);
+  }
+  /* row 5: pitch 21, length 117 */
+  hull() {
+    translate([16.5, 81.5, -2.5]) cylinder(h = thick + 5, d = slot_w);
+    translate([133.5, 81.5, -2.5]) cylinder(h = thick + 5, d = slot_w);
+  }
+  translate([15, 5, -2.5]) cylinder(h = 13, d = mount_d);
+  translate([15, 95, -2.5]) cylinder(h = 13, d = mount_d);
+  translate([135, 5, -2.5]) cylinder(h = 13, d = mount_d);
+  translate([135, 95, -2.5]) cylinder(h = 13, d = mount_d);
+}

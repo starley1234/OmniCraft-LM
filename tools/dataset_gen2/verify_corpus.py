@@ -24,8 +24,13 @@ MAX_BYTES = 12000
 BBOX_TOLERANCE = 0.15  # the receiver's allowance
 
 
-def audit_corpus(parts_dir: Path, limit: int | None = None) -> dict:
-    """Return the audit summary; ``problems`` is empty for a clean corpus."""
+def audit_corpus(parts_dir: Path, limit: int | None = None, stl: bool = False) -> dict:
+    """Return the audit summary; ``problems`` is empty for a clean corpus.
+
+    With ``stl=True`` every sample goes through the receiver-simulation STL
+    gate as well (manifold -> binary STL -> trimesh), which is what catches
+    degenerate slivers and multi-component meshes.
+    """
     manifest_path = parts_dir / "manifest.jsonl"
     if not manifest_path.is_file():
         return {"error": f"missing {manifest_path}", "problems": ["missing manifest"]}
@@ -43,6 +48,10 @@ def audit_corpus(parts_dir: Path, limit: int | None = None) -> dict:
     problems: list[str] = []
     family_counts: dict[str, int] = {}
     wire_rows = 0
+    disconnected_graphs = 0
+    graphs_with_isolated_nodes = 0
+    stl_checked = 0
+    stl_bad: list[str] = []
     max_bbox_error = 0.0
     for row in rows:
         name = str(row.get("file", ""))
@@ -91,6 +100,18 @@ def audit_corpus(parts_dir: Path, limit: int | None = None) -> dict:
             if have < 5.0 or have > 250.0:
                 problems.append(f"{name}: axis {axis} is {have:.2f} mm, outside 5-250 mm")
 
+        if stl:
+            from tools.dataset_gen2.stlcheck import check_source, is_bad
+
+            stl_checked += 1
+            try:
+                if is_bad(check_source(source)):
+                    stl_bad.append(name)
+                    problems.append(f"{name}: STL round-trip is not watertight/single component")
+            except Exception as exc:  # noqa: BLE001
+                stl_bad.append(name)
+                problems.append(f"{name}: STL round-trip failed: {exc}")
+
         graph = row.get("graph")
         if graph:
             wire_rows += 1
@@ -112,6 +133,7 @@ def audit_corpus(parts_dir: Path, limit: int | None = None) -> dict:
                 adjacency[start].add(end)
                 adjacency[end].add(start)
             if any(value == 0 for value in degree):
+                graphs_with_isolated_nodes += 1
                 problems.append(f"{name}: graph has isolated nodes")
             seen, stack = {0}, [0]
             while stack:
@@ -121,6 +143,7 @@ def audit_corpus(parts_dir: Path, limit: int | None = None) -> dict:
                         seen.add(neighbour)
                         stack.append(neighbour)
             if len(seen) != len(nodes):
+                disconnected_graphs += 1
                 problems.append(f"{name}: graph is not connected")
 
     checksums_ok = True
@@ -142,6 +165,10 @@ def audit_corpus(parts_dir: Path, limit: int | None = None) -> dict:
         "rows": len(rows),
         "families": len(family_counts),
         "wire_rows": wire_rows,
+        "disconnected_graphs": disconnected_graphs,
+        "graphs_with_isolated_nodes": graphs_with_isolated_nodes,
+        "stl_checked": stl_checked,
+        "stl_bad": stl_bad,
         "max_bbox_error": max_bbox_error,
         "bbox_tolerance": BBOX_TOLERANCE,
         "checksums_ok": checksums_ok,
@@ -149,8 +176,8 @@ def audit_corpus(parts_dir: Path, limit: int | None = None) -> dict:
     }
 
 
-def verify(parts_dir: Path, limit: int | None = None, quiet: bool = False) -> int:
-    summary = audit_corpus(parts_dir, limit)
+def verify(parts_dir: Path, limit: int | None = None, quiet: bool = False, stl: bool = False) -> int:
+    summary = audit_corpus(parts_dir, limit, stl)
     if "error" in summary:
         print(summary["error"])
         return 2
@@ -163,6 +190,12 @@ def verify(parts_dir: Path, limit: int | None = None, quiet: bool = False) -> in
             f"max bbox error  : {summary['max_bbox_error']:.4%} "
             f"(allowance {summary['bbox_tolerance']:.0%})"
         )
+        print(f"wire graphs     : {summary['wire_rows']} rows, "
+              f"{summary['disconnected_graphs']} disconnected, "
+              f"{summary['graphs_with_isolated_nodes']} with isolated nodes")
+        if summary["stl_checked"]:
+            print(f"STL round-trip  : {summary['stl_checked']} checked, "
+                  f"{len(summary['stl_bad'])} bad (trimesh watertight/components)")
         print(f"sha256 list     : {'ok' if summary['checksums_ok'] else 'MISMATCH'}")
         if problems:
             print(f"problems        : {len(problems)}")
@@ -177,9 +210,10 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Audit a generated gen2 corpus")
     parser.add_argument("--parts-dir", type=Path, default=Path("optional_data/data/gen2"))
     parser.add_argument("--limit", type=int, default=None, help="only check the first N rows")
+    parser.add_argument("--stl", action="store_true", help="also run the receiver-simulation STL gate")
     parser.add_argument("--quiet", action="store_true")
     args = parser.parse_args(argv)
-    return verify(args.parts_dir, args.limit, args.quiet)
+    return verify(args.parts_dir, args.limit, args.quiet, args.stl)
 
 
 if __name__ == "__main__":

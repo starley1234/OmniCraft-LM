@@ -12,13 +12,13 @@ offset_h = 45;            // overall rise, Z
 sheet_t = 6;              // plate thickness
 hole_d = 5.5;             // clearance for M5
 rib_len = 15.3;           // gusset leg
-rib_sink = 0.9;           // gusset overlap into the plates
+rib_sink = 1.6;           // gusset overlap into the plates
 
 module hole_z(px, py, z0) {
-  translate([px, py, z0 - 0.5]) cylinder(h = sheet_t + 1, d = hole_d);
+  translate([px, py, z0 - 2.5]) cylinder(h = sheet_t + 5, d = hole_d);
 }
 module hole_x(py, pz) {
-  translate([-0.5, py, pz]) rotate([0, 90, 0]) cylinder(h = sheet_t + 1, d = hole_d);
+  translate([-2.5, py, pz]) rotate([0, 90, 0]) cylinder(h = sheet_t + 5, d = hole_d);
 }
 module gusset(x0) {
   translate([x0, bracket_w - rib_sink, 0])
@@ -40,5 +40,5 @@ difference() {
   }
   hole_z(11, 20, 0);
   translate([lower_leg - sheet_t - 22.8, 0, 0]) hole_z(0, 20, offset_h - sheet_t);
-  translate([lower_leg - sheet_t, 0, 0]) hole_x(20, 11);
+  translate([lower_leg - sheet_t, 0, 0]) hole_x(20, 28.1);
 }

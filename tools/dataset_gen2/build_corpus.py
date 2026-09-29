@@ -176,6 +176,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT, help="output directory")
     parser.add_argument("--quiet", action="store_true", help="only print the final summary")
     parser.add_argument(
+        "--stl-audit",
+        action="store_true",
+        help="also run the receiver-simulation STL gate over the written corpus (slow)",
+    )
+    parser.add_argument(
         "--report",
         action="store_true",
         help="write GENERATION_REPORT.md next to the corpus",
@@ -189,7 +194,7 @@ def main(argv: list[str] | None = None) -> int:
 
         # re-audit the files that are actually on disk and put those numbers in
         # the report, so the report can never claim more than the corpus does
-        summary["audit"] = audit_corpus(args.out)
+        summary["audit"] = audit_corpus(args.out, stl=args.stl_audit)
         write_report(args.out, summary)
         if not args.quiet:
             print(f"report written to {args.out / 'GENERATION_REPORT.md'}")

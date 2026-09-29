@@ -14,17 +14,18 @@ len3 = 10;                // step 3 length
 d4 = 8;                   // step 4 diameter
 len4 = 30;                // step 4 length
 total = 75;               // overall length
-chamfer = 2.4;            // end chamfer
-groove_r = 12.5;          // groove radius
-groove_z = 17;            // groove position from the end
-groove_w = 3.5;           // groove width
-groove_d = 1.3;           // groove depth
-
-/* closed turning profile: x is the radius, y is the length */
-profile = [[0, 0], [15 - chamfer, 0], [15, chamfer], [15, 15], [12.5, 15], [12.5, 35], [10, 35], [10, 45], [4, 45], [4, 72.6], [1.6, 75], [0, 75]];
+chamfer = 2;              // end chamfer
 
 difference() {
-  rotate_extrude() polygon(profile);
-  /* circlip groove just behind the shoulder */
-  rotate_extrude() translate([groove_r - groove_d, groove_z]) square([groove_d + 1, groove_w]);
+  /* turned body: stacked cylinders, every step sunk into the bigger one */
+  union() {
+    cylinder(h = len1, d = d1);
+    translate([0, 0, 14.6]) cylinder(h = 20.4, d = d2);
+    translate([0, 0, 34.6]) cylinder(h = 10.4, d = d3);
+    translate([0, 0, 44.6]) cylinder(h = 30.4, d = d4);
+  }
+  /* bottom chamfer ring cut */
+  rotate_extrude() translate([13, -2.5]) polygon([[0, 0], [4.5, 0], [4.5, 7], [0, 2.5]]);
+  /* top chamfer ring cut */
+  rotate_extrude() translate([2, 75]) polygon([[0, 0], [4.5, -4.5], [4.5, 2.5], [0, 2.5]]);
 }

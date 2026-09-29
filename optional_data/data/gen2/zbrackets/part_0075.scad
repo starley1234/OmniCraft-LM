@@ -15,10 +15,10 @@ cb_d = 14.5;              // counterbore diameter
 cb_h = 3.2;               // counterbore depth
 
 module hole_z(px, py, z0) {
-  translate([px, py, z0 - 0.5]) cylinder(h = thick + 1, d = hole_d);
+  translate([px, py, z0 - 2.5]) cylinder(h = thick + 5, d = hole_d);
 }
 module hole_x(py, pz) {
-  translate([-0.5, py, pz]) rotate([0, 90, 0]) cylinder(h = thick + 1, d = hole_d);
+  translate([-2.5, py, pz]) rotate([0, 90, 0]) cylinder(h = thick + 5, d = hole_d);
 }
 module cb_z(px, py, top_z) {
   translate([px, py, top_z - cb_h]) cylinder(h = cb_h + 0.5, d = cb_d);
@@ -37,8 +37,8 @@ difference() {
   }
   hole_z(18, 10, 0);
   translate([lower_len - thick - 7, 0, 0]) hole_z(0, 10, rise - thick);
-  translate([lower_len - thick, 0, 0]) hole_x(10, 18);
+  translate([lower_len - thick, 0, 0]) hole_x(10, 12.5);
   cb_z(18, 10, thick);
   translate([lower_len - thick - 7, 0, 0]) cb_z(0, 10, rise);
-  translate([lower_len - thick, 0, 0]) cb_x(10, 18);
+  translate([lower_len - thick, 0, 0]) cb_x(10, 12.5);
 }

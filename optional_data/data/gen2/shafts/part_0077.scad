@@ -16,17 +16,29 @@ len4 = 20;                // step 4 length
 d5 = 12;                  // step 5 diameter
 len5 = 40;                // step 5 length
 total = 140;              // overall length
-chamfer = 1.5;            // end chamfer
-key_w = 4;                // keyway width
-key_d = 2;                // keyway depth
-key_len = 14;             // keyway length
-key_z = 123;              // keyway start along the shaft
-
-/* closed turning profile: x is the radius, y is the length */
-profile = [[0, 0], [15 - chamfer, 0], [15, chamfer], [15, 20], [12.5, 20], [12.5, 50], [10, 50], [10, 80], [8, 80], [8, 100], [6, 100], [6, 138.5], [4.5, 140], [0, 140]];
+chamfer = 2.4;            // end chamfer
+groove_r = 10;            // groove radius
+groove_z = 52;            // groove position from the end
+groove_w = 2;             // groove width
+groove_d = 1;             // groove depth
+cross_d = 6;              // cross pin hole
+cross_z = 120;            // cross hole position
 
 difference() {
-  rotate_extrude() polygon(profile);
-  /* keyway milled into the top of the largest step */
-  translate([d1 / 2 - key_d, -key_w / 2, key_z]) cube([key_d + 1, key_w, key_len]);
+  /* turned body: stacked cylinders, every step sunk into the bigger one */
+  union() {
+    cylinder(h = len1, d = d1);
+    translate([0, 0, 19.6]) cylinder(h = 30.4, d = d2);
+    translate([0, 0, 49.6]) cylinder(h = 30.4, d = d3);
+    translate([0, 0, 79.6]) cylinder(h = 20.4, d = d4);
+    translate([0, 0, 99.6]) cylinder(h = 40.4, d = d5);
+  }
+  /* bottom chamfer ring cut */
+  rotate_extrude() translate([12.6, -2.5]) polygon([[0, 0], [4.9, 0], [4.9, 7.4], [0, 2.5]]);
+  /* top chamfer ring cut */
+  rotate_extrude() translate([3.6, 140]) polygon([[0, 0], [4.9, -4.9], [4.9, 2.5], [0, 2.5]]);
+  /* circlip groove just behind the shoulder */
+  rotate_extrude() translate([groove_r - groove_d, groove_z]) square([groove_d + 2.5, groove_w]);
+  /* cross pin hole through the small step */
+  translate([0, 0, cross_z]) rotate([90, 0, 0]) cylinder(h = d5 + 5, d = cross_d, center = true);
 }

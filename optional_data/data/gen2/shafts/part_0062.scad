@@ -14,21 +14,34 @@ len3 = 10;                // step 3 length
 d4 = 10;                  // step 4 diameter
 len4 = 15;                // step 4 length
 total = 85;               // overall length
-chamfer = 2.4;            // end chamfer
-groove_r = 7;             // groove radius
-groove_z = 62;            // groove position from the end
-groove_w = 3;             // groove width
-groove_d = 1.3;           // groove depth
+chamfer = 1;              // end chamfer
+groove_r = 5;             // groove radius
+groove_z = 72;            // groove position from the end
+groove_w = 2.5;           // groove width
+groove_d = 2;             // groove depth
+key_w = 4;                // keyway width
+key_d = 2;                // keyway depth
+key_len = 13;             // keyway length
+key_z = 3;                // keyway start along the shaft
 cross_d = 4;              // cross pin hole
-cross_z = 77.5;           // cross hole position
-
-/* closed turning profile: x is the radius, y is the length */
-profile = [[0, 0], [15 - chamfer, 0], [15, chamfer], [15, 20], [8, 20], [8, 60], [7, 60], [7, 70], [5, 70], [5, 82.6], [2.6, 85], [0, 85]];
+cross_z = 10;             // cross hole position
 
 difference() {
-  rotate_extrude() polygon(profile);
+  /* turned body: stacked cylinders, every step sunk into the bigger one */
+  union() {
+    cylinder(h = len1, d = d1);
+    translate([0, 0, 19.6]) cylinder(h = 40.4, d = d2);
+    translate([0, 0, 59.6]) cylinder(h = 10.4, d = d3);
+    translate([0, 0, 69.6]) cylinder(h = 15.4, d = d4);
+  }
+  /* bottom chamfer ring cut */
+  rotate_extrude() translate([14, -2.5]) polygon([[0, 0], [3.5, 0], [3.5, 6], [0, 2.5]]);
+  /* top chamfer ring cut */
+  rotate_extrude() translate([4, 85]) polygon([[0, 0], [3.5, -3.5], [3.5, 2.5], [0, 2.5]]);
   /* circlip groove just behind the shoulder */
-  rotate_extrude() translate([groove_r - groove_d, groove_z]) square([groove_d + 1, groove_w]);
+  rotate_extrude() translate([groove_r - groove_d, groove_z]) square([groove_d + 2.5, groove_w]);
+  /* keyway milled along the first step */
+  translate([d1 / 2 - key_d, -key_w / 2, key_z]) cube([key_d + 2.5, key_w, key_len]);
   /* cross pin hole through the small step */
-  translate([0, 0, cross_z]) rotate([90, 0, 0]) cylinder(h = d4 + 4, d = cross_d, center = true);
+  translate([0, 0, cross_z]) rotate([90, 0, 0]) cylinder(h = d1 + 5, d = cross_d, center = true);
 }

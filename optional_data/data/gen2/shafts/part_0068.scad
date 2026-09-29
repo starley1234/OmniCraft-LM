@@ -14,11 +14,18 @@ len3 = 30;                // step 3 length
 d4 = 10;                  // step 4 diameter
 len4 = 15;                // step 4 length
 total = 90;               // overall length
-chamfer = 2;              // end chamfer
-
-/* closed turning profile: x is the radius, y is the length */
-profile = [[0, 0], [20 - chamfer, 0], [20, chamfer], [20, 30], [15, 30], [15, 45], [10, 45], [10, 75], [5, 75], [5, 88], [3, 90], [0, 90]];
+chamfer = 1;              // end chamfer
 
 difference() {
-  rotate_extrude() polygon(profile);
+  /* turned body: stacked cylinders, every step sunk into the bigger one */
+  union() {
+    cylinder(h = len1, d = d1);
+    translate([0, 0, 29.6]) cylinder(h = 15.4, d = d2);
+    translate([0, 0, 44.6]) cylinder(h = 30.4, d = d3);
+    translate([0, 0, 74.6]) cylinder(h = 15.4, d = d4);
+  }
+  /* bottom chamfer ring cut */
+  rotate_extrude() translate([19, -2.5]) polygon([[0, 0], [3.5, 0], [3.5, 6], [0, 2.5]]);
+  /* top chamfer ring cut */
+  rotate_extrude() translate([4, 90]) polygon([[0, 0], [3.5, -3.5], [3.5, 2.5], [0, 2.5]]);
 }

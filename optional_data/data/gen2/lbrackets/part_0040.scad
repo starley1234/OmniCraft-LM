@@ -12,18 +12,18 @@ thick = 3.5;              // plate thickness
 hole_d = 6.6;             // clearance for M6
 slot_l = 20;              // adjustment slot length
 rib_leg = 28.5;           // gusset leg
-rib_sink = 0.9;           // gusset overlap into the plates
+rib_sink = 1.6;           // gusset overlap into the plates
 
 module hole_z(px, py) {
-  translate([px, py, -0.5]) cylinder(h = thick + 1, d = hole_d);
+  translate([px, py, -2.5]) cylinder(h = thick + 5, d = hole_d);
 }
 module hole_x(pz, py) {
-  translate([-0.5, py, pz]) rotate([0, 90, 0]) cylinder(h = thick + 1, d = hole_d);
+  translate([-2.5, py, pz]) rotate([0, 90, 0]) cylinder(h = thick + 5, d = hole_d);
 }
 module adjust_slot(px, py) {
   hull() {
-    translate([px - (slot_l - hole_d) / 2, py, -0.5]) cylinder(h = thick + 1, d = hole_d);
-    translate([px + (slot_l - hole_d) / 2, py, -0.5]) cylinder(h = thick + 1, d = hole_d);
+    translate([px - (slot_l - hole_d) / 2, py, -2.5]) cylinder(h = thick + 5, d = hole_d);
+    translate([px + (slot_l - hole_d) / 2, py, -2.5]) cylinder(h = thick + 5, d = hole_d);
   }
 }
 module gusset() {

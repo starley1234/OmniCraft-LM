@@ -15,10 +15,21 @@ d4 = 10;                  // step 4 diameter
 len4 = 30;                // step 4 length
 total = 105;              // overall length
 chamfer = 1.5;            // end chamfer
-
-/* closed turning profile: x is the radius, y is the length */
-profile = [[0, 0], [12.5 - chamfer, 0], [12.5, chamfer], [12.5, 20], [10, 20], [10, 45], [6, 45], [6, 75], [5, 75], [5, 103.5], [3.5, 105], [0, 105]];
+cross_d = 4;              // cross pin hole
+cross_z = 90;             // cross hole position
 
 difference() {
-  rotate_extrude() polygon(profile);
+  /* turned body: stacked cylinders, every step sunk into the bigger one */
+  union() {
+    cylinder(h = len1, d = d1);
+    translate([0, 0, 19.6]) cylinder(h = 25.4, d = d2);
+    translate([0, 0, 44.6]) cylinder(h = 30.4, d = d3);
+    translate([0, 0, 74.6]) cylinder(h = 30.4, d = d4);
+  }
+  /* bottom chamfer ring cut */
+  rotate_extrude() translate([11, -2.5]) polygon([[0, 0], [4, 0], [4, 6.5], [0, 2.5]]);
+  /* top chamfer ring cut */
+  rotate_extrude() translate([3.5, 105]) polygon([[0, 0], [4, -4], [4, 2.5], [0, 2.5]]);
+  /* cross pin hole through the small step */
+  translate([0, 0, cross_z]) rotate([90, 0, 0]) cylinder(h = d4 + 5, d = cross_d, center = true);
 }

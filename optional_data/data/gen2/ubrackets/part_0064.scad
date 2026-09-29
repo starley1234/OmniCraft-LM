@@ -13,16 +13,16 @@ hole_d = 9;               // clearance for M8
 slot_l = 14;              // slot length
 
 module hole_z(px, py) {
-  translate([px, py, -0.5]) cylinder(h = web_t + 1, d = hole_d);
+  translate([px, py, -2.5]) cylinder(h = web_t + 5, d = hole_d);
 }
 module hole_y_pz(pz) {
   /* through both uprights along Y */
-  translate([0, -0.5, pz]) rotate([-90, 0, 0]) cylinder(h = jaw_w + 1, d = hole_d);
+  translate([0, -2.5, pz]) rotate([-90, 0, 0]) cylinder(h = jaw_w + 5, d = hole_d);
 }
 module slot_z(px, py) {
   hull() {
-    translate([px - (slot_l - hole_d) / 2, py, -0.5]) cylinder(h = web_t + 1, d = hole_d);
-    translate([px + (slot_l - hole_d) / 2, py, -0.5]) cylinder(h = web_t + 1, d = hole_d);
+    translate([px - (slot_l - hole_d) / 2, py, -2.5]) cylinder(h = web_t + 5, d = hole_d);
+    translate([px + (slot_l - hole_d) / 2, py, -2.5]) cylinder(h = web_t + 5, d = hole_d);
   }
 }
 

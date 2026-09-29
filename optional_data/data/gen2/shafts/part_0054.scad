@@ -18,13 +18,26 @@ chamfer = 1.5;            // end chamfer
 groove_r = 10;            // groove radius
 groove_z = 42;            // groove position from the end
 groove_w = 2.5;           // groove width
-groove_d = 1;             // groove depth
-
-/* closed turning profile: x is the radius, y is the length */
-profile = [[0, 0], [20 - chamfer, 0], [20, chamfer], [20, 25], [15, 25], [15, 40], [10, 40], [10, 50], [8, 50], [8, 78.5], [6.5, 80], [0, 80]];
+groove_d = 2;             // groove depth
+key_w = 4;                // keyway width
+key_d = 2;                // keyway depth
+key_len = 17.5;           // keyway length
+key_z = 3.5;              // keyway start along the shaft
 
 difference() {
-  rotate_extrude() polygon(profile);
+  /* turned body: stacked cylinders, every step sunk into the bigger one */
+  union() {
+    cylinder(h = len1, d = d1);
+    translate([0, 0, 24.6]) cylinder(h = 15.4, d = d2);
+    translate([0, 0, 39.6]) cylinder(h = 10.4, d = d3);
+    translate([0, 0, 49.6]) cylinder(h = 30.4, d = d4);
+  }
+  /* bottom chamfer ring cut */
+  rotate_extrude() translate([18.5, -2.5]) polygon([[0, 0], [4, 0], [4, 6.5], [0, 2.5]]);
+  /* top chamfer ring cut */
+  rotate_extrude() translate([6.5, 80]) polygon([[0, 0], [4, -4], [4, 2.5], [0, 2.5]]);
   /* circlip groove just behind the shoulder */
-  rotate_extrude() translate([groove_r - groove_d, groove_z]) square([groove_d + 1, groove_w]);
+  rotate_extrude() translate([groove_r - groove_d, groove_z]) square([groove_d + 2.5, groove_w]);
+  /* keyway milled along the first step */
+  translate([d1 / 2 - key_d, -key_w / 2, key_z]) cube([key_d + 2.5, key_w, key_len]);
 }

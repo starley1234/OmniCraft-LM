@@ -14,11 +14,11 @@ window_l = 25.9;          // window length
 window_h = 17.6;          // window height
 
 module hole_z(px, py) {
-  translate([px, py, -0.5]) cylinder(h = mat_t + 1, d = hole_d);
+  translate([px, py, -2.5]) cylinder(h = mat_t + 5, d = hole_d);
 }
 module hole_y_pz(pz) {
   /* through both uprights along Y */
-  translate([0, -0.5, pz]) rotate([-90, 0, 0]) cylinder(h = channel_w + 1, d = hole_d);
+  translate([0, -2.5, pz]) rotate([-90, 0, 0]) cylinder(h = channel_w + 5, d = hole_d);
 }
 
 module base() {

@@ -14,21 +14,28 @@ len3 = 10;                // step 3 length
 d4 = 8;                   // step 4 diameter
 len4 = 15;                // step 4 length
 total = 70;               // overall length
-chamfer = 2;              // end chamfer
-key_w = 5;                // keyway width
-key_d = 2.5;              // keyway depth
-key_len = 24;             // keyway length
-key_z = 43;               // keyway start along the shaft
-cross_d = 5;              // cross pin hole
+chamfer = 2.5;            // end chamfer
+groove_r = 8;             // groove radius
+groove_z = 32;            // groove position from the end
+groove_w = 2.5;           // groove width
+groove_d = 1.3;           // groove depth
+cross_d = 4;              // cross pin hole
 cross_z = 62.5;           // cross hole position
 
-/* closed turning profile: x is the radius, y is the length */
-profile = [[0, 0], [25 - chamfer, 0], [25, chamfer], [25, 30], [8, 30], [8, 45], [5, 45], [5, 55], [4, 55], [4, 68], [2, 70], [0, 70]];
-
 difference() {
-  rotate_extrude() polygon(profile);
-  /* keyway milled into the top of the largest step */
-  translate([d1 / 2 - key_d, -key_w / 2, key_z]) cube([key_d + 1, key_w, key_len]);
+  /* turned body: stacked cylinders, every step sunk into the bigger one */
+  union() {
+    cylinder(h = len1, d = d1);
+    translate([0, 0, 29.6]) cylinder(h = 15.4, d = d2);
+    translate([0, 0, 44.6]) cylinder(h = 10.4, d = d3);
+    translate([0, 0, 54.6]) cylinder(h = 15.4, d = d4);
+  }
+  /* bottom chamfer ring cut */
+  rotate_extrude() translate([22.5, -2.5]) polygon([[0, 0], [5, 0], [5, 7.5], [0, 2.5]]);
+  /* top chamfer ring cut */
+  rotate_extrude() translate([1.5, 70]) polygon([[0, 0], [5, -5], [5, 2.5], [0, 2.5]]);
+  /* circlip groove just behind the shoulder */
+  rotate_extrude() translate([groove_r - groove_d, groove_z]) square([groove_d + 2.5, groove_w]);
   /* cross pin hole through the small step */
-  translate([0, 0, cross_z]) rotate([90, 0, 0]) cylinder(h = d4 + 4, d = cross_d, center = true);
+  translate([0, 0, cross_z]) rotate([90, 0, 0]) cylinder(h = d4 + 5, d = cross_d, center = true);
 }

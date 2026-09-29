@@ -12,15 +12,23 @@ len2 = 15;                // step 2 length
 d3 = 10;                  // step 3 diameter
 len3 = 20;                // step 3 length
 total = 60;               // overall length
-chamfer = 2.5;            // end chamfer
-cross_d = 6;              // cross pin hole
-cross_z = 50;             // cross hole position
-
-/* closed turning profile: x is the radius, y is the length */
-profile = [[0, 0], [25 - chamfer, 0], [25, chamfer], [25, 25], [10, 25], [10, 40], [5, 40], [5, 57.5], [2.5, 60], [0, 60]];
+chamfer = 1.5;            // end chamfer
+key_w = 6;                // keyway width
+key_d = 3;                // keyway depth
+key_len = 17.5;           // keyway length
+key_z = 3.5;              // keyway start along the shaft
 
 difference() {
-  rotate_extrude() polygon(profile);
-  /* cross pin hole through the small step */
-  translate([0, 0, cross_z]) rotate([90, 0, 0]) cylinder(h = d3 + 4, d = cross_d, center = true);
+  /* turned body: stacked cylinders, every step sunk into the bigger one */
+  union() {
+    cylinder(h = len1, d = d1);
+    translate([0, 0, 24.6]) cylinder(h = 15.4, d = d2);
+    translate([0, 0, 39.6]) cylinder(h = 20.4, d = d3);
+  }
+  /* bottom chamfer ring cut */
+  rotate_extrude() translate([23.5, -2.5]) polygon([[0, 0], [4, 0], [4, 6.5], [0, 2.5]]);
+  /* top chamfer ring cut */
+  rotate_extrude() translate([3.5, 60]) polygon([[0, 0], [4, -4], [4, 2.5], [0, 2.5]]);
+  /* keyway milled along the first step */
+  translate([d1 / 2 - key_d, -key_w / 2, key_z]) cube([key_d + 2.5, key_w, key_len]);
 }

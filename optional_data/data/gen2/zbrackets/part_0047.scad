@@ -13,10 +13,10 @@ plate_t = 5;              // plate thickness
 hole_d = 3.4;             // clearance for M3
 
 module hole_z(px, py, z0) {
-  translate([px, py, z0 - 0.5]) cylinder(h = plate_t + 1, d = hole_d);
+  translate([px, py, z0 - 2.5]) cylinder(h = plate_t + 5, d = hole_d);
 }
 module hole_x(py, pz) {
-  translate([-0.5, py, pz]) rotate([0, 90, 0]) cylinder(h = plate_t + 1, d = hole_d);
+  translate([-2.5, py, pz]) rotate([0, 90, 0]) cylinder(h = plate_t + 5, d = hole_d);
 }
 
 difference() {
@@ -29,5 +29,5 @@ difference() {
   }
   hole_z(6.8, 17.5, 0);
   translate([foot_len - plate_t - 18, 0, 0]) hole_z(0, 17.5, step_h - plate_t);
-  translate([foot_len - plate_t, 0, 0]) hole_x(17.5, 6.8);
+  translate([foot_len - plate_t, 0, 0]) hole_x(17.5, 15);
 }

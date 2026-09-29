@@ -13,13 +13,13 @@ hole_d = 4.5;             // clearance for M4
 cb_d = 8;                 // counterbore seat
 cb_h = 2.4;               // counterbore depth
 rib_leg = 34.2;           // gusset leg
-rib_sink = 0.9;           // gusset overlap into the plates
+rib_sink = 1.6;           // gusset overlap into the plates
 
 module hole_z(px, py) {
-  translate([px, py, -0.5]) cylinder(h = mat_t + 1, d = hole_d);
+  translate([px, py, -2.5]) cylinder(h = mat_t + 5, d = hole_d);
 }
 module hole_x(pz, py) {
-  translate([-0.5, py, pz]) rotate([0, 90, 0]) cylinder(h = mat_t + 1, d = hole_d);
+  translate([-2.5, py, pz]) rotate([0, 90, 0]) cylinder(h = mat_t + 5, d = hole_d);
 }
 module cb_z(px, py) {
   translate([px, py, mat_t - cb_h]) cylinder(h = cb_h + 0.4, d = cb_d);

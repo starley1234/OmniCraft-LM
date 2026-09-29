@@ -1,0 +1,28 @@
+$fn = 32;
+
+// ----------------------------------------------------------------------
+// Deck eye: 28 mm eye on a 40 mm base
+// ----------------------------------------------------------------------
+
+// --- parameters (mm) ---
+base_l = 40;              // base length
+base_w = 28;              // base width
+base_t = 10;              // base thickness
+eye_r = 14;               // eye outside radius
+eye_bore = 20;            // eye bore diameter
+eye_w = 10;               // eye thickness
+eye_z = 21;               // eye centre height
+holes_d = 6.35;           // fixing holes
+hole_x = 12;              // fixing hole spacing
+
+difference() {
+  union() {
+    translate([-20, -14, 0]) cube([base_l, base_w, base_t]);
+    /* eye standing upright, its foot sunk 3 mm into the base */
+    translate([0, -5, 21]) rotate([-90, 0, 0]) cylinder(h = 10, d = 28);
+  }
+  /* eye bore, 2.5 mm clear of both faces */
+  translate([0, -7.5, 21]) rotate([-90, 0, 0]) cylinder(h = 15, d = 20);
+  translate([-12, 0, -2.5]) cylinder(h = base_t + 5, d = holes_d);
+  translate([12, 0, -2.5]) cylinder(h = base_t + 5, d = holes_d);
+}

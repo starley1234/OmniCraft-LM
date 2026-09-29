@@ -12,11 +12,11 @@ plate_t = 4.5;            // wall thickness
 hole_d = 4.5;             // clearance for M4
 
 module hole_z(px, py) {
-  translate([px, py, -0.5]) cylinder(h = plate_t + 1, d = hole_d);
+  translate([px, py, -2.5]) cylinder(h = plate_t + 5, d = hole_d);
 }
 module hole_y_pz(pz) {
   /* through both uprights along Y */
-  translate([0, -0.5, pz]) rotate([-90, 0, 0]) cylinder(h = outer_w + 1, d = hole_d);
+  translate([0, -2.5, pz]) rotate([-90, 0, 0]) cylinder(h = outer_w + 5, d = hole_d);
 }
 
 module base() {

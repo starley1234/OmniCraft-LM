@@ -2,13 +2,16 @@
 
 This file is the audit sheet for `optional_data/data/gen2/`: it lists exactly what was added, how it was produced and how to re-verify it. Nothing in here is part of the training data itself - the corpus is `manifest.jsonl` plus the `.scad` files.
 
-- generated: 2026-09-29 19:41 UTC
+- generated: 2026-09-29 21:21 UTC
 - samples: **2240** across **28** families
-- corpus size: 5040.7 KiB of text (manifest + sources)
-- `manifest.jsonl` sha256: `45a361dc152fdc50e4a52e10632a28ea40b679bfae348fb7fa25b55cf85ebe4d`
+- corpus size: 5064.4 KiB of text (manifest + sources)
+- `manifest.jsonl` sha256: `d8039c72763db9582d1e8b2c3fb8413801d1be01bf92191e6fea67af34a8788f`
 - generator: `tools/dataset_gen2/` (`build_corpus.py`, `families/*.py`)
+- openSCAD CLI on this machine / openSCAD CLI на этой машине: no / нет; every check below was done on the manifold + trimesh stack instead, run `openscad --backend=manifold` on the receiving side to repeat it there
 - seeds: deterministic, `Rng(family, index)` with fixed seed 20260929
 - local gate: 2240 samples evaluated with the manifold kernel (the same kernel OpenSCAD uses with `--backend=manifold`); 0 rejected before writing, 7 duplicate draws skipped
+- wire graph connectivity: 400 graph rows, 0 disconnected, 0 with isolated nodes
+- STL round-trip through trimesh (same calls as `src/env/openscad_runner.py`): 2240 samples checked, 0 not watertight / multi-component / degenerate
 - independent re-audit of the files on disk (`tools/dataset_gen2/verify_corpus.py`): 2240 rows / 28 families / 400 graph rows re-evaluated, worst bbox deviation vs the manifest 2.42% (the receiver allows 15%), SHA-256 list verified, 0 problems
 - the corpus lives under `optional_data/`, which this repository ignores, so the deliverable was committed with `git add -f optional_data/data/gen2`
 
@@ -16,11 +19,11 @@ This file is the audit sheet for `optional_data/data/gen2/`: it lists exactly wh
 
 | path (inside `optional_data/data/gen2/`) | what it is | size |
 | --- | --- | ---: |
-| `manifest.jsonl` | 2240 rows of metadata: file, family, `prompt_ru`, `prompt_en`, `expected_bbox_mm`, `parameters`, `graph`; sha256 `45a361dc152fdc50e4a52e10632a28ea40b679bfae348fb7fa25b55cf85ebe4d` | 1869.9 KiB |
-| `<family>/part_NNNN.scad` | 2240 source files in 28 single-word family directories, four-digit part numbers | 3170.8 KiB |
+| `manifest.jsonl` | 2240 rows of metadata: file, family, `prompt_ru`, `prompt_en`, `expected_bbox_mm`, `parameters`, `graph`; sha256 `d8039c72763db9582d1e8b2c3fb8413801d1be01bf92191e6fea67af34a8788f` | 1870.9 KiB |
+| `<family>/part_NNNN.scad` | 2240 source files in 28 single-word family directories, four-digit part numbers | 3193.4 KiB |
 | `SHA256SUMS.txt` | one `sha256  path` pair per artifact, manifest first | 2241 lines |
 | `GENERATION_REPORT.md` | this audit sheet - not part of the training data | - |
-| `tools/dataset_gen2/` (repository, not inside the corpus) | the generator that produced the corpus: 13 Python modules (`build_corpus.py`, `common.py`, `bearings.py`, `brackets.py`, `drive.py`, `joints.py`, `profiles.py`, `shells.py`, `wire.py`, `miniscad.py`, `prompts.py`, `report.py`, `verify_corpus.py`) | - |
+| `tools/dataset_gen2/` (repository, not inside the corpus) | the generator that produced the corpus: 14 Python modules (`build_corpus.py`, `common.py`, `bearings.py`, `brackets.py`, `drive.py`, `joints.py`, `profiles.py`, `shells.py`, `wire.py`, `miniscad.py`, `prompts.py`, `report.py`, `stlcheck.py`, `verify_corpus.py`) | - |
 
 Nothing else in the repository is modified by this delivery: the request file `docs/DATASET_REQUEST.md` and the training pipeline are untouched, and outside `tools/dataset_gen2/` the only change is the corpus itself. Because `.gitignore` covers `optional_data/`, the files were force-added (`git add -f`); `git show --stat HEAD` lists the whole diff.
 
@@ -93,7 +96,7 @@ One JSON object per line, exactly the fields from `docs/DATASET_REQUEST.md`:
 - words per RU prompt: min 18, median 33, max 52
 - words per EN prompt: min 19, median 36, max 56
 - a dedicated printing-tolerance sentence is injected with probability 0.21 (`prompts.tail`), which matches the ~20% asked for in the request
-- measured over the corpus, 610 of 2240 samples (27%) mention a clearance / fit / tolerance phrase in at least one language (the rest of the hits come from the general chatty tails)
+- measured over the corpus, 613 of 2240 samples (27%) mention a clearance / fit / tolerance phrase in at least one language (the rest of the hits come from the general chatty tails)
 - every prompt carries the overall size in mm in both languages
 
 ## Hard-rule checklist (verified locally before writing)

@@ -16,15 +16,29 @@ len4 = 20;                // step 4 length
 d5 = 12;                  // step 5 diameter
 len5 = 15;                // step 5 length
 total = 115;              // overall length
-chamfer = 2;              // end chamfer
+chamfer = 1.5;            // end chamfer
+groove_r = 7;             // groove radius
+groove_z = 82;            // groove position from the end
+groove_w = 3;             // groove width
+groove_d = 1.6;           // groove depth
 cross_d = 6;              // cross pin hole
 cross_z = 107.5;          // cross hole position
 
-/* closed turning profile: x is the radius, y is the length */
-profile = [[0, 0], [20 - chamfer, 0], [20, chamfer], [20, 30], [10, 30], [10, 55], [8, 55], [8, 80], [7, 80], [7, 100], [6, 100], [6, 113], [4, 115], [0, 115]];
-
 difference() {
-  rotate_extrude() polygon(profile);
+  /* turned body: stacked cylinders, every step sunk into the bigger one */
+  union() {
+    cylinder(h = len1, d = d1);
+    translate([0, 0, 29.6]) cylinder(h = 25.4, d = d2);
+    translate([0, 0, 54.6]) cylinder(h = 25.4, d = d3);
+    translate([0, 0, 79.6]) cylinder(h = 20.4, d = d4);
+    translate([0, 0, 99.6]) cylinder(h = 15.4, d = d5);
+  }
+  /* bottom chamfer ring cut */
+  rotate_extrude() translate([18.5, -2.5]) polygon([[0, 0], [4, 0], [4, 6.5], [0, 2.5]]);
+  /* top chamfer ring cut */
+  rotate_extrude() translate([4.5, 115]) polygon([[0, 0], [4, -4], [4, 2.5], [0, 2.5]]);
+  /* circlip groove just behind the shoulder */
+  rotate_extrude() translate([groove_r - groove_d, groove_z]) square([groove_d + 2.5, groove_w]);
   /* cross pin hole through the small step */
-  translate([0, 0, cross_z]) rotate([90, 0, 0]) cylinder(h = d5 + 4, d = cross_d, center = true);
+  translate([0, 0, cross_z]) rotate([90, 0, 0]) cylinder(h = d5 + 5, d = cross_d, center = true);
 }

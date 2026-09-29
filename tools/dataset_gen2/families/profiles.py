@@ -62,6 +62,11 @@ def build_stepped_shafts(index: int) -> Part:
         scale = 240.0 / total
         lengths = [round(value * scale, 1) for value in lengths]
         total = round(sum(lengths), 2)
+    # the chamfers are cut with a revolved ring, so the ring has to keep clear
+    # of the axis by at least 1.2 mm on the small end
+    chamfer = rng.grid([1.0, 1.5, 2.0, 2.5])
+    chamfer = round(max(0.6, min(chamfer, diameters[0] * 0.08, diameters[-1] / 2 - 1.2)), 2)
+
     groove = rng.chance(0.6)
     groove_w = rng.grid([2.0, 2.5, 3.0, 3.5]) if groove else 0.0
     groove_depth = rng.grid([1.0, 1.3, 1.6, 2.0]) if groove else 0.0
@@ -70,44 +75,44 @@ def build_stepped_shafts(index: int) -> Part:
     key_w = rng.grid([4.0, 5.0, 6.0, 8.0]) if keyway else 0.0
     key_depth = round(key_w * 0.5, 2) if keyway else 0.0
     key_len = rng.grid([20.0, 25.0, 30.0, 40.0]) if keyway else 0.0
-    if keyway:
-        key_len = round(min(key_len, lengths[0] - 6.0), 2)
-        if key_len < 10.0:
-            keyway = False
-    cross_hole = rng.chance(0.4)
+    cross_hole = rng.chance(0.45)
     cross_d = rng.grid([4.0, 5.0, 6.0, 8.0]) if cross_hole else 0.0
-    chamfer = rng.grid([1.0, 1.5, 2.0, 2.5])
-    chamfer = round(min(chamfer, diameters[0] * 0.08), 2)
 
     # where each step starts along the shaft
     offsets = [0.0]
     for length in lengths[:-1]:
         offsets.append(round(offsets[-1] + length, 2))
-    # the circlip groove sits just behind a shoulder
+    # the keyway is milled into the first (largest) step, clear of the chamfer
+    if keyway:
+        key_len = round(min(key_len, lengths[0] - chamfer - 6.0), 2)
+        key_z = round(chamfer + 2.0, 2)
+        if key_len < 10.0 or key_z + key_len > lengths[0] - 1.0:
+            keyway = False
+    # the circlip groove is turned into the smaller step, a couple of mm behind
+    # the shoulder - inside the bigger step it would leave a floating ring
     groove_radius = round(diameters[groove_index + 1] / 2, 2) if groove else 0.0
-    # the groove is turned into the smaller step, a couple of mm behind the
-    # shoulder - inside the bigger step it would leave a floating ring
     groove_z = round(offsets[groove_index + 1] + 2.0, 2) if groove else 0.0
     groove_limit = round(offsets[groove_index + 1] + lengths[groove_index + 1] - 2.0, 2)
     if groove and groove_z + groove_w > groove_limit:
         groove = False
     if groove:
-        groove_depth = round(min(groove_depth, groove_radius - 2.0), 2)
-    # the pin hole must leave a wall all round its step; a step that carries the
-    # circlip groove only has a thin core left, so the pin moves to step one
+        # the core left under the groove has to stay solid: >= 2.6 mm of radius
+        groove_depth = round(min(groove_depth, groove_radius - 2.6), 2)
+        if groove_depth < 1.0:
+            groove = False
+    # the pin hole goes through the step that keeps the most material around it
     cross_step = steps - 1
     if groove and groove_index + 1 == steps - 1:
         cross_step = 0
     if cross_hole:
         carries_groove = groove and groove_index + 1 == cross_step
         core_d = 2 * (groove_radius - groove_depth) if carries_groove else diameters[cross_step]
-        cross_d = round(min(cross_d, core_d - 3.0), 2)
-        if cross_d < 3.0:
+        cross_d = round(min(cross_d, core_d - 4.0), 2)
+        if cross_d < 3.0 or lengths[cross_step] < cross_d + 4.0:
             cross_hole = False
         else:
             cross_z = round(offsets[cross_step] + lengths[cross_step] / 2, 2)
 
-    largest = diameters[0]
     builder = ScadBuilder(
         "Stepped shaft",
         f"diameters {', '.join(fmt(value) for value in diameters)} mm, {fmt(total)} mm long",
@@ -126,57 +131,70 @@ def build_stepped_shafts(index: int) -> Part:
         builder.param("key_w", key_w, "keyway width")
         builder.param("key_d", key_depth, "keyway depth")
         builder.param("key_len", key_len, "keyway length")
-        builder.param("key_z", round(total - key_len - 3.0, 2), "keyway start along the shaft")
+        builder.param("key_z", key_z, "keyway start along the shaft")
     if cross_hole:
         builder.param("cross_d", cross_d, "cross pin hole")
         builder.param("cross_z", cross_z, "cross hole position")
 
-    # profile: bottom face, then up the shoulders, closed along the axis
-    profile = ["[0, 0]"]
-    profile.append(f"[{fmt(diameters[0] / 2, 3)} - chamfer, 0]")
-    profile.append(f"[{fmt(diameters[0] / 2, 3)}, chamfer]")
-    height = chamfer
-    for index_step in range(steps):
-        height = round(offsets[index_step] + lengths[index_step], 2)
-        if index_step < steps - 1:
-            profile.append(f"[{fmt(diameters[index_step] / 2, 3)}, {fmt(height, 2)}]")
-            profile.append(f"[{fmt(diameters[index_step + 1] / 2, 3)}, {fmt(height, 2)}]")
-        else:
-            profile.append(f"[{fmt(diameters[index_step] / 2, 3)}, {fmt(round(height - chamfer, 2), 2)}]")
-            profile.append(f"[{fmt(diameters[index_step] / 2 - chamfer, 3)}, {fmt(height, 2)}]")
-    profile.append(f"[0, {fmt(total, 2)}]")
-
+    # Body: a stack of cylinders, every smaller step sunk 0.4 mm into the bigger
+    # one so the joints overlap.  Nothing is revolved around the axis here: a
+    # rotate_extrude whose profile touches the axis is what produced the broken
+    # meshes in the previous delivery, so the turned shape is built from
+    # primitives and only the chamfers and the groove are ring cuts that stay
+    # clear of the axis.
     lines = [
-        "/* closed turning profile: x is the radius, y is the length */",
-        "profile = [" + ", ".join(profile) + "];",
-        "",
         "difference() {",
-        "  rotate_extrude() polygon(profile);",
+        "  /* turned body: stacked cylinders, every step sunk into the bigger one */",
+        "  union() {",
+        "    cylinder(h = len1, d = d1);",
     ]
-    if groove:
+    for position in range(2, steps + 1):
+        start = round(offsets[position - 1] - 0.4, 2)
+        height = round(lengths[position - 1] + 0.4, 2)
         lines.append(
-            "  /* circlip groove just behind the shoulder */"
+            f"    translate([0, 0, {fmt(start, 2)}])"
+            f" cylinder(h = {fmt(height, 2)}, d = d{position});"
         )
+    lines.append("  }")
+    # the ring cuts run 2.5 mm past the body and stay 1.2 mm off the axis
+    bottom_r = round(diameters[0] / 2 - chamfer, 3)
+    wide = round(chamfer + 2.5, 3)
+    lines.append("  /* bottom chamfer ring cut */")
+    lines.append(
+        f"  rotate_extrude() translate([{fmt(bottom_r, 3)}, -2.5])"
+        f" polygon([[0, 0], [{fmt(wide, 3)}, 0],"
+        f" [{fmt(wide, 3)}, {fmt(round(chamfer + 5.0, 3), 3)}], [0, 2.5]]);"
+    )
+    top_r = round(diameters[-1] / 2 - chamfer, 3)
+    lines.append("  /* top chamfer ring cut */")
+    lines.append(
+        f"  rotate_extrude() translate([{fmt(top_r, 3)}, {fmt(total, 2)}])"
+        f" polygon([[0, 0], [{fmt(wide, 3)}, {fmt(round(-chamfer - 2.5, 3), 3)}],"
+        f" [{fmt(wide, 3)}, 2.5], [0, 2.5]]);"
+    )
+    if groove:
+        lines.append("  /* circlip groove just behind the shoulder */")
         lines.append(
             "  rotate_extrude() translate([groove_r - groove_d, groove_z])"
-            " square([groove_d + 1, groove_w]);"
+            " square([groove_d + 2.5, groove_w]);"
         )
     if keyway:
-        lines.append("  /* keyway milled into the top of the largest step */")
+        lines.append("  /* keyway milled along the first step */")
         lines.append(
-            "  translate([d1 / 2 - key_d, -key_w / 2, key_z]) cube([key_d + 1, key_w, key_len]);"
+            "  translate([d1 / 2 - key_d, -key_w / 2, key_z])"
+            " cube([key_d + 2.5, key_w, key_len]);"
         )
     if cross_hole:
         lines.append("  /* cross pin hole through the small step */")
         lines.append(
             "  translate([0, 0, cross_z]) rotate([90, 0, 0])"
-            " cylinder(h = d" + str(cross_step + 1) + " + 4, d = cross_d, center = true);"
+            " cylinder(h = d" + str(cross_step + 1) + " + 5, d = cross_d, center = true);"
         )
     lines.append("}")
     builder.section("\n".join(lines))
     code = builder.render()
 
-    bbox = (float(largest), float(largest), float(total))
+    bbox = (float(diameters[0]), float(diameters[0]), float(total))
     features_ru = [
         f"{ru_count(steps, 'ступень', 'ступени', 'ступеней')} диаметрами "
         + ", ".join(fmt(value) + " мм" for value in diameters),
@@ -204,7 +222,7 @@ def build_stepped_shafts(index: int) -> Part:
         code=code,
         bbox=bbox,
         params={
-            "max_d": largest,
+            "max_d": float(diameters[0]),
             "total": total,
             "steps": steps,
             "chamfer": chamfer,

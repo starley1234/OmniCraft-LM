@@ -14,10 +14,10 @@ cb_d = 14.5;              // counterbore seat
 cb_h = 4.2;               // counterbore depth
 
 module hole_z(px, py) {
-  translate([px, py, -0.5]) cylinder(h = sheet_t + 1, d = hole_d);
+  translate([px, py, -2.5]) cylinder(h = sheet_t + 5, d = hole_d);
 }
 module hole_x(pz, py) {
-  translate([-0.5, py, pz]) rotate([0, 90, 0]) cylinder(h = sheet_t + 1, d = hole_d);
+  translate([-2.5, py, pz]) rotate([0, 90, 0]) cylinder(h = sheet_t + 5, d = hole_d);
 }
 module cb_z(px, py) {
   translate([px, py, sheet_t - cb_h]) cylinder(h = cb_h + 0.4, d = cb_d);

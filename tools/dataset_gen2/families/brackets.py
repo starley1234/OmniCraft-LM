@@ -111,7 +111,7 @@ _L_NAMES = (
     {"a": "base_len", "b": "upright_h", "t": "mat_t", "d": "flange_w"},
     {"a": "run_out", "b": "rise", "t": "sheet_t", "d": "bracket_w"},
 )
-_L_RIB_SINK = 0.9
+_L_RIB_SINK = 1.6
 
 
 def build_brackets_l(index: int) -> Part:
@@ -154,10 +154,10 @@ def build_brackets_l(index: int) -> Part:
 
     modules = [
         f"""module hole_z(px, py) {{
-  translate([px, py, -0.5]) cylinder(h = {names['t']} + 1, d = hole_d);
+  translate([px, py, -2.5]) cylinder(h = {names['t']} + 5, d = hole_d);
 }}""",
         f"""module hole_x(pz, py) {{
-  translate([-0.5, py, pz]) rotate([0, 90, 0]) cylinder(h = {names['t']} + 1, d = hole_d);
+  translate([-2.5, py, pz]) rotate([0, 90, 0]) cylinder(h = {names['t']} + 5, d = hole_d);
 }}""",
     ]
     if counterbore:
@@ -175,16 +175,16 @@ def build_brackets_l(index: int) -> Part:
         modules.append(
             f"""module euro_slot_z(px, py) {{
   hull() {{
-    translate([px - (slot_l - slot_w) / 2, py, -0.5]) cylinder(h = {names['t']} + 1, d = slot_w);
-    translate([px + (slot_l - slot_w) / 2, py, -0.5]) cylinder(h = {names['t']} + 1, d = slot_w);
+    translate([px - (slot_l - slot_w) / 2, py, -2.5]) cylinder(h = {names['t']} + 5, d = slot_w);
+    translate([px + (slot_l - slot_w) / 2, py, -2.5]) cylinder(h = {names['t']} + 5, d = slot_w);
   }}
 }}"""
         )
         modules.append(
             f"""module euro_slot_x(pz, py) {{
-  translate([-0.5, 0, 0]) rotate([0, 90, 0]) hull() {{
-    translate([0, py, pz - (slot_l - slot_w) / 2]) cylinder(h = {names['t']} + 1, d = slot_w);
-    translate([0, py, pz + (slot_l - slot_w) / 2]) cylinder(h = {names['t']} + 1, d = slot_w);
+  translate([-2.5, 0, 0]) rotate([0, 90, 0]) hull() {{
+    translate([0, py, pz - (slot_l - slot_w) / 2]) cylinder(h = {names['t']} + 5, d = slot_w);
+    translate([0, py, pz + (slot_l - slot_w) / 2]) cylinder(h = {names['t']} + 5, d = slot_w);
   }}
 }}"""
         )
@@ -192,8 +192,8 @@ def build_brackets_l(index: int) -> Part:
         modules.append(
             f"""module adjust_slot(px, py) {{
   hull() {{
-    translate([px - (slot_l - hole_d) / 2, py, -0.5]) cylinder(h = {names['t']} + 1, d = hole_d);
-    translate([px + (slot_l - hole_d) / 2, py, -0.5]) cylinder(h = {names['t']} + 1, d = hole_d);
+    translate([px - (slot_l - hole_d) / 2, py, -2.5]) cylinder(h = {names['t']} + 5, d = hole_d);
+    translate([px + (slot_l - hole_d) / 2, py, -2.5]) cylinder(h = {names['t']} + 5, d = hole_d);
   }}
 }}"""
         )
@@ -344,11 +344,11 @@ def build_brackets_u(index: int) -> Part:
 
     modules = [
         f"""module hole_z(px, py) {{
-  translate([px, py, -0.5]) cylinder(h = {names['t']} + 1, d = hole_d);
+  translate([px, py, -2.5]) cylinder(h = {names['t']} + 5, d = hole_d);
 }}""",
         f"""module hole_y_pz(pz) {{
   /* through both uprights along Y */
-  translate([0, -0.5, pz]) rotate([-90, 0, 0]) cylinder(h = {names['w']} + 1, d = hole_d);
+  translate([0, -2.5, pz]) rotate([-90, 0, 0]) cylinder(h = {names['w']} + 5, d = hole_d);
 }}""",
     ]
     if counterbore:
@@ -361,8 +361,8 @@ def build_brackets_u(index: int) -> Part:
         modules.append(
             f"""module slot_z(px, py) {{
   hull() {{
-    translate([px - (slot_l - hole_d) / 2, py, -0.5]) cylinder(h = {names['t']} + 1, d = hole_d);
-    translate([px + (slot_l - hole_d) / 2, py, -0.5]) cylinder(h = {names['t']} + 1, d = hole_d);
+    translate([px - (slot_l - hole_d) / 2, py, -2.5]) cylinder(h = {names['t']} + 5, d = hole_d);
+    translate([px + (slot_l - hole_d) / 2, py, -2.5]) cylinder(h = {names['t']} + 5, d = hole_d);
   }}
 }}"""
         )
@@ -481,6 +481,7 @@ def build_brackets_z(index: int) -> Part:
     thick = rng.grid([3, 4, 5, 6])
     thread, hole_d, head_d, head_h = hole_for_thread(rng)
     rib = rng.chance(0.6)
+    rib_sink = 1.6
     counterbore = thick >= 5 and rng.chance(0.5)
     upper = min(upper, lower - 2 * thick)
     margin = max(6.0, hole_d * 2.0)
@@ -496,15 +497,22 @@ def build_brackets_z(index: int) -> Part:
         builder.param("cb_d", head_d, "counterbore diameter")
         builder.param("cb_h", round(min(head_h, thick - 1.8), 2), "counterbore depth")
     if rib:
-        builder.param("rib_len", round(rng.uniform(0.32, 0.46) * min(lower, rise), 1), "gusset leg")
-        builder.param("rib_sink", 0.9, "gusset overlap into the plates")
+        # the gusset must not reach into the lower mounting hole
+        rib_limit = round(lower - thick - margin - hole_d / 2 - 2.0, 1)
+        rib_len = round(rng.uniform(0.32, 0.46) * min(lower, rise), 1)
+        rib_len = round(min(rib_len, rib_limit), 1)
+        if rib_len < 6.0:
+            rib = False
+    if rib:
+        builder.param("rib_len", rib_len, "gusset leg")
+        builder.param("rib_sink", rib_sink, "gusset overlap into the plates")
 
     modules = [
         f"""module hole_z(px, py, z0) {{
-  translate([px, py, z0 - 0.5]) cylinder(h = {names['t']} + 1, d = hole_d);
+  translate([px, py, z0 - 2.5]) cylinder(h = {names['t']} + 5, d = hole_d);
 }}""",
         f"""module hole_x(py, pz) {{
-  translate([-0.5, py, pz]) rotate([0, 90, 0]) cylinder(h = {names['t']} + 1, d = hole_d);
+  translate([-2.5, py, pz]) rotate([0, 90, 0]) cylinder(h = {names['t']} + 5, d = hole_d);
 }}""",
     ]
     if counterbore:
@@ -555,18 +563,33 @@ def build_brackets_z(index: int) -> Part:
         f"  translate([{names['lb']} - {names['t']} - {fmt(upper_hole_x)}, 0, 0]) "
         f"hole_z(0, {fmt(width / 2)}, {names['h']} - {names['t']});"
     )
-    lines.append(
-        f"  translate([{names['lb']} - {names['t']}, 0, 0]) hole_x({fmt(width / 2)}, {fmt(margin)});"
-    )
+    # the clamp hole through the web has to clear both feet by >= 2 mm, or it
+    # would shave a hairline wedge off the foot above it
+    web_lo = thick + hole_d / 2 + 2.0
+    if rib:
+        # the cutter starts 2.5 mm before the web, and that plane has to land in
+        # free space: above the gusset's slope, never inside a hairline wedge
+        gusset_top = thick - rib_sink + rib_len - 2.5
+        web_lo = max(web_lo, gusset_top + hole_d / 2 + 2.0)
+    web_hi = rise - thick - hole_d / 2 - 2.0
+    web_hole = bool(web_lo <= web_hi)
+    web_hole_z = round((web_lo + web_hi) / 2, 2) if web_hole else 0.0
+    if web_hole:
+        lines.append(
+            f"  translate([{names['lb']} - {names['t']}, 0, 0])"
+            f" hole_x({fmt(width / 2)}, {fmt(web_hole_z)});"
+        )
     if counterbore:
         lines.append(f"  cb_z({fmt(margin)}, {fmt(width / 2)}, {names['t']});")
         lines.append(
             f"  translate([{names['lb']} - {names['t']} - {fmt(upper_hole_x)}, 0, 0]) "
             f"cb_z(0, {fmt(width / 2)}, {names['h']});"
         )
-        lines.append(
-            f"  translate([{names['lb']} - {names['t']}, 0, 0]) cb_x({fmt(width / 2)}, {fmt(margin)});"
-        )
+        if web_hole:
+            lines.append(
+                f"  translate([{names['lb']} - {names['t']}, 0, 0])"
+                f" cb_x({fmt(width / 2)}, {fmt(web_hole_z)});"
+            )
     lines.append("}")
     builder.section("\n".join(lines))
     code = builder.render()
@@ -580,8 +603,9 @@ def build_brackets_z(index: int) -> Part:
         f"{fmt(lower)} mm lower foot, {fmt(upper)} mm upper foot facing the other way",
         f"{fmt(thick)} mm sheet, {fmt(rise)} mm offset between the feet",
     ]
-    features_ru.append(_sentence_ru_holes(thread, 3, "полках"))
-    features_en.append(_sentence_en_holes(thread, 3, "feet"))
+    foot_holes = 3 if web_hole else 2
+    features_ru.append(_sentence_ru_holes(thread, foot_holes, "полках"))
+    features_en.append(_sentence_en_holes(thread, foot_holes, "feet"))
     if counterbore:
         features_ru.append("цековки под потайные винты")
         features_en.append("counterbores for the screws")
