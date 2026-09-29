@@ -130,6 +130,7 @@ def main() -> int:
             "id": row.get("id", f"row_{index}"),
             "code_chars": len(code),
             "expected_bbox_mm": expected,
+            "code": code,
         }
         if not code.startswith("$fn = 32;"):
             record.update(compiled=False, error="missing canonical $fn header")
