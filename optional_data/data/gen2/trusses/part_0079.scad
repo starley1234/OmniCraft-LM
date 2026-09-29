@@ -1,17 +1,17 @@
 $fn = 32;
 
 // ----------------------------------------------------------------------
-// Warren truss: span 80 mm, height 48 mm, 4 equal panels
+// Warren truss: span 240.8 mm, height 90 mm, 7 equal panels
 // ----------------------------------------------------------------------
 
 // --- parameters (mm) ---
-panels = 4;               // number of equal panels
-panel_p = 20;             // panel length, X
-span = 80;                // span between the end joints
-frame_h = 48;             // truss height, Z
-chord_r = 4;              // chord member radius
+panels = 7;               // number of equal panels
+panel_p = 34.4;           // panel length, X
+span = 240.8;             // span between the end joints
+frame_h = 90;             // truss height, Z
+chord_r = 3;              // chord member radius
 diag_r = 2.6;             // diagonal member radius
-joint_r = 4.8;            // joint ball radius
+joint_r = 3.6;            // joint ball radius
 
 module member(a, b, r) {
   /* rod: cylinder from joint a to joint b */
@@ -30,7 +30,7 @@ bottom = [for (i = [0 : panels]) [i * panel_p, 0, 0]];
 top = [for (i = [0 : panels - 1]) [i * panel_p + panel_p / 2, 0, frame_h]];
 
 for (i = [0 : panels - 1]) member(bottom[i], bottom[i + 1], chord_r);
-for (i = [0 : 2]) member(top[i], top[i + 1], chord_r);
+for (i = [0 : 5]) member(top[i], top[i + 1], chord_r);
 
 /* zig-zag diagonals up to the mid-panel joints */
 for (i = [0 : panels - 1]) {
@@ -40,4 +40,4 @@ for (i = [0 : panels - 1]) {
 
 /* joint balls */
 for (i = [0 : panels]) joint(bottom[i], joint_r);
-for (i = [0 : 3]) joint(top[i], joint_r);
+for (i = [0 : 6]) joint(top[i], joint_r);

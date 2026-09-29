@@ -118,7 +118,8 @@ def write_report(out_dir: Path, summary: dict) -> Path:
     add(
         f"- local gate: {len(rows) - len(summary.get('rejects', []))} samples evaluated with the "
         "manifold kernel (the same kernel OpenSCAD uses with `--backend=manifold`); "
-        f"{len(summary.get('rejects', []))} rejected before writing"
+        f"{len(summary.get('rejects', []))} rejected before writing, "
+        f"{summary.get('duplicates_skipped', 0)} duplicate draws skipped"
     )
     audit = summary.get("audit") or {}
     if audit:
@@ -249,6 +250,10 @@ def write_report(out_dir: Path, summary: dict) -> Path:
         "step-down, clamp bores, boss lips, lid lips) are clamped so no ring drops below 1.2 mm |"
     )
     add("| <= 4000 tokens / ~12 KiB | largest file is %.2f KiB |" % (max(sizes) / 1024))
+    add(
+        "| unique samples | every prompt text and every source file is unique: a draw that "
+        "repeats the bytes of an accepted part is skipped and the next seed is used |"
+    )
     add("| deterministic | seeded `Rng`, no `rands()`, re-running reproduces the same bytes |")
     add("| wire graph connected, no isolated nodes, positive edge lengths | graph audit in `common.check_part` |")
     add("")

@@ -90,6 +90,10 @@ def build(count: int, out_dir: Path, quiet: bool = False) -> dict[str, object]:
     family_stats: dict[str, dict[str, object]] = {}
     rejects: list[dict[str, str]] = []
     written: list[Path] = []
+    # two seeds can land on the same parameter set, which would put the same
+    # geometry into the corpus twice: keep the first draw, skip the repeat
+    seen_sources: set[str] = set()
+    duplicates = 0
 
     for family, builder in FAMILY_BUILDERS.items():
         directory = out_dir / family
@@ -106,6 +110,11 @@ def build(count: int, out_dir: Path, quiet: bool = False) -> dict[str, object]:
             if problems:
                 rejects.append({"family": family, "index": str(index), "reason": "; ".join(problems)})
                 continue
+            digest = hashlib.sha256(part.code.encode("utf-8")).hexdigest()
+            if digest in seen_sources:
+                duplicates += 1
+                continue
+            seen_sources.add(digest)
             relative = f"{family}/part_{accepted + 1:04d}.scad"
             path = out_dir / relative
             path.write_text(part.code, encoding="utf-8")
@@ -148,11 +157,14 @@ def build(count: int, out_dir: Path, quiet: bool = False) -> dict[str, object]:
         "seconds": round(elapsed, 1),
         "family_stats": family_stats,
         "rejects": rejects,
+        "duplicates_skipped": duplicates,
         "written": written,
     }
     if not quiet:
         print(f"\n{len(manifest_rows)} samples in {len(FAMILY_BUILDERS)} families, {elapsed:.1f} s")
         print(f"manifest.jsonl sha256 = {checksums}")
+        if duplicates:
+            print(f"skipped {duplicates} duplicate draws (identical source bytes)")
         if rejects:
             print(f"rejected {len(rejects)} samples (first 5): {rejects[:5]}")
     return summary

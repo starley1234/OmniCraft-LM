@@ -1,17 +1,17 @@
 $fn = 32;
 
 // ----------------------------------------------------------------------
-// Four-leg tower: 80 x 80 x 200 mm, 4 bays of 50 mm
+// Four-leg tower: 100 x 100 x 238.4 mm, 4 bays of 59.6 mm
 // ----------------------------------------------------------------------
 
 // --- parameters (mm) ---
-size = 80;                // footprint across the legs
-lvl = 50;                 // bay height between the rings
+size = 100;               // footprint across the legs
+lvl = 59.6;               // bay height between the rings
 levels = 4;               // number of bays
-tower_h = 200;            // overall height
-leg_r = 5;                // leg tube radius
-brace_r = 2.6;            // brace tube radius
-joint_r = 6;              // joint ball radius
+tower_h = 238.4;          // overall height
+leg_r = 4;                // leg tube radius
+brace_r = 3;              // brace tube radius
+joint_r = 4.8;            // joint ball radius
 
 module member(a, b, r) {
   /* rod: cylinder from joint a to joint b */

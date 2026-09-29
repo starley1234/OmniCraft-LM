@@ -1,20 +1,17 @@
 $fn = 32;
 
 // ----------------------------------------------------------------------
-// Four-leg tower: 100 x 100 x 160 mm, 4 bays of 40 mm
+// Four-leg tower: 80 x 80 x 236 mm, 5 bays of 47.2 mm
 // ----------------------------------------------------------------------
 
 // --- parameters (mm) ---
-size = 100;               // footprint across the legs
-lvl = 40;                 // bay height between the rings
-levels = 4;               // number of bays
-tower_h = 160;            // overall height
+size = 80;                // footprint across the legs
+lvl = 47.2;               // bay height between the rings
+levels = 5;               // number of bays
+tower_h = 236;            // overall height
 leg_r = 5;                // leg tube radius
-brace_r = 3;              // brace tube radius
+brace_r = 3.4;            // brace tube radius
 joint_r = 6;              // joint ball radius
-plate_t = 5;              // top plate thickness
-plate_hole_d = 8.4;       // top plate bolt holes
-inset = 12;               // bolt hole inset from the corner
 
 module member(a, b, r) {
   /* rod: cylinder from joint a to joint b */
@@ -47,31 +44,9 @@ for (i = [0 : levels]) {
   }
 }
 
-/* cross bracing in every bay */
-for (i = [0 : levels - 1]) {
-  for (j = [0 : 3]) {
-    member([p[j][0] * size / 2, p[j][1] * size / 2, i * lvl],
-           [p[(j + 1) % 4][0] * size / 2, p[(j + 1) % 4][1] * size / 2, (i + 1) * lvl], brace_r);
-    member([p[(j + 1) % 4][0] * size / 2, p[(j + 1) % 4][1] * size / 2, i * lvl],
-           [p[j][0] * size / 2, p[j][1] * size / 2, (i + 1) * lvl], brace_r);
-  }
-}
-
 /* joint balls */
 for (i = [0 : levels]) {
   for (j = [0 : 3]) {
     joint([p[j][0] * size / 2, p[j][1] * size / 2, i * lvl], joint_r);
   }
-}
-
-module top_plate() {
-  /* sunk 1 mm into the top ring so the joint overlaps */
-  translate([-size / 2, -size / 2, tower_h - 1]) cube([size, size, plate_t + 1]);
-}
-
-difference() {
-  top_plate();
-  for (sx = [-1, 1]) for (sy = [-1, 1])
-    translate([sx * (size / 2 - inset), sy * (size / 2 - inset), tower_h - 2])
-      cylinder(h = plate_t + 3, d = plate_hole_d);
 }

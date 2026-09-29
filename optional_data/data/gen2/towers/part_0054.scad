@@ -1,19 +1,19 @@
 $fn = 32;
 
 // ----------------------------------------------------------------------
-// Four-leg tower: 60 x 60 x 210 mm, 3 bays of 70 mm
+// Four-leg tower: 100 x 100 x 120 mm, 3 bays of 40 mm
 // ----------------------------------------------------------------------
 
 // --- parameters (mm) ---
-size = 60;                // footprint across the legs
-lvl = 70;                 // bay height between the rings
+size = 100;               // footprint across the legs
+lvl = 40;                 // bay height between the rings
 levels = 3;               // number of bays
-tower_h = 210;            // overall height
-leg_r = 4.5;              // leg tube radius
-brace_r = 2.6;            // brace tube radius
-joint_r = 5.4;            // joint ball radius
-plate_t = 7;              // top plate thickness
-plate_hole_d = 6.6;       // top plate bolt holes
+tower_h = 120;            // overall height
+leg_r = 5;                // leg tube radius
+brace_r = 3;              // brace tube radius
+joint_r = 6;              // joint ball radius
+plate_t = 6;              // top plate thickness
+plate_hole_d = 9;         // top plate bolt holes
 inset = 12;               // bolt hole inset from the corner
 
 module member(a, b, r) {

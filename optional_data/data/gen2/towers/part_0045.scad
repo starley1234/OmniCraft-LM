@@ -1,19 +1,19 @@
 $fn = 32;
 
 // ----------------------------------------------------------------------
-// Four-leg tower: 60 x 60 x 233.5 mm, 5 bays of 46.7 mm
+// Four-leg tower: 100 x 100 x 200 mm, 5 bays of 40 mm
 // ----------------------------------------------------------------------
 
 // --- parameters (mm) ---
-size = 60;                // footprint across the legs
-lvl = 46.7;               // bay height between the rings
+size = 100;               // footprint across the legs
+lvl = 40;                 // bay height between the rings
 levels = 5;               // number of bays
-tower_h = 233.5;          // overall height
-leg_r = 6;                // leg tube radius
-brace_r = 3;              // brace tube radius
-joint_r = 7.2;            // joint ball radius
+tower_h = 200;            // overall height
+leg_r = 4.5;              // leg tube radius
+brace_r = 3.4;            // brace tube radius
+joint_r = 5.4;            // joint ball radius
 plate_t = 5;              // top plate thickness
-plate_hole_d = 9;         // top plate bolt holes
+plate_hole_d = 8.4;       // top plate bolt holes
 inset = 12;               // bolt hole inset from the corner
 
 module member(a, b, r) {
@@ -47,13 +47,16 @@ for (i = [0 : levels]) {
   }
 }
 
-/* cross bracing in every bay */
+/* braces alternate direction bay by bay */
 for (i = [0 : levels - 1]) {
   for (j = [0 : 3]) {
-    member([p[j][0] * size / 2, p[j][1] * size / 2, i * lvl],
-           [p[(j + 1) % 4][0] * size / 2, p[(j + 1) % 4][1] * size / 2, (i + 1) * lvl], brace_r);
-    member([p[(j + 1) % 4][0] * size / 2, p[(j + 1) % 4][1] * size / 2, i * lvl],
-           [p[j][0] * size / 2, p[j][1] * size / 2, (i + 1) * lvl], brace_r);
+    if (i % 2 == 0) {
+      member([p[j][0] * size / 2, p[j][1] * size / 2, i * lvl],
+             [p[(j + 1) % 4][0] * size / 2, p[(j + 1) % 4][1] * size / 2, (i + 1) * lvl], brace_r);
+    } else {
+      member([p[(j + 1) % 4][0] * size / 2, p[(j + 1) % 4][1] * size / 2, i * lvl],
+             [p[j][0] * size / 2, p[j][1] * size / 2, (i + 1) * lvl], brace_r);
+    }
   }
 }
 

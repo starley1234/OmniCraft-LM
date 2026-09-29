@@ -1,13 +1,13 @@
 $fn = 32;
 
 // ----------------------------------------------------------------------
-// Lattice I-beam: 125 mm long, 40 mm deep, 5 panels
+// Lattice I-beam: 120 mm long, 40 mm deep, 6 panels
 // ----------------------------------------------------------------------
 
 // --- parameters (mm) ---
-panels = 5;               // number of web panels
-panel_p = 25;             // panel length, X
-length = 125;             // beam length
+panels = 6;               // number of web panels
+panel_p = 20;             // panel length, X
+length = 120;             // beam length
 beam_h = 40;              // depth between the flange axes
 flange_r = 3.5;           // flange tube radius
 web_r = 3;                // web brace radius

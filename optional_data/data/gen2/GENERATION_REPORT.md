@@ -2,13 +2,13 @@
 
 This file is the audit sheet for `optional_data/data/gen2/`: it lists exactly what was added, how it was produced and how to re-verify it. Nothing in here is part of the training data itself - the corpus is `manifest.jsonl` plus the `.scad` files.
 
-- generated: 2026-09-29 19:39 UTC
+- generated: 2026-09-29 19:41 UTC
 - samples: **2240** across **28** families
-- corpus size: 5041.0 KiB of text (manifest + sources)
-- `manifest.jsonl` sha256: `841ca737b455b0babb02b80885ea2ab692d329acedac29d031cb173546571264`
+- corpus size: 5040.7 KiB of text (manifest + sources)
+- `manifest.jsonl` sha256: `45a361dc152fdc50e4a52e10632a28ea40b679bfae348fb7fa25b55cf85ebe4d`
 - generator: `tools/dataset_gen2/` (`build_corpus.py`, `families/*.py`)
 - seeds: deterministic, `Rng(family, index)` with fixed seed 20260929
-- local gate: 2240 samples evaluated with the manifold kernel (the same kernel OpenSCAD uses with `--backend=manifold`); 0 rejected before writing
+- local gate: 2240 samples evaluated with the manifold kernel (the same kernel OpenSCAD uses with `--backend=manifold`); 0 rejected before writing, 7 duplicate draws skipped
 - independent re-audit of the files on disk (`tools/dataset_gen2/verify_corpus.py`): 2240 rows / 28 families / 400 graph rows re-evaluated, worst bbox deviation vs the manifest 2.42% (the receiver allows 15%), SHA-256 list verified, 0 problems
 - the corpus lives under `optional_data/`, which this repository ignores, so the deliverable was committed with `git add -f optional_data/data/gen2`
 
@@ -16,8 +16,8 @@ This file is the audit sheet for `optional_data/data/gen2/`: it lists exactly wh
 
 | path (inside `optional_data/data/gen2/`) | what it is | size |
 | --- | --- | ---: |
-| `manifest.jsonl` | 2240 rows of metadata: file, family, `prompt_ru`, `prompt_en`, `expected_bbox_mm`, `parameters`, `graph`; sha256 `841ca737b455b0babb02b80885ea2ab692d329acedac29d031cb173546571264` | 1869.9 KiB |
-| `<family>/part_NNNN.scad` | 2240 source files in 28 single-word family directories, four-digit part numbers | 3171.1 KiB |
+| `manifest.jsonl` | 2240 rows of metadata: file, family, `prompt_ru`, `prompt_en`, `expected_bbox_mm`, `parameters`, `graph`; sha256 `45a361dc152fdc50e4a52e10632a28ea40b679bfae348fb7fa25b55cf85ebe4d` | 1869.9 KiB |
+| `<family>/part_NNNN.scad` | 2240 source files in 28 single-word family directories, four-digit part numbers | 3170.8 KiB |
 | `SHA256SUMS.txt` | one `sha256  path` pair per artifact, manifest first | 2241 lines |
 | `GENERATION_REPORT.md` | this audit sheet - not part of the training data | - |
 | `tools/dataset_gen2/` (repository, not inside the corpus) | the generator that produced the corpus: 13 Python modules (`build_corpus.py`, `common.py`, `bearings.py`, `brackets.py`, `drive.py`, `joints.py`, `profiles.py`, `shells.py`, `wire.py`, `miniscad.py`, `prompts.py`, `report.py`, `verify_corpus.py`) | - |
@@ -84,7 +84,7 @@ One JSON object per line, exactly the fields from `docs/DATASET_REQUEST.md`:
 }
 ```
 
-- `graph` is `null` for every voxel / sketch family and populated for the 400 wire samples (4537 nodes, 7804 edges in total). Graph nodes are the joint centres exactly as they appear in the source, edges are index pairs; members are cylinders whose ends sit inside the joint balls, so the mesh is a single solid and the graph is connected with strictly positive edge lengths.
+- `graph` is `null` for every voxel / sketch family and populated for the 400 wire samples (4545 nodes, 7802 edges in total). Graph nodes are the joint centres exactly as they appear in the source, edges are index pairs; members are cylinders whose ends sit inside the joint balls, so the mesh is a single solid and the graph is connected with strictly positive edge lengths.
 - `expected_bbox_mm` is the *measured* bounding box of the evaluated solid, so the
   receiver's 15% tolerance check passes with the exact values.
 
@@ -93,7 +93,7 @@ One JSON object per line, exactly the fields from `docs/DATASET_REQUEST.md`:
 - words per RU prompt: min 18, median 33, max 52
 - words per EN prompt: min 19, median 36, max 56
 - a dedicated printing-tolerance sentence is injected with probability 0.21 (`prompts.tail`), which matches the ~20% asked for in the request
-- measured over the corpus, 611 of 2240 samples (27%) mention a clearance / fit / tolerance phrase in at least one language (the rest of the hits come from the general chatty tails)
+- measured over the corpus, 610 of 2240 samples (27%) mention a clearance / fit / tolerance phrase in at least one language (the rest of the hits come from the general chatty tails)
 - every prompt carries the overall size in mm in both languages
 
 ## Hard-rule checklist (verified locally before writing)
@@ -108,6 +108,7 @@ One JSON object per line, exactly the fields from `docs/DATASET_REQUEST.md`:
 | 5-250 mm per axis | checked per sample; below 5 mm or above 250 mm is rejected |
 | wall thickness >= 1.2 mm | nominal walls are 1.5-8 mm (`wall`, `plate_t`, `wall_t`), ribs and wire members >= 2 mm, and radial features derived from a wall (spacer step-down, clamp bores, boss lips, lid lips) are clamped so no ring drops below 1.2 mm |
 | <= 4000 tokens / ~12 KiB | largest file is 2.93 KiB |
+| unique samples | every prompt text and every source file is unique: a draw that repeats the bytes of an accepted part is skipped and the next seed is used |
 | deterministic | seeded `Rng`, no `rands()`, re-running reproduces the same bytes |
 | wire graph connected, no isolated nodes, positive edge lengths | graph audit in `common.check_part` |
 

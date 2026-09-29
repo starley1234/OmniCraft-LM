@@ -9,11 +9,11 @@ size = 100;               // footprint across the legs
 lvl = 50;                 // bay height between the rings
 levels = 4;               // number of bays
 tower_h = 200;            // overall height
-leg_r = 4.5;              // leg tube radius
-brace_r = 3.4;            // brace tube radius
-joint_r = 5.4;            // joint ball radius
-plate_t = 7;              // top plate thickness
-plate_hole_d = 8.4;       // top plate bolt holes
+leg_r = 4;                // leg tube radius
+brace_r = 3;              // brace tube radius
+joint_r = 4.8;            // joint ball radius
+plate_t = 6;              // top plate thickness
+plate_hole_d = 9;         // top plate bolt holes
 inset = 12;               // bolt hole inset from the corner
 
 module member(a, b, r) {

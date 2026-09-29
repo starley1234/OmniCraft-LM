@@ -1,17 +1,17 @@
 $fn = 32;
 
 // ----------------------------------------------------------------------
-// Lattice I-beam: 180 mm long, 20 mm deep, 6 panels
+// Lattice I-beam: 236 mm long, 20 mm deep, 8 panels
 // ----------------------------------------------------------------------
 
 // --- parameters (mm) ---
-panels = 6;               // number of web panels
-panel_p = 30;             // panel length, X
-length = 180;             // beam length
+panels = 8;               // number of web panels
+panel_p = 29.5;           // panel length, X
+length = 236;             // beam length
 beam_h = 20;              // depth between the flange axes
-flange_r = 3;             // flange tube radius
-web_r = 2.6;              // web brace radius
-joint_r = 3.6;            // joint ball radius
+flange_r = 5;             // flange tube radius
+web_r = 3.4;              // web brace radius
+joint_r = 6;              // joint ball radius
 
 module member(a, b, r) {
   /* rod: cylinder from joint a to joint b */

@@ -1,25 +1,30 @@
 $fn = 32;
 
 // ----------------------------------------------------------------------
-// Oldham coupling disc: 34 x 22 mm
+// Oldham coupling hub: 32 x 23 mm
 // ----------------------------------------------------------------------
 
 // --- parameters (mm) ---
-disc_d = 34;              // disc diameter
-disc_t = 10;              // disc thickness
-tongue_w = 20;            // tongue width
-tongue_h = 6;             // tongue height
-bore_d = 14;              // centre lightening bore
+hub_d = 32;               // hub diameter
+hub_l = 18;               // hub length
+bore_d = 12;              // shaft bore
+tongue_w = 20;            // drive tongue width
+tongue_h = 5;             // drive tongue height
+set_d = 4.5;              // set screw tap hole
 
-module disc() {
-  cylinder(h = disc_t, d = disc_d);
-  /* tongue on the top face, sunk 1 mm into the disc */
-  translate([-tongue_w / 2, -disc_d / 2, disc_t - 1]) cube([tongue_w, disc_d, tongue_h + 1]);
-  /* slot wall on the bottom face, 90 degrees turned */
-  translate([-disc_d / 2, -tongue_w / 2, -tongue_h]) cube([disc_d, tongue_w, tongue_h + 1]);
+module hub() {
+  cylinder(h = hub_l, d = hub_d);
+  /* tongue, clipped to the hub disc and sunk 1 mm into the face */
+  intersection() {
+    translate([-tongue_w / 2, -hub_d / 2, hub_l - 1])
+      cube([tongue_w, hub_d, tongue_h + 1]);
+    translate([0, 0, hub_l - 1]) cylinder(h = tongue_h + 1, d = hub_d);
+  }
 }
 
 difference() {
-  disc();
-  translate([0, 0, -tongue_h - 1]) cylinder(h = disc_t + 2 * tongue_h + 2, d = bore_d);
+  hub();
+  translate([0, 0, -1]) cylinder(h = hub_l + tongue_h + 2, d = bore_d);
+  translate([-hub_d / 2 - 1, 0, hub_l * 0.5])
+    rotate([0, 90, 0]) cylinder(h = hub_d / 2 + 2, d = set_d);
 }

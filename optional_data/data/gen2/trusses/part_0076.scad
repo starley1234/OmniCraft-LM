@@ -1,16 +1,16 @@
 $fn = 32;
 
 // ----------------------------------------------------------------------
-// Warren truss: span 160 mm, height 96 mm, 4 equal panels
+// Warren truss: span 80 mm, height 48 mm, 4 equal panels
 // ----------------------------------------------------------------------
 
 // --- parameters (mm) ---
 panels = 4;               // number of equal panels
-panel_p = 40;             // panel length, X
-span = 160;               // span between the end joints
-frame_h = 96;             // truss height, Z
+panel_p = 20;             // panel length, X
+span = 80;                // span between the end joints
+frame_h = 48;             // truss height, Z
 chord_r = 4;              // chord member radius
-diag_r = 3.4;             // diagonal member radius
+diag_r = 2.6;             // diagonal member radius
 joint_r = 4.8;            // joint ball radius
 
 module member(a, b, r) {

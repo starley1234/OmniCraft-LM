@@ -1,19 +1,19 @@
 $fn = 32;
 
 // ----------------------------------------------------------------------
-// Four-leg tower: 100 x 100 x 237.3 mm, 3 bays of 79.1 mm
+// Four-leg tower: 60 x 60 x 180 mm, 3 bays of 60 mm
 // ----------------------------------------------------------------------
 
 // --- parameters (mm) ---
-size = 100;               // footprint across the legs
-lvl = 79.1;               // bay height between the rings
+size = 60;                // footprint across the legs
+lvl = 60;                 // bay height between the rings
 levels = 3;               // number of bays
-tower_h = 237.3;          // overall height
-leg_r = 4.5;              // leg tube radius
+tower_h = 180;            // overall height
+leg_r = 5;                // leg tube radius
 brace_r = 2.6;            // brace tube radius
-joint_r = 5.4;            // joint ball radius
-plate_t = 6;              // top plate thickness
-plate_hole_d = 9;         // top plate bolt holes
+joint_r = 6;              // joint ball radius
+plate_t = 7;              // top plate thickness
+plate_hole_d = 8.4;       // top plate bolt holes
 inset = 12;               // bolt hole inset from the corner
 
 module member(a, b, r) {
@@ -44,6 +44,16 @@ for (i = [0 : levels]) {
   for (j = [0 : 3]) {
     member([p[j][0] * size / 2, p[j][1] * size / 2, i * lvl],
            [p[(j + 1) % 4][0] * size / 2, p[(j + 1) % 4][1] * size / 2, i * lvl], brace_r);
+  }
+}
+
+/* cross bracing in every bay */
+for (i = [0 : levels - 1]) {
+  for (j = [0 : 3]) {
+    member([p[j][0] * size / 2, p[j][1] * size / 2, i * lvl],
+           [p[(j + 1) % 4][0] * size / 2, p[(j + 1) % 4][1] * size / 2, (i + 1) * lvl], brace_r);
+    member([p[(j + 1) % 4][0] * size / 2, p[(j + 1) % 4][1] * size / 2, i * lvl],
+           [p[j][0] * size / 2, p[j][1] * size / 2, (i + 1) * lvl], brace_r);
   }
 }
 

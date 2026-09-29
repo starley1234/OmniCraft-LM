@@ -1,19 +1,15 @@
 $fn = 32;
 
 // ----------------------------------------------------------------------
-// Quadcopter frame: 152.84 mm across the motor pads, arms 60 mm
+// Quadcopter frame: 232.84 mm across the motor pads, arms 100 mm
 // ----------------------------------------------------------------------
 
 // --- parameters (mm) ---
-hub = 50;                 // central plate size
+hub = 40;                 // central plate size
 plate_t = 6;              // plate thickness
-arm_len = 60;             // hub centre to motor pad centre
-bar_w = 16;               // arm width
+arm_len = 100;            // hub centre to motor pad centre
+bar_w = 10;               // arm width
 pad_d = 32.84;            // motor pad diameter
-hole_x = 16;              // motor bolt spacing, X
-hole_y = 19;              // motor bolt spacing, Y
-hole_d = 3.4;             // motor bolt clearance
-centre_d = 22.5;          // central cut-out for the stack
 
 module arm_bar() {
   /* flat bar: hull of a stub inside the hub and a box at the pad */
@@ -41,8 +37,4 @@ module frame() {
 
 difference() {
   frame();
-  for (a = [0 : 3]) rotate([0, 0, a * 90 + 0])
-    for (sx = [-1, 1]) for (sy = [-1, 1])
-      translate([arm_len + sx * hole_x / 2, sy * hole_y / 2, -1]) cylinder(h = plate_t + 2, d = hole_d);
-  translate([0, 0, -1]) cylinder(h = plate_t + 2, d = centre_d);
 }
