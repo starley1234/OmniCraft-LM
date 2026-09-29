@@ -6,6 +6,7 @@ import torch
 from torch import nn
 
 from src.model.hook_manager import SpatialHookManager
+from src.training.trainer import SpatialTrainer
 from src.training.aux_losses import (
     chamfer_distance_masked,
     edge_bce_masked,
@@ -58,6 +59,24 @@ def test_edge_bce_rejects_empty_masks() -> None:
         pass
     else:  # pragma: no cover
         raise AssertionError("empty pair mask must raise")
+
+
+def test_pack_chunks_respects_token_budget_and_covers_all() -> None:
+    lengths = [600, 150, 150, 700, 150, 300, 150, 150]
+    chunks = SpatialTrainer._pack_chunks(lengths, token_budget=2700, max_batch=8)
+    flat = sorted(i for chunk in chunks for i in chunk)
+    assert flat == list(range(len(lengths)))  # every sample exactly once
+    for chunk in chunks:
+        assert max(lengths[i] for i in chunk) * len(chunk) <= 2700
+        assert len(chunk) <= 8
+
+
+def test_pack_chunks_caps_batch_and_handles_tight_budget() -> None:
+    chunks = SpatialTrainer._pack_chunks([10] * 20, token_budget=10_000, max_batch=4)
+    assert all(len(chunk) <= 4 for chunk in chunks)
+    assert sum(len(chunk) for chunk in chunks) == 20
+    chunks = SpatialTrainer._pack_chunks([900, 850, 100], token_budget=1000, max_batch=8)
+    assert chunks == [(2,), (1,), (0,)]  # ascending sort; each long sample packs alone
 
 
 class _FakeAttention(nn.Module):

@@ -1,3 +1,5 @@
+# NOTE: declarative specification — the pipeline tools take these values as CLI
+# flags; this file documents intended defaults (docs/hardware-notes.md §9).
 dataset:
   format: jsonl
   path: data/processed/train.jsonl

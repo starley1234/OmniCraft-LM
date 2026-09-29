@@ -23,6 +23,11 @@ if str(REPOSITORY_ROOT) not in sys.path:
 
 os.environ.setdefault("HF_HUB_OFFLINE", "1")
 os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
+# Cap cached blocks so long-seq logits buffers return to the driver instead of
+# growing the cache to the card's ceiling (see docs/hardware-notes.md §1-2).
+os.environ.setdefault(
+    "PYTORCH_CUDA_ALLOC_CONF", "max_split_size_mb:512,garbage_collection_threshold:0.7"
+)
 
 from src.training.trainer import SPATIAL_TOKENS, SpatialTrainer, TrainerConfig
 
@@ -37,10 +42,20 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--device", choices=("cuda", "cpu"), default="cuda")
     parser.add_argument("--steps", type=int, default=20)
     parser.add_argument("--accumulate", type=int, default=1)
-    parser.add_argument("--lr", type=float, default=1e-4)
+    parser.add_argument("--microbatch", type=int, default=8, help="hard cap on samples per forward")
+    parser.add_argument(
+        "--max-tokens-per-forward",
+        type=int,
+        default=2700,
+        help="token budget B*S per forward; logits cost ~3 MB per token on the 248320 vocab",
+    )
+    parser.add_argument("--lr", type=float, default=2e-4)
+    parser.add_argument("--warmup-steps", type=int, default=30)
+    parser.add_argument("--lora-dropout", type=float, default=0.05)
+    parser.add_argument("--max-vram-gb", type=float, default=14.0)
     parser.add_argument("--lambda-geom", type=float, default=0.1)
-    parser.add_argument("--max-prompt-tokens", type=int, default=1024)
-    parser.add_argument("--max-code-tokens", type=int, default=4096)
+    parser.add_argument("--max-prompt-tokens", type=int, default=256)
+    parser.add_argument("--max-code-tokens", type=int, default=768)
     parser.add_argument("--gradient-checkpointing", action="store_true")
     parser.add_argument("--save-every", type=int, default=0)
     parser.add_argument("--log-every", type=int, default=1)
@@ -59,7 +74,12 @@ def main() -> int:
         device=args.device,
         max_steps=args.steps,
         accumulate=args.accumulate,
+        microbatch=args.microbatch,
+        max_tokens_per_forward=args.max_tokens_per_forward,
         lr=args.lr,
+        lr_warmup_steps=args.warmup_steps,
+        lora_dropout=args.lora_dropout,
+        max_vram_gb=args.max_vram_gb,
         lambda_geom=args.lambda_geom,
         max_prompt_tokens=args.max_prompt_tokens,
         max_code_tokens=args.max_code_tokens,
@@ -78,6 +98,11 @@ def main() -> int:
     if trainer.device.type == "cuda":
         properties = trainer.device and __import__("torch").cuda.get_device_properties(0)
         print(f"Backbone device: {trainer.device} ({properties.name})")
+    print(
+        f"recipe: lr={config.lr} (warmup {config.lr_warmup_steps}), accum={config.accumulate}, "
+        f"microbatch={config.microbatch}, lora_dropout={config.lora_dropout}, "
+        f"max_code_tokens={config.max_code_tokens}, vram ceiling={config.max_vram_gb} GiB"
+    )
     trainer.train()
     saved = trainer.save(step=config.max_steps)
     print(f"Saved trained artifacts to {saved}")

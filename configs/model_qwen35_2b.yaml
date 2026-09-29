@@ -1,4 +1,7 @@
 # Backbone and adapter parameters. Keep synchronized with ARCHITECTURE.md sections 3 and 5.
+# NOTE: declarative specification — code does NOT read this file yet; CLI args
+# of tools/train_spatial.py are authoritative. Every key here must map to a
+# real code path before relying on it (docs/hardware-notes.md §9).
 backbone:
   name: Qwen/Qwen3.5-2B
   load_in_4bit: false

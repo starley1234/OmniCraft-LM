@@ -59,13 +59,19 @@ class TrainerConfig:
     device: str = "cuda"
     max_steps: int = 20
     accumulate: int = 1
+    microbatch: int = 8  # hard cap on samples per forward
+    max_tokens_per_forward: int = 2700  # B*S budget; logits cost ~3 MB per (B*S) token on a 248320 vocab
     lr: float = 1e-4
     weight_decay: float = 0.0
     grad_clip: float = 1.0
     lambda_geom: float = 0.1
-    max_prompt_tokens: int = 1024
-    max_code_tokens: int = 4096
+    max_prompt_tokens: int = 256   # measured corpus p100: ~22 prompt tokens; cap prevents silent bloat
+    max_code_tokens: int = 768     # measured corpus p100: 565 code tokens; logits dominate VRAM (3·B·S·V·4B)
     gradient_checkpointing: bool = False
+    train_spatial_token_embeddings: bool = False  # True adds a ~1 GiB param + ~3 GiB of Adam state/grads
+    lr_warmup_steps: int = 30
+    lora_dropout: float = 0.05
+    max_vram_gb: float = 14.0  # hard ceiling; log lines flag every breach (Windows spills instead of OOM)
     save_every: int = 0  # 0 = save only at the end
     log_every: int = 1
 
@@ -100,7 +106,8 @@ class SpatialTrainer:
         self.hook.attach_to_backbone(self.backbone)
         set_active_adapter(self.backbone, config.layer)
         freeze_inactive_adapters(self.backbone, config.layer)
-        self._thaw_spatial_token_rows(self.backbone)
+        if config.train_spatial_token_embeddings:
+            self._thaw_spatial_token_rows(self.backbone)
         self.optimizer = torch.optim.AdamW(
             self._trainable_parameters(), lr=config.lr, weight_decay=config.weight_decay
         )
@@ -143,7 +150,12 @@ class SpatialTrainer:
             model.resize_token_embeddings(needed_vocab)
         model.to(device=self.device, dtype=self.dtype)
         freeze_module(model)
-        model = attach_lora_adapters(model, layers=(self.config.layer,), seed=self.zero_point.seed)
+        model = attach_lora_adapters(
+            model,
+            layers=(self.config.layer,),
+            seed=self.zero_point.seed,
+            dropout=self.config.lora_dropout,
+        )
         model.config.use_cache = False
         if self.config.gradient_checkpointing:
             model.gradient_checkpointing_enable()
@@ -175,15 +187,24 @@ class SpatialTrainer:
         stack.to(device=self.device, dtype=self.dtype)
         return stack
 
+    def _apply_warmup(self, step: int) -> None:
+        """Linear LR warmup; straight to ``lr`` after ``lr_warmup_steps``."""
+        warmup = max(0, self.config.lr_warmup_steps)
+        if warmup == 0 or step > warmup:
+            return
+        scale = step / warmup
+        for group in self.optimizer.param_groups:
+            group["lr"] = self.config.lr * scale
+
     def _trainable_parameters(self) -> list[nn.Parameter]:
-        # The shared embedding weight appears once; its gradient is row-masked
-        # down to the <|spatial_*|> rows by the hook registered in __init__.
-        embedding_weight = self.backbone.get_input_embeddings().weight
-        return (
-            self.stack.trainable_parameters(self.config.layer)
-            + adapter_parameters(self.backbone, self.config.layer)
-            + [embedding_weight]
+        params = self.stack.trainable_parameters(self.config.layer) + adapter_parameters(
+            self.backbone, self.config.layer
         )
+        if self.config.train_spatial_token_embeddings:
+            # Row-masked by the gradient hook; note the ~3 GiB optimizer/grad
+            # footprint this single shared matrix adds on the VRAM budget.
+            params = params + [self.backbone.get_input_embeddings().weight]
+        return params
 
     # ------------------------------------------------------------- sequences
 
@@ -215,17 +236,11 @@ class SpatialTrainer:
         bundle = self.stack.bundles[layer]
 
         def compute(hidden: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
-            batch = hidden.shape[0]
-            gathered = []
-            for index in range(batch):
-                positions = mask[index].nonzero(as_tuple=False)
-                if positions.numel() == 0:
-                    gathered.append(
-                        torch.zeros(hidden.shape[-1], device=hidden.device, dtype=hidden.dtype)
-                    )
-                else:
-                    gathered.append(hidden[index, int(positions[0].item())])
-            h_cls = torch.stack(gathered, dim=0)
+            # Stay on-GPU: nonzero()/item() here would force a host sync per step,
+            # which on WDDM (~32 us kernel dispatch) dominates the whole step.
+            first = mask.float().argmax(dim=1)  # (B,) index of the first control token
+            index = first.view(-1, 1, 1).expand(-1, 1, hidden.shape[-1])
+            h_cls = hidden.gather(1, index).squeeze(1)  # (B, D)
             log_bbox_device = log_bbox.to(device=hidden.device)
             if layer == "wire":
                 scale_embedding = bundle.scale_mlp.forward_log_bbox(log_bbox_device)
@@ -239,14 +254,35 @@ class SpatialTrainer:
 
     # -------------------------------------------------------------- training
 
-    def forward_loss(self, sample: CADSample) -> tuple[torch.Tensor, torch.Tensor]:
-        """Single-sample forward; returns ``(lm_loss, aux_loss)`` with graphs attached."""
-        build = self.build_sequence(sample)
-        input_ids = build["input_ids"].to(self.device)
-        attention_mask = build["attention_mask"].to(self.device)
-        labels = build["labels"].to(self.device)
+    def _collate(self, builds: list[dict[str, torch.Tensor]]) -> dict[str, torch.Tensor]:
+        """Pad per-sample builds into one microbatch (left side free, right padded)."""
+        batch = len(builds)
+        max_len = max(build["input_ids"].shape[1] for build in builds)
+        pad_id = self.tokenizer.pad_token_id or 0
+        input_ids = torch.full((batch, max_len), pad_id, dtype=torch.long)
+        attention_mask = torch.zeros(batch, max_len, dtype=torch.long)
+        labels = torch.full((batch, max_len), -100, dtype=torch.long)
+        for index, build in enumerate(builds):
+            length = build["input_ids"].shape[1]
+            input_ids[index, :length] = build["input_ids"][0]
+            attention_mask[index, :length] = 1
+            labels[index, :length] = build["labels"][0]
+        return {
+            "input_ids": input_ids,
+            "attention_mask": attention_mask,
+            "labels": labels,
+            "log_bbox": torch.cat([build["log_bbox"] for build in builds], dim=0),
+        }
+
+    def forward_loss(self, samples: list[CADSample]) -> tuple[torch.Tensor, torch.Tensor]:
+        """One microbatch forward; returns ``(lm_loss, aux_loss)`` with graphs attached."""
+        builds = [self.build_sequence(sample) for sample in samples]
+        batch = self._collate(builds)
+        input_ids = batch["input_ids"].to(self.device)
+        attention_mask = batch["attention_mask"].to(self.device)
+        labels = batch["labels"].to(self.device)
         self._pending_aux = None
-        self.hook.set_context(build["input_ids"], spatial_fn=self._spatial_fn(build["log_bbox"]))
+        self.hook.set_context(input_ids.cpu(), spatial_fn=self._spatial_fn(batch["log_bbox"]))
         try:
             outputs = self.backbone(
                 input_ids=input_ids,
@@ -260,20 +296,72 @@ class SpatialTrainer:
         aux = torch.zeros((), device=self.device, dtype=torch.float32)
         if self._pending_aux is not None:
             predicted_nodes, edge_logits = self._pending_aux
-            nodes = torch.tensor([sample.auxiliary_ground_truth.nodes], dtype=torch.float32)
-            node_mask = torch.ones(1, nodes.shape[1], dtype=torch.bool)
-            edges = torch.zeros(1, nodes.shape[1], nodes.shape[1], dtype=torch.float32)
-            for start, end in sample.auxiliary_ground_truth.edges:
-                edges[0, start, end] = 1.0
-                edges[0, end, start] = 1.0
             aux = wire_auxiliary_loss(
                 predicted_nodes.float(),
                 edge_logits.float(),
-                nodes.to(self.device),
-                node_mask.to(self.device),
-                edges.to(self.device),
+                *self._collate_wire_targets(samples),
             )
         return lm_loss, aux
+
+    def _collate_wire_targets(
+        self, samples: list[CADSample]
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        """Pad per-sample GT graphs into a batched (nodes, node_mask, edges) triple."""
+        batch = len(samples)
+        max_nodes = max(len(sample.auxiliary_ground_truth.nodes) for sample in samples)
+        nodes = torch.zeros(batch, max_nodes, 3, dtype=torch.float32)
+        node_mask = torch.zeros(batch, max_nodes, dtype=torch.bool)
+        edges = torch.zeros(batch, max_nodes, max_nodes, dtype=torch.float32)
+        for index, sample in enumerate(samples):
+            ground = sample.auxiliary_ground_truth
+            count = len(ground.nodes)
+            nodes[index, :count] = torch.tensor(ground.nodes, dtype=torch.float32)
+            node_mask[index, :count] = True
+            for start, end in ground.edges:
+                edges[index, start, end] = 1.0
+                edges[index, end, start] = 1.0
+        return nodes.to(self.device), node_mask.to(self.device), edges.to(self.device)
+
+    @staticmethod
+    def _pack_chunks(
+        lengths: list[int], token_budget: int, max_batch: int
+    ) -> list[tuple[int, ...]]:
+        """Greedy ascending-length packing: each chunk satisfies ``max_len * size <= budget``.
+
+        Padding waste stays minimal because chunk mates have similar lengths;
+        a long sample forces a small chunk, a run of short ones packs densely.
+        """
+        order = sorted(range(len(lengths)), key=lambda i: lengths[i])
+        chunks: list[tuple[int, ...]] = []
+        current: list[int] = []
+        current_max = 0
+        for index in order:
+            candidate_max = max(current_max, lengths[index])
+            if current and (candidate_max * (len(current) + 1) > token_budget or len(current) >= max_batch):
+                chunks.append(tuple(current))
+                current = []
+                current_max = 0
+            current.append(index)
+            current_max = candidate_max
+        if current:
+            chunks.append(tuple(current))
+        return chunks
+
+    def _sample_lengths(self, samples: list[CADSample]) -> list[int]:
+        """Tokenized sequence lengths, computed once per run (CPU-bound, ~1 ms each)."""
+        import time as _time
+
+        start = _time.monotonic()
+        lengths: list[int] = []
+        for sample in samples:
+            prompt_text = sample.prompts.get("en") or next(iter(sample.prompts.values()))
+            prompt_len = len(
+                self.tokenizer(f"{prompt_text}\nX\n", add_special_tokens=False)["input_ids"]
+            )
+            code_len = len(self.tokenizer(sample.code, add_special_tokens=False)["input_ids"])
+            lengths.append(min(prompt_len, self.config.max_prompt_tokens) + 1 + min(code_len, self.config.max_code_tokens))
+        print(f"pretokenized {len(lengths)} lengths in {_time.monotonic() - start:.1f}s")
+        return lengths
 
     def train(self) -> list[dict[str, float]]:
         if self.config.data is None or not Path(self.config.data).is_file():
@@ -289,34 +377,61 @@ class SpatialTrainer:
             raise ValueError(
                 f"no accepted samples for layer {self.config.layer!r} in {self.config.data}"
             )
+        lengths = self._sample_lengths(samples)
         cursor = 0
+        import time as _time
+
+        last_log_time = _time.monotonic()
         for step in range(1, self.config.max_steps + 1):
-            step_lm = 0.0
-            step_aux = 0.0
-            for _ in range(self.config.accumulate):
-                sample = samples[cursor % len(samples)]
-                cursor += 1
-                lm_loss, aux = self.forward_loss(sample)
-                total = (lm_loss + self.config.lambda_geom * aux) / self.config.accumulate
+            # Keep per-microbatch losses on the GPU; host reads happen only on
+            # log steps — each float() here is a WDDM host sync (~ms on Windows).
+            step_lm = torch.zeros((), device=self.device)
+            step_aux = torch.zeros((), device=self.device)
+            indices = [(cursor + offset) % len(samples) for offset in range(self.config.accumulate)]
+            cursor += self.config.accumulate
+            chunk_index_groups = self._pack_chunks(
+                [lengths[i] for i in indices],
+                self.config.max_tokens_per_forward,
+                max(1, self.config.microbatch),
+            )
+            for group in chunk_index_groups:
+                chunk = [samples[indices[i]] for i in group]
+                lm_loss, aux = self.forward_loss(chunk)
+                total = (lm_loss + self.config.lambda_geom * aux) / len(chunk_index_groups)
                 total.backward()
-                step_lm += float(lm_loss.detach())
-                step_aux += float(aux.detach())
+                step_lm += lm_loss.detach()
+                step_aux += aux.detach()
             torch.nn.utils.clip_grad_norm_(
                 [p for p in self._trainable_parameters() if p.grad is not None],
                 self.config.grad_clip,
             )
+            self._apply_warmup(step)
             self.optimizer.step()
             self.optimizer.zero_grad(set_to_none=True)
             metrics = {
                 "step": float(step),
-                "lm_loss": step_lm / self.config.accumulate,
-                "aux_loss": step_aux / self.config.accumulate,
+                "lm_loss": float(step_lm) / len(chunk_index_groups),
+                "aux_loss": float(step_aux) / len(chunk_index_groups),
             }
             self.history.append(metrics)
             if step % self.config.log_every == 0 or step == self.config.max_steps:
+                vram_now, vram_peak = 0.0, 0.0
+                if self.device.type == "cuda":
+                    vram_now = torch.cuda.memory_allocated() / 1024**3
+                    vram_peak = torch.cuda.max_memory_allocated() / 1024**3
+                breach = (
+                    f"  !! over the {self.config.max_vram_gb:g} GiB ceiling"
+                    if vram_peak > self.config.max_vram_gb
+                    else ""
+                )
+                now = _time.monotonic()
+                steps_per_sec = self.config.log_every / max(now - last_log_time, 1e-9)
+                last_log_time = now
                 print(
                     f"step {step:4d}/{self.config.max_steps} | "
-                    f"lm {metrics['lm_loss']:.4f} | aux {metrics['aux_loss']:.4f}"
+                    f"lm {metrics['lm_loss']:.4f} | aux {metrics['aux_loss']:.4f} | "
+                    f"{steps_per_sec:.2f} it/s | vram {vram_now:.1f}/{vram_peak:.1f} GiB{breach}",
+                    flush=True,
                 )
             if self.config.save_every and step % self.config.save_every == 0:
                 self.save(step=step)
