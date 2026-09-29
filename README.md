@@ -4,6 +4,8 @@ CPU-first scaffolding for the Qwen3.5-2B spatial bridge, procedural OpenSCAD dat
 
 **Hardware status:** verified end-to-end on the target workstation — NVIDIA GeForce RTX 5060 Ti (sm_120, 15.93 GiB VRAM, native bfloat16) + OpenSCAD 2025.12.17 with the Manifold backend. All spatial canvases run on CUDA in bfloat16 (`tests/test_cuda_smoke.py`) and peak canvas activation memory stays around ~250 MiB at batch 64, far below the 14.2 GiB VRAM budget reserved for the frozen backbone.
 
+**Start here: [docs/RUNBOOK.md](docs/RUNBOOK.md)** — пошаговая человеко-читаемая инструкция (проверка среды → данные → обучение в WSL2 → оценка → откат → симптомы/лечение).
+
 ## Install
 
 Choose the PyTorch wheel for the target machine first. For a CPU-only Python environment:

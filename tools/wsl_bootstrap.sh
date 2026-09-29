@@ -12,6 +12,7 @@ echo "=== syncing repository into the Linux filesystem (fast ext4, not /mnt/c)"
 mkdir -p "$HOME/omnicraft"
 rsync -a --delete \
   --exclude .git --exclude optional_data --exclude __pycache__ --exclude .pytest_cache \
+  --exclude .venv \
   /mnt/c/github/OmniCraft-LM/ "$HOME/omnicraft/repo/"
 cd "$HOME/omnicraft/repo"
 
