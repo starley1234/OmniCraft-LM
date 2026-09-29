@@ -8,7 +8,7 @@ export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1
 LAYER="${1:-voxel}"
 STEPS="${2:-600}"
 ACC="${3:-16}"
-BUDGET="${4:-2700}"   # token budget per forward; wire defaults to 1200 below
+BUDGET="${4:-2000}"   # token budget per forward; wire defaults to 1200 below
 
 if [ "$LAYER" = "wire" ] && [ "${4:-}" = "" ]; then
   BUDGET=1200  # wire codes are ~3x longer; the PyTorch DeltaNet fallback is S-sensitive

@@ -17,3 +17,6 @@ checkpoints/
 *.3mf
 *.step
 *.stp
+
+data/previews/
+data/debug*/

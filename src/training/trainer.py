@@ -60,7 +60,10 @@ class TrainerConfig:
     max_steps: int = 20
     accumulate: int = 1
     microbatch: int = 8  # hard cap on samples per forward
-    max_tokens_per_forward: int = 2700  # B*S budget; logits cost ~3 MB per (B*S) token on a 248320 vocab
+    # CE loss keeps ~4 copies of the fp32 logits alive: ~4 MB per (B*S) token on
+    # the 248320 vocab. 2000 keeps the longest corpus bucket (768) inside the
+    # 14 GiB ceiling with headroom; 2700 provably spiked reserved to ~29 GiB.
+    max_tokens_per_forward: int = 2000
     seq_bucket: int = 128  # pad sequences to this quantum: the CUDA allocator keeps per-shape pools,
     # and hundreds of distinct lengths balloon reserved VRAM until WSL2 spills to system RAM
     empty_cache_every: int = 50  # release fragmented allocator pools periodically; 0 disables
@@ -115,6 +118,7 @@ class SpatialTrainer:
             self._trainable_parameters(), lr=config.lr, weight_decay=config.weight_decay
         )
         self.history: list[dict[str, float]] = []
+        self._oom_skips = 0
 
     # ------------------------------------------------------------------ setup
 
@@ -407,11 +411,23 @@ class SpatialTrainer:
             )
             for group in chunk_index_groups:
                 chunk = [samples[indices[i]] for i in group]
-                lm_loss, aux = self.forward_loss(chunk)
-                total = (lm_loss + self.config.lambda_geom * aux) / len(chunk_index_groups)
-                total.backward()
-                step_lm += lm_loss.detach()
-                step_aux += aux.detach()
+                try:
+                    lm_loss, aux = self.forward_loss(chunk)
+                    total = (lm_loss + self.config.lambda_geom * aux) / len(chunk_index_groups)
+                    total.backward()
+                    step_lm += lm_loss.detach()
+                    step_aux += aux.detach()
+                except torch.cuda.OutOfMemoryError:
+                    # A pathological batch must not sink a multi-hour run: drop it,
+                    # contract the pools, and keep an honest count for the report.
+                    self._oom_skips += 1
+                    self.optimizer.zero_grad(set_to_none=True)
+                    torch.cuda.empty_cache()
+                    print(
+                        f"  [OOM] skipped chunk of {len(chunk)} samples "
+                        f"(max ~{max(lengths[indices[i]] for i in group)} tokens); total skips: {self._oom_skips}",
+                        flush=True,
+                    )
             torch.nn.utils.clip_grad_norm_(
                 [p for p in self._trainable_parameters() if p.grad is not None],
                 self.config.grad_clip,
@@ -458,6 +474,8 @@ class SpatialTrainer:
             if self.config.save_every and step % self.config.save_every == 0:
                 self.save(step=step)
         self.save(step=self.config.max_steps)
+        if self._oom_skips:
+            print(f"[warning] training finished with {self._oom_skips} OOM-skipped chunks")
         return self.history
 
     # ------------------------------------------------------------ checkpoints
