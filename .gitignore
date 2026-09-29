@@ -5,6 +5,8 @@ __pycache__/
 venv/
 .env
 
+optional_data/
+
 # Generated datasets, CAD meshes, and temporary training artifacts
 data/processed/
 data/images/
