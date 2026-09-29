@@ -70,7 +70,18 @@ def _load_rows(out_dir: Path) -> list[dict]:
     ]
 
 
-def write_report(out_dir: Path, summary: dict) -> Path:
+def write_report(
+    out_dir: Path,
+    summary: dict,
+    *,
+    title: str = "gen2 corpus - generation report",
+    corpus_label: str = "optional_data/data/gen2/",
+    generator: str = "`tools/dataset_gen2/` (`build_corpus.py`, `families/*.py`)",
+    coverage_notes: dict[str, str] | None = None,
+    tool_dir: str = "tools/dataset_gen2",
+    build_script: str = "build_corpus.py",
+    variant_tag: str = "gen2",
+) -> Path:
     rows = _load_rows(out_dir)
     family_stats = summary.get("family_stats", {})
 
@@ -102,10 +113,10 @@ def write_report(out_dir: Path, summary: dict) -> Path:
     lines: list[str] = []
     add = lines.append
 
-    add("# gen2 corpus - generation report")
+    add(f"# {title}")
     add("")
     add(
-        "This file is the audit sheet for `optional_data/data/gen2/`: it lists exactly what "
+        f"This file is the audit sheet for `{corpus_label}`: it lists exactly what "
         "was added, how it was produced and how to re-verify it. Nothing in here is part of "
         "the training data itself - the corpus is `manifest.jsonl` plus the `.scad` files."
     )
@@ -114,7 +125,7 @@ def write_report(out_dir: Path, summary: dict) -> Path:
     add(f"- samples: **{len(rows)}** across **{len(family_stats)}** families")
     add(f"- corpus size: {total_bytes / 1024:.1f} KiB of text (manifest + sources)")
     add(f"- `manifest.jsonl` sha256: `{manifest_sha}`")
-    add(f"- generator: `tools/dataset_gen2/` (`build_corpus.py`, `families/*.py`)")
+    add(f"- generator: {generator}")
     openscad = shutil.which("openscad")
     add(
         "- openSCAD CLI on this machine / openSCAD CLI на этой машине: "
@@ -122,7 +133,7 @@ def write_report(out_dir: Path, summary: dict) -> Path:
         + "; every check below was done on the manifold + trimesh stack instead, "
         "run `openscad --backend=manifold` on the receiving side to repeat it there"
     )
-    add(f"- seeds: deterministic, `Rng(family, index)` with fixed seed 20260929")
+    add("- seeds: deterministic, `Rng(family, index)` with fixed seed 20260929")
     add(
         f"- local gate: {len(rows) - len(summary.get('rejects', []))} samples evaluated with the "
         "manifold kernel (the same kernel OpenSCAD uses with `--backend=manifold`); "
@@ -143,7 +154,7 @@ def write_report(out_dir: Path, summary: dict) -> Path:
                 f"{len(audit.get('stl_bad', []))} not watertight / multi-component / degenerate"
             )
         add(
-            f"- independent re-audit of the files on disk (`tools/dataset_gen2/verify_corpus.py`): "
+            f"- independent re-audit of the files on disk (`{tool_dir}/verify_corpus.py`): "
             f"{audit.get('rows')} rows / {audit.get('families')} families / "
             f"{audit.get('wire_rows')} graph rows re-evaluated, worst bbox deviation vs the "
             f"manifest {audit.get('max_bbox_error', 0):.2%} (the receiver allows 15%), "
@@ -152,12 +163,12 @@ def write_report(out_dir: Path, summary: dict) -> Path:
         )
     add(
         "- the corpus lives under `optional_data/`, which this repository ignores, so the "
-        "deliverable was committed with `git add -f optional_data/data/gen2`"
+        f"deliverable was committed with `git add -f {corpus_label.rstrip('/')}`"
     )
     add("")
     add("## What was added, file by file")
     add("")
-    add("| path (inside `optional_data/data/gen2/`) | what it is | size |")
+    add(f"| path (inside `{corpus_label}`) | what it is | size |")
     add("| --- | --- | ---: |")
     add(
         f"| `manifest.jsonl` | {len(rows)} rows of metadata: file, family, `prompt_ru`, "
@@ -181,11 +192,11 @@ def write_report(out_dir: Path, summary: dict) -> Path:
     add("| `GENERATION_REPORT.md` | this audit sheet - not part of the training data | - |")
     generator_files = sorted(
         path
-        for path in (Path(__file__).resolve().parent).rglob("*.py")
+        for path in Path(tool_dir).rglob("*.py")
         if "__pycache__" not in path.parts
     )
     add(
-        "| `tools/dataset_gen2/` (repository, not inside the corpus) | the generator that "
+        f"| `{tool_dir}/` (repository, not inside the corpus) | the generator that "
         f"produced the corpus: {len(generator_files)} Python modules "
         f"({', '.join(f'`{path.name}`' for path in generator_files)}) | - |"
     )
@@ -193,7 +204,7 @@ def write_report(out_dir: Path, summary: dict) -> Path:
     add(
         "Nothing else in the repository is modified by this delivery: the request file "
         "`docs/DATASET_REQUEST.md` and the training pipeline are untouched, and outside "
-        "`tools/dataset_gen2/` the only change is the corpus itself. Because `.gitignore` "
+        f"`{tool_dir}/` the only change is the corpus itself. Because `.gitignore` "
         "covers `optional_data/`, the files were force-added (`git add -f`); "
         "`git show --stat HEAD` lists the whole diff."
     )
@@ -203,7 +214,7 @@ def write_report(out_dir: Path, summary: dict) -> Path:
     add("| family | samples | variants | what it contains |")
     add("| --- | ---: | ---: | --- |")
     for family, stats in family_stats.items():
-        note = COVERAGE_NOTES.get(family, "")
+        note = (coverage_notes if coverage_notes is not None else COVERAGE_NOTES).get(family, "")
         add(f"| `{family}` | {stats['written']} | {stats['variants']} | {note} |")
     add("")
     add("## Manifest row schema")
@@ -290,7 +301,7 @@ def write_report(out_dir: Path, summary: dict) -> Path:
     add("")
     add("```bash")
     add("# regenerate byte-identically (writes manifest.jsonl + <family>/part_NNNN.scad):")
-    add(f"python tools/dataset_gen2/build_corpus.py --count {summary.get('count', 80)} --report")
+    add(f"python {tool_dir}/{build_script} --count {summary.get('count', 80)} --report")
     add("")
     add("# verify the checksum list that ships with the corpus:")
     add(f"cd {out_dir.as_posix()}")
@@ -300,12 +311,12 @@ def write_report(out_dir: Path, summary: dict) -> Path:
     add("openscad --backend=manifold -o /tmp/out.stl <family>/part_0001.scad")
     add("")
     add("# standalone audit of the files on disk (no OpenSCAD needed):")
-    add("python tools/dataset_gen2/verify_corpus.py --parts-dir optional_data/data/gen2")
+    add(f"python {tool_dir}/verify_corpus.py --parts-dir {corpus_label.rstrip('/')}")
     add("")
     add("# repository pipeline: import the candidates, then validate them")
-    add("python tools/import_external_scad.py --parts-dir optional_data/data/gen2 \\")
-    add("    --output data/processed/gen2_candidates.jsonl")
-    add("python tools/validate_dataset.py --input data/processed/gen2_candidates.jsonl \\")
+    add(f"python tools/import_external_scad.py --parts-dir {corpus_label.rstrip('/')} \\")
+    add(f"    --output data/processed/{variant_tag}_candidates.jsonl")
+    add(f"python tools/validate_dataset.py --input data/processed/{variant_tag}_candidates.jsonl \\")
     add("    --backend openscad --workers 2")
     add("```")
     add("")

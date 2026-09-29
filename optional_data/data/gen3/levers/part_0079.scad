@@ -1,0 +1,29 @@
+$fn = 32;
+
+// ----------------------------------------------------------------------
+// Lever: 115 mm between the bosses, 8 mm thick, smooth outline
+// ----------------------------------------------------------------------
+
+// --- parameters (mm) ---
+lever_l = 115;            // distance between the boss centres
+boss_a = 20;              // first boss diameter
+boss_b = 16;              // second boss diameter
+bore_a = 9.53;            // first bore
+bore_b = 3.6;             // second bore
+lever_t = 8;              // lever thickness
+boss_c = 26;              // middle boss diameter
+bend = 18.4;              // how far the middle boss drops
+slot_w = 6.6;             // adjustment slot width
+
+lever_profile = [[-67.5, 0], [-67.377, -1.564], [-67.011, -3.09], [-66.41, -4.54], [-65.59, -5.878], [-64.571, -7.071], [-63.378, -8.09], [-62.04, -8.91], [-60.59, -9.511], [-4.017, -30.764], [-2.034, -31.24], [0, -31.4], [2.034, -31.24], [4.017, -30.764], [59.972, -7.608], [61.132, -7.128], [62.202, -6.472], [63.157, -5.657], [63.972, -4.702], [64.628, -3.632], [65.108, -2.472], [65.402, -1.251], [65.5, 0], [65.402, 1.251], [65.108, 2.472], [64.628, 3.632], [63.972, 4.702], [63.157, 5.657], [62.202, 6.472], [61.132, 7.128], [59.972, 7.608], [58.751, 7.902], [57.5, 8], [-57.5, 10], [-59.064, 9.877], [-60.59, 9.511], [-62.04, 8.91], [-63.378, 8.09], [-64.571, 7.071], [-65.59, 5.878], [-66.41, 4.54], [-67.011, 3.09], [-67.377, 1.564]];
+
+difference() {
+  linear_extrude(height = lever_t) polygon(lever_profile);
+  translate([-57.5, 0, -2.5]) cylinder(h = lever_t + 5, d = bore_a);
+  translate([57.5, 0, -2.5]) cylinder(h = lever_t + 5, d = bore_b);
+  /* slotted adjustment, stadium shaped */
+  hull() {
+    translate([-13.8, 0, -2.5]) cylinder(h = lever_t + 5, d = slot_w);
+    translate([13.8, 0, -2.5]) cylinder(h = lever_t + 5, d = slot_w);
+  }
+}

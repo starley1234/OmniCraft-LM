@@ -1,0 +1,69 @@
+$fn = 32;
+
+// ----------------------------------------------------------------------
+// Slotted panel: 120 x 100 mm, 7 рядов of slots
+// ----------------------------------------------------------------------
+
+// --- parameters (mm) ---
+panel_w = 120;            // panel width
+panel_d = 100;            // panel depth
+thick = 5;                // panel thickness
+slot_w = 6;               // slot width
+pitch0 = 12;              // first row pitch
+pitch_step = 2.4;         // pitch increase per row
+margin = 8.4;             // margin around the slot field
+rows = 7;                 // number of slot rows
+mount_d = 5.4;            // mounting holes
+mount_x = 45;             // mounting hole offset
+rim_h = 10;               // rim height
+rim_t = 3;                // rim wall thickness
+
+difference() {
+  union() {
+    cube([panel_w, panel_d, thick]);
+    translate([0, 0, thick - 1]) difference() {
+      cube([panel_w, panel_d, rim_h - thick + 1]);
+      translate([rim_t, rim_t, -2.5]) cube([panel_w - 2 * rim_t, panel_d - 2 * rim_t, rim_h - thick + 6]);
+    }
+  }
+  /* slot rows: stadium shaped cutters, 2.5 mm clear of both faces */
+  /* row 0: pitch 12, length 41.28 */
+  hull() {
+    translate([39.36, 11.4, -2.5]) cylinder(h = thick + 5, d = slot_w);
+    translate([80.64, 11.4, -2.5]) cylinder(h = thick + 5, d = slot_w);
+  }
+  /* row 1: pitch 12, length 53.66 */
+  hull() {
+    translate([33.17, 23.4, -2.5]) cylinder(h = thick + 5, d = slot_w);
+    translate([86.83, 23.4, -2.5]) cylinder(h = thick + 5, d = slot_w);
+  }
+  /* row 2: pitch 12, length 66.05 */
+  hull() {
+    translate([26.98, 35.4, -2.5]) cylinder(h = thick + 5, d = slot_w);
+    translate([93.03, 35.4, -2.5]) cylinder(h = thick + 5, d = slot_w);
+  }
+  /* row 3: pitch 12, length 78.43 */
+  hull() {
+    translate([20.78, 47.4, -2.5]) cylinder(h = thick + 5, d = slot_w);
+    translate([99.21, 47.4, -2.5]) cylinder(h = thick + 5, d = slot_w);
+  }
+  /* row 4: pitch 12, length 90.82 */
+  hull() {
+    translate([14.59, 59.4, -2.5]) cylinder(h = thick + 5, d = slot_w);
+    translate([105.41, 59.4, -2.5]) cylinder(h = thick + 5, d = slot_w);
+  }
+  /* row 5: pitch 12, length 103.2 */
+  hull() {
+    translate([8.4, 71.4, -2.5]) cylinder(h = thick + 5, d = slot_w);
+    translate([111.6, 71.4, -2.5]) cylinder(h = thick + 5, d = slot_w);
+  }
+  /* row 6: pitch 12, length 103.2 */
+  hull() {
+    translate([8.4, 83.4, -2.5]) cylinder(h = thick + 5, d = slot_w);
+    translate([111.6, 83.4, -2.5]) cylinder(h = thick + 5, d = slot_w);
+  }
+  translate([15, 4.2, -2.5]) cylinder(h = 15, d = mount_d);
+  translate([15, 95.8, -2.5]) cylinder(h = 15, d = mount_d);
+  translate([105, 4.2, -2.5]) cylinder(h = 15, d = mount_d);
+  translate([105, 95.8, -2.5]) cylinder(h = 15, d = mount_d);
+}
