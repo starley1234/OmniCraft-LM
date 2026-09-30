@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ru" class="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OmniCraft-LM — генератор CAD</title>
+<script src="/vendor/tailwind.js"></script>
+<script>tailwind.config = { darkMode: 'class' }</script>
+<style>
+  pre.codeblock { tab-size: 2; }
+  .chip { transition: transform .08s ease, opacity .15s ease; }
+  .chip:hover { transform: translateY(-1px); }
+  .chip:active { transform: translateY(0); }
+  .fade { opacity: 1; transition: opacity .2s ease; }
+  .fade.loading { opacity: .45; }
+</style>
+</head>
+<body class="min-h-screen bg-slate-100 text-slate-900 dark:bg-[#10141c] dark:text-slate-200">
+<div class="max-w-7xl mx-auto px-4 py-5">
+
+  <header class="flex items-center justify-between flex-wrap gap-3 mb-5">
+    <div class="flex items-baseline gap-3">
+      <h1 class="text-2xl font-semibold tracking-tight">OmniCraft-LM</h1>
+      <span class="text-sm text-slate-500 dark:text-slate-400">текст → [SPECS] → холст → код OpenSCAD → manifold-проверка</span>
+    </div>
+    <nav class="flex items-center gap-2">
+      <a href="/" class="px-3 py-1.5 rounded-lg bg-blue-600/10 text-blue-600 dark:text-blue-400 font-medium">Генератор</a>
+      <a href="/status" class="px-3 py-1.5 rounded-lg hover:bg-slate-500/10">Статус проекта</a>
+      <button id="themeBtn" class="px-3 py-1.5 rounded-lg hover:bg-slate-500/10" title="день/ночь">🌙</button>
+    </nav>
+  </header>
+
+  <section class="mb-4">
+    <div class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-2">Примеры — запуск в один клик</div>
+    <div id="examples" class="flex flex-wrap gap-2"></div>
+  </section>
+
+  <section class="bg-white dark:bg-[#171c26] rounded-xl shadow-sm border border-slate-200 dark:border-[#262f3f] p-4 mb-5">
+    <textarea id="prompt" rows="3" class="w-full rounded-lg border border-slate-300 dark:border-[#2a3242] bg-slate-50 dark:bg-[#10141c] p-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+      placeholder="Сделай фланец 60x60x10 мм с центральным отверстием 20 мм и 4 отверстиями М5 по углам..."></textarea>
+    <div class="flex items-center gap-3 mt-3 flex-wrap">
+      <label class="text-sm text-slate-500 dark:text-slate-400">Холст:</label>
+      <select id="canvas" class="rounded-lg border border-slate-300 dark:border-[#2a3242] bg-slate-50 dark:bg-[#10141c] px-3 py-2 text-sm"></select>
+      <button id="genBtn" class="px-5 py-2 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-500 disabled:opacity-50">Сгенерировать</button>
+      <span id="spinner" class="hidden items-center gap-2 text-sm text-slate-500"><svg class="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" class="opacity-20"/><path d="M22 12a10 10 0 0 0-10-10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span id="spinText">генерация…</span></span>
+      <span id="elapsed" class="text-sm text-slate-400"></span>
+    </div>
+  </section>
+
+  <section id="result" class="hidden fade">
+    <div class="grid lg:grid-cols-2 gap-4">
+      <div class="bg-white dark:bg-[#171c26] rounded-xl shadow-sm border border-slate-200 dark:border-[#262f3f] p-4">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="font-semibold text-blue-600 dark:text-blue-400">[SPECS] + код</h3>
+          <button id="copyBtn" class="text-xs px-2 py-1 rounded hover:bg-slate-500/10">копировать код</button>
+        </div>
+        <pre id="specs" class="codeblock text-xs bg-slate-100 dark:bg-[#0b0e14] rounded-lg p-3 overflow-auto mb-3"></pre>
+        <pre id="code" class="codeblock text-[13px] bg-slate-100 dark:bg-[#0b0e14] rounded-lg p-3 overflow-auto max-h-[420px]"></pre>
+      </div>
+      <div class="bg-white dark:bg-[#171c26] rounded-xl shadow-sm border border-slate-200 dark:border-[#262f3f] p-4">
+        <h3 class="font-semibold text-blue-600 dark:text-blue-400 mb-2">Проверка (OpenSCAD manifold)</h3>
+        <div id="verdict" class="mb-2 text-sm"></div>
+        <ul id="metrics" class="text-sm space-y-1 mb-3"></ul>
+        <div id="viewerWrap" class="rounded-lg overflow-hidden border border-slate-200 dark:border-[#2a3242] bg-slate-50 dark:bg-[#0b0e14]" style="height:380px; position:relative">
+          <canvas id="stlView" class="w-full h-full block"></canvas>
+          <img id="pngView" class="hidden absolute inset-0 m-auto max-h-full" alt="preview">
+          <div id="viewerHint" class="absolute inset-0 flex items-center justify-center text-sm text-slate-400">3D-модель появится после валидной генерации</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="historySection" class="hidden mt-5">
+    <div class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-2">История сессии</div>
+    <div id="history" class="flex flex-col gap-1.5"></div>
+  </section>
+
+  <footer class="mt-8 text-xs text-slate-400 dark:text-slate-500">
+    backbone локально (offline) · обученные холсты: <span id="trainedNote">…</span> · CLI: <code>python tools/omni.py help</code>
+  </footer>
+</div>
+
+<script src="/vendor/three.min.js"></script>
+<script src="/vendor/OrbitControls.js"></script>
+<script src="/vendor/STLLoader.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>
