@@ -65,11 +65,11 @@ class TrainerConfig:
     # CE loss keeps ~4 copies of the fp32 logits alive: ~4 MB per (B*S) token on
     # the 248320 vocab. 2000 keeps the longest corpus bucket (768) inside the
     # 14 GiB ceiling with headroom; 2700 provably spiked reserved to ~29 GiB.
-    max_tokens_per_forward: int = 2000
+    max_tokens_per_forward: int = 1600
     voxel_grids: Path | None = None  # sidecar JSONL from tools/build_voxel_grids.py
     seq_bucket: int = 128  # pad sequences to this quantum: the CUDA allocator keeps per-shape pools,
     # and hundreds of distinct lengths balloon reserved VRAM until WSL2 spills to system RAM
-    empty_cache_every: int = 50  # release fragmented allocator pools periodically; 0 disables
+    empty_cache_every: int = 25  # release fragmented allocator pools periodically; 0 disables
     lr: float = 1e-4
     weight_decay: float = 0.0
     grad_clip: float = 1.0
