@@ -1,0 +1,8802 @@
+[
+ {
+  "source_id": "gen2_bearings_0039",
+  "corpus": "gen2",
+  "family": "bearings",
+  "code_ref": "gen2/bearings/part_0039.scad",
+  "expected_bbox_mm": [
+   54.15,
+   54.15,
+   15.4
+  ]
+ },
+ {
+  "source_id": "gen2_bezels_0044",
+  "corpus": "gen2",
+  "family": "bezels",
+  "code_ref": "gen2/bezels/part_0044.scad",
+  "expected_bbox_mm": [
+   60.0,
+   100.0,
+   6.0
+  ]
+ },
+ {
+  "source_id": "gen2_caps_0060",
+  "corpus": "gen2",
+  "family": "caps",
+  "code_ref": "gen2/caps/part_0060.scad",
+  "expected_bbox_mm": [
+   59.0,
+   59.0,
+   17.0
+  ]
+ },
+ {
+  "source_id": "gen2_clips_0077",
+  "corpus": "gen2",
+  "family": "clips",
+  "code_ref": "gen2/clips/part_0077.scad",
+  "expected_bbox_mm": [
+   32.0,
+   18.0,
+   15.0
+  ]
+ },
+ {
+  "source_id": "gen2_ducts_0049",
+  "corpus": "gen2",
+  "family": "ducts",
+  "code_ref": "gen2/ducts/part_0049.scad",
+  "expected_bbox_mm": [
+   180.0,
+   60.0,
+   40.0
+  ]
+ },
+ {
+  "source_id": "gen2_enclosures_0074",
+  "corpus": "gen2",
+  "family": "enclosures",
+  "code_ref": "gen2/enclosures/part_0074.scad",
+  "expected_bbox_mm": [
+   108.0,
+   60.0,
+   50.0
+  ]
+ },
+ {
+  "source_id": "gen2_flanges_0049",
+  "corpus": "gen2",
+  "family": "flanges",
+  "code_ref": "gen2/flanges/part_0049.scad",
+  "expected_bbox_mm": [
+   80.0,
+   80.0,
+   31.0
+  ]
+ },
+ {
+  "source_id": "gen2_handles_0041",
+  "corpus": "gen2",
+  "family": "handles",
+  "code_ref": "gen2/handles/part_0041.scad",
+  "expected_bbox_mm": [
+   150.0,
+   23.1,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen2_helicalgears_0032",
+  "corpus": "gen2",
+  "family": "helicalgears",
+  "code_ref": "gen2/helicalgears/part_0032.scad",
+  "expected_bbox_mm": [
+   40.5,
+   40.5,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen2_hinges_0016",
+  "corpus": "gen2",
+  "family": "hinges",
+  "code_ref": "gen2/hinges/part_0016.scad",
+  "expected_bbox_mm": [
+   50.0,
+   47.0,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen2_ibeams_0030",
+  "corpus": "gen2",
+  "family": "ibeams",
+  "code_ref": "gen2/ibeams/part_0030.scad",
+  "expected_bbox_mm": [
+   108.4,
+   8.4,
+   48.4
+  ]
+ },
+ {
+  "source_id": "gen2_impellers_0023",
+  "corpus": "gen2",
+  "family": "impellers",
+  "code_ref": "gen2/impellers/part_0023.scad",
+  "expected_bbox_mm": [
+   93.29,
+   95.63,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen2_knobs_0017",
+  "corpus": "gen2",
+  "family": "knobs",
+  "code_ref": "gen2/knobs/part_0017.scad",
+  "expected_bbox_mm": [
+   53.5,
+   54.94,
+   16.2
+  ]
+ },
+ {
+  "source_id": "gen2_lbrackets_0038",
+  "corpus": "gen2",
+  "family": "lbrackets",
+  "code_ref": "gen2/lbrackets/part_0038.scad",
+  "expected_bbox_mm": [
+   35.0,
+   40.0,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen2_lids_0008",
+  "corpus": "gen2",
+  "family": "lids",
+  "code_ref": "gen2/lids/part_0008.scad",
+  "expected_bbox_mm": [
+   100.0,
+   80.0,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen2_motormounts_0017",
+  "corpus": "gen2",
+  "family": "motormounts",
+  "code_ref": "gen2/motormounts/part_0017.scad",
+  "expected_bbox_mm": [
+   45.0,
+   51.0,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen2_oldhams_0036",
+  "corpus": "gen2",
+  "family": "oldhams",
+  "code_ref": "gen2/oldhams/part_0036.scad",
+  "expected_bbox_mm": [
+   32.0,
+   32.0,
+   22.0
+  ]
+ },
+ {
+  "source_id": "gen2_pipes_0046",
+  "corpus": "gen2",
+  "family": "pipes",
+  "code_ref": "gen2/pipes/part_0046.scad",
+  "expected_bbox_mm": [
+   144.4,
+   134.4,
+   44.4
+  ]
+ },
+ {
+  "source_id": "gen2_pulleys_0034",
+  "corpus": "gen2",
+  "family": "pulleys",
+  "code_ref": "gen2/pulleys/part_0034.scad",
+  "expected_bbox_mm": [
+   8.66,
+   8.66,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen2_quadframes_0048",
+  "corpus": "gen2",
+  "family": "quadframes",
+  "code_ref": "gen2/quadframes/part_0048.scad",
+  "expected_bbox_mm": [
+   185.57,
+   185.57,
+   7.0
+  ]
+ },
+ {
+  "source_id": "gen2_racks_0052",
+  "corpus": "gen2",
+  "family": "racks",
+  "code_ref": "gen2/racks/part_0052.scad",
+  "expected_bbox_mm": [
+   246.19,
+   30.0,
+   17.0
+  ]
+ },
+ {
+  "source_id": "gen2_shafts_0038",
+  "corpus": "gen2",
+  "family": "shafts",
+  "code_ref": "gen2/shafts/part_0038.scad",
+  "expected_bbox_mm": [
+   50.0,
+   50.0,
+   90.0
+  ]
+ },
+ {
+  "source_id": "gen2_spacers_0054",
+  "corpus": "gen2",
+  "family": "spacers",
+  "code_ref": "gen2/spacers/part_0054.scad",
+  "expected_bbox_mm": [
+   24.5,
+   24.5,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen2_spurgears_0053",
+  "corpus": "gen2",
+  "family": "spurgears",
+  "code_ref": "gen2/spurgears/part_0053.scad",
+  "expected_bbox_mm": [
+   58.5,
+   58.5,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen2_towers_0013",
+  "corpus": "gen2",
+  "family": "towers",
+  "code_ref": "gen2/towers/part_0013.scad",
+  "expected_bbox_mm": [
+   62.0,
+   62.0,
+   248.0
+  ]
+ },
+ {
+  "source_id": "gen2_trusses_0054",
+  "corpus": "gen2",
+  "family": "trusses",
+  "code_ref": "gen2/trusses/part_0054.scad",
+  "expected_bbox_mm": [
+   157.2,
+   7.2,
+   87.2
+  ]
+ },
+ {
+  "source_id": "gen2_ubrackets_0039",
+  "corpus": "gen2",
+  "family": "ubrackets",
+  "code_ref": "gen2/ubrackets/part_0039.scad",
+  "expected_bbox_mm": [
+   70.0,
+   45.0,
+   45.0
+  ]
+ },
+ {
+  "source_id": "gen2_zbrackets_0049",
+  "corpus": "gen2",
+  "family": "zbrackets",
+  "code_ref": "gen2/zbrackets/part_0049.scad",
+  "expected_bbox_mm": [
+   70.0,
+   30.0,
+   35.0
+  ]
+ },
+ {
+  "source_id": "gen3_airducts_0077",
+  "corpus": "gen3",
+  "family": "airducts",
+  "code_ref": "gen3/airducts/part_0077.scad",
+  "expected_bbox_mm": [
+   158.92,
+   86.35,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen3_archtrusses_0008",
+  "corpus": "gen3",
+  "family": "archtrusses",
+  "code_ref": "gen3/archtrusses/part_0008.scad",
+  "expected_bbox_mm": [
+   189.48,
+   13.48,
+   88.28
+  ]
+ },
+ {
+  "source_id": "gen3_bearingblocks_0070",
+  "corpus": "gen3",
+  "family": "bearingblocks",
+  "code_ref": "gen3/bearingblocks/part_0070.scad",
+  "expected_bbox_mm": [
+   90.0,
+   60.0,
+   45.22
+  ]
+ },
+ {
+  "source_id": "gen3_beltrollers_0044",
+  "corpus": "gen3",
+  "family": "beltrollers",
+  "code_ref": "gen3/beltrollers/part_0044.scad",
+  "expected_bbox_mm": [
+   40.0,
+   40.0,
+   22.0
+  ]
+ },
+ {
+  "source_id": "gen3_cams_0071",
+  "corpus": "gen3",
+  "family": "cams",
+  "code_ref": "gen3/cams/part_0071.scad",
+  "expected_bbox_mm": [
+   61.256,
+   61.256,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen3_cardans_0048",
+  "corpus": "gen3",
+  "family": "cardans",
+  "code_ref": "gen3/cardans/part_0048.scad",
+  "expected_bbox_mm": [
+   76.0,
+   76.0,
+   11.43
+  ]
+ },
+ {
+  "source_id": "gen3_chassisframes_0021",
+  "corpus": "gen3",
+  "family": "chassisframes",
+  "code_ref": "gen3/chassisframes/part_0021.scad",
+  "expected_bbox_mm": [
+   179.84,
+   99.84,
+   74.84
+  ]
+ },
+ {
+  "source_id": "gen3_cleats_0053",
+  "corpus": "gen3",
+  "family": "cleats",
+  "code_ref": "gen3/cleats/part_0053.scad",
+  "expected_bbox_mm": [
+   80.0,
+   34.0,
+   47.0
+  ]
+ },
+ {
+  "source_id": "gen3_fairings_0094",
+  "corpus": "gen3",
+  "family": "fairings",
+  "code_ref": "gen3/fairings/part_0094.scad",
+  "expected_bbox_mm": [
+   200.4,
+   46.0,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen3_heatsinks_0003",
+  "corpus": "gen3",
+  "family": "heatsinks",
+  "code_ref": "gen3/heatsinks/part_0003.scad",
+  "expected_bbox_mm": [
+   60.0,
+   45.0,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen3_herringbones_0055",
+  "corpus": "gen3",
+  "family": "herringbones",
+  "code_ref": "gen3/herringbones/part_0055.scad",
+  "expected_bbox_mm": [
+   80.0,
+   80.0,
+   24.0
+  ]
+ },
+ {
+  "source_id": "gen3_hexlattices_0008",
+  "corpus": "gen3",
+  "family": "hexlattices",
+  "code_ref": "gen3/hexlattices/part_0008.scad",
+  "expected_bbox_mm": [
+   62.77,
+   45.26,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen3_hooks_0097",
+  "corpus": "gen3",
+  "family": "hooks",
+  "code_ref": "gen3/hooks/part_0097.scad",
+  "expected_bbox_mm": [
+   57.983,
+   77.0,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen3_levers_0014",
+  "corpus": "gen3",
+  "family": "levers",
+  "code_ref": "gen3/levers/part_0014.scad",
+  "expected_bbox_mm": [
+   116.0,
+   34.0,
+   6.0
+  ]
+ },
+ {
+  "source_id": "gen3_livinghinges_0084",
+  "corpus": "gen3",
+  "family": "livinghinges",
+  "code_ref": "gen3/livinghinges/part_0084.scad",
+  "expected_bbox_mm": [
+   40.0,
+   36.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen3_pipeclamps_0067",
+  "corpus": "gen3",
+  "family": "pipeclamps",
+  "code_ref": "gen3/pipeclamps/part_0067.scad",
+  "expected_bbox_mm": [
+   32.903,
+   44.9,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen3_ringgears_0047",
+  "corpus": "gen3",
+  "family": "ringgears",
+  "code_ref": "gen3/ringgears/part_0047.scad",
+  "expected_bbox_mm": [
+   54.972,
+   54.972,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen3_scissorgrids_0009",
+  "corpus": "gen3",
+  "family": "scissorgrids",
+  "code_ref": "gen3/scissorgrids/part_0009.scad",
+  "expected_bbox_mm": [
+   248.08,
+   248.08,
+   12.48
+  ]
+ },
+ {
+  "source_id": "gen3_slottedpanels_0058",
+  "corpus": "gen3",
+  "family": "slottedpanels",
+  "code_ref": "gen3/slottedpanels/part_0058.scad",
+  "expected_bbox_mm": [
+   150.0,
+   80.0,
+   6.0
+  ]
+ },
+ {
+  "source_id": "gen3_snapfits_0040",
+  "corpus": "gen3",
+  "family": "snapfits",
+  "code_ref": "gen3/snapfits/part_0040.scad",
+  "expected_bbox_mm": [
+   48.0,
+   48.0,
+   24.0
+  ]
+ },
+ {
+  "source_id": "gen3_springclamps_0026",
+  "corpus": "gen3",
+  "family": "springclamps",
+  "code_ref": "gen3/springclamps/part_0026.scad",
+  "expected_bbox_mm": [
+   47.919,
+   42.385,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen3_steptowers_0087",
+  "corpus": "gen3",
+  "family": "steptowers",
+  "code_ref": "gen3/steptowers/part_0087.scad",
+  "expected_bbox_mm": [
+   75.32,
+   75.32,
+   191.32
+  ]
+ },
+ {
+  "source_id": "gen3_threadcaps_0080",
+  "corpus": "gen3",
+  "family": "threadcaps",
+  "code_ref": "gen3/threadcaps/part_0080.scad",
+  "expected_bbox_mm": [
+   45.0,
+   45.0,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen3_threads_0084",
+  "corpus": "gen3",
+  "family": "threads",
+  "code_ref": "gen3/threads/part_0084.scad",
+  "expected_bbox_mm": [
+   41.11,
+   35.6,
+   94.4
+  ]
+ },
+ {
+  "source_id": "gen3_thumbscrews_0040",
+  "corpus": "gen3",
+  "family": "thumbscrews",
+  "code_ref": "gen3/thumbscrews/part_0040.scad",
+  "expected_bbox_mm": [
+   38.337,
+   38.838,
+   24.0
+  ]
+ },
+ {
+  "source_id": "gen3_wormwheels_0047",
+  "corpus": "gen3",
+  "family": "wormwheels",
+  "code_ref": "gen3/wormwheels/part_0047.scad",
+  "expected_bbox_mm": [
+   55.0,
+   55.0,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen2_bearings_0037",
+  "corpus": "gen2",
+  "family": "bearings",
+  "code_ref": "gen2/bearings/part_0037.scad",
+  "expected_bbox_mm": [
+   48.2,
+   48.2,
+   16.4
+  ]
+ },
+ {
+  "source_id": "gen2_bezels_0006",
+  "corpus": "gen2",
+  "family": "bezels",
+  "code_ref": "gen2/bezels/part_0006.scad",
+  "expected_bbox_mm": [
+   160.0,
+   60.0,
+   6.0
+  ]
+ },
+ {
+  "source_id": "gen2_caps_0054",
+  "corpus": "gen2",
+  "family": "caps",
+  "code_ref": "gen2/caps/part_0054.scad",
+  "expected_bbox_mm": [
+   46.0,
+   46.0,
+   6.0
+  ]
+ },
+ {
+  "source_id": "gen2_clips_0007",
+  "corpus": "gen2",
+  "family": "clips",
+  "code_ref": "gen2/clips/part_0007.scad",
+  "expected_bbox_mm": [
+   28.0,
+   16.0,
+   17.0
+  ]
+ },
+ {
+  "source_id": "gen2_ducts_0005",
+  "corpus": "gen2",
+  "family": "ducts",
+  "code_ref": "gen2/ducts/part_0005.scad",
+  "expected_bbox_mm": [
+   100.0,
+   72.0,
+   15.0
+  ]
+ },
+ {
+  "source_id": "gen2_enclosures_0015",
+  "corpus": "gen2",
+  "family": "enclosures",
+  "code_ref": "gen2/enclosures/part_0015.scad",
+  "expected_bbox_mm": [
+   154.0,
+   80.0,
+   50.0
+  ]
+ },
+ {
+  "source_id": "gen2_flanges_0058",
+  "corpus": "gen2",
+  "family": "flanges",
+  "code_ref": "gen2/flanges/part_0058.scad",
+  "expected_bbox_mm": [
+   100.0,
+   100.0,
+   18.0
+  ]
+ },
+ {
+  "source_id": "gen2_handles_0042",
+  "corpus": "gen2",
+  "family": "handles",
+  "code_ref": "gen2/handles/part_0042.scad",
+  "expected_bbox_mm": [
+   60.0,
+   27.3,
+   24.0
+  ]
+ },
+ {
+  "source_id": "gen2_helicalgears_0052",
+  "corpus": "gen2",
+  "family": "helicalgears",
+  "code_ref": "gen2/helicalgears/part_0052.scad",
+  "expected_bbox_mm": [
+   63.0,
+   63.0,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen2_hinges_0023",
+  "corpus": "gen2",
+  "family": "hinges",
+  "code_ref": "gen2/hinges/part_0023.scad",
+  "expected_bbox_mm": [
+   80.0,
+   39.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen2_ibeams_0001",
+  "corpus": "gen2",
+  "family": "ibeams",
+  "code_ref": "gen2/ibeams/part_0001.scad",
+  "expected_bbox_mm": [
+   107.2,
+   7.2,
+   47.2
+  ]
+ },
+ {
+  "source_id": "gen2_impellers_0058",
+  "corpus": "gen2",
+  "family": "impellers",
+  "code_ref": "gen2/impellers/part_0058.scad",
+  "expected_bbox_mm": [
+   52.0,
+   52.0,
+   36.0
+  ]
+ },
+ {
+  "source_id": "gen2_knobs_0025",
+  "corpus": "gen2",
+  "family": "knobs",
+  "code_ref": "gen2/knobs/part_0025.scad",
+  "expected_bbox_mm": [
+   46.2,
+   25.0,
+   32.0
+  ]
+ },
+ {
+  "source_id": "gen2_lbrackets_0041",
+  "corpus": "gen2",
+  "family": "lbrackets",
+  "code_ref": "gen2/lbrackets/part_0041.scad",
+  "expected_bbox_mm": [
+   55.0,
+   40.0,
+   55.0
+  ]
+ },
+ {
+  "source_id": "gen2_lids_0016",
+  "corpus": "gen2",
+  "family": "lids",
+  "code_ref": "gen2/lids/part_0016.scad",
+  "expected_bbox_mm": [
+   100.0,
+   100.0,
+   9.0
+  ]
+ },
+ {
+  "source_id": "gen2_motormounts_0020",
+  "corpus": "gen2",
+  "family": "motormounts",
+  "code_ref": "gen2/motormounts/part_0020.scad",
+  "expected_bbox_mm": [
+   61.0,
+   61.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen2_oldhams_0031",
+  "corpus": "gen2",
+  "family": "oldhams",
+  "code_ref": "gen2/oldhams/part_0031.scad",
+  "expected_bbox_mm": [
+   32.0,
+   32.0,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen2_pipes_0025",
+  "corpus": "gen2",
+  "family": "pipes",
+  "code_ref": "gen2/pipes/part_0025.scad",
+  "expected_bbox_mm": [
+   142.0,
+   162.0,
+   62.0
+  ]
+ },
+ {
+  "source_id": "gen2_pulleys_0059",
+  "corpus": "gen2",
+  "family": "pulleys",
+  "code_ref": "gen2/pulleys/part_0059.scad",
+  "expected_bbox_mm": [
+   8.66,
+   8.66,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen2_quadframes_0023",
+  "corpus": "gen2",
+  "family": "quadframes",
+  "code_ref": "gen2/quadframes/part_0023.scad",
+  "expected_bbox_mm": [
+   115.48,
+   115.48,
+   5.0
+  ]
+ },
+ {
+  "source_id": "gen2_racks_0057",
+  "corpus": "gen2",
+  "family": "racks",
+  "code_ref": "gen2/racks/part_0057.scad",
+  "expected_bbox_mm": [
+   74.76,
+   20.0,
+   11.25
+  ]
+ },
+ {
+  "source_id": "gen2_shafts_0063",
+  "corpus": "gen2",
+  "family": "shafts",
+  "code_ref": "gen2/shafts/part_0063.scad",
+  "expected_bbox_mm": [
+   30.0,
+   30.0,
+   115.0
+  ]
+ },
+ {
+  "source_id": "gen2_spacers_0059",
+  "corpus": "gen2",
+  "family": "spacers",
+  "code_ref": "gen2/spacers/part_0059.scad",
+  "expected_bbox_mm": [
+   15.5,
+   15.5,
+   5.0
+  ]
+ },
+ {
+  "source_id": "gen2_spurgears_0025",
+  "corpus": "gen2",
+  "family": "spurgears",
+  "code_ref": "gen2/spurgears/part_0025.scad",
+  "expected_bbox_mm": [
+   37.5,
+   37.5,
+   23.0
+  ]
+ },
+ {
+  "source_id": "gen2_towers_0047",
+  "corpus": "gen2",
+  "family": "towers",
+  "code_ref": "gen2/towers/part_0047.scad",
+  "expected_bbox_mm": [
+   114.4,
+   114.4,
+   248.0
+  ]
+ },
+ {
+  "source_id": "gen2_trusses_0022",
+  "corpus": "gen2",
+  "family": "trusses",
+  "code_ref": "gen2/trusses/part_0022.scad",
+  "expected_bbox_mm": [
+   184.6,
+   9.6,
+   109.6
+  ]
+ },
+ {
+  "source_id": "gen2_ubrackets_0060",
+  "corpus": "gen2",
+  "family": "ubrackets",
+  "code_ref": "gen2/ubrackets/part_0060.scad",
+  "expected_bbox_mm": [
+   100.0,
+   40.0,
+   50.0
+  ]
+ },
+ {
+  "source_id": "gen2_zbrackets_0030",
+  "corpus": "gen2",
+  "family": "zbrackets",
+  "code_ref": "gen2/zbrackets/part_0030.scad",
+  "expected_bbox_mm": [
+   45.0,
+   25.0,
+   35.0
+  ]
+ },
+ {
+  "source_id": "gen3_airducts_0057",
+  "corpus": "gen3",
+  "family": "airducts",
+  "code_ref": "gen3/airducts/part_0057.scad",
+  "expected_bbox_mm": [
+   62.31,
+   62.31,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen3_archtrusses_0026",
+  "corpus": "gen3",
+  "family": "archtrusses",
+  "code_ref": "gen3/archtrusses/part_0026.scad",
+  "expected_bbox_mm": [
+   195.48,
+   13.48,
+   86.33
+  ]
+ },
+ {
+  "source_id": "gen3_bearingblocks_0052",
+  "corpus": "gen3",
+  "family": "bearingblocks",
+  "code_ref": "gen3/bearingblocks/part_0052.scad",
+  "expected_bbox_mm": [
+   90.0,
+   60.0,
+   43.22
+  ]
+ },
+ {
+  "source_id": "gen3_beltrollers_0037",
+  "corpus": "gen3",
+  "family": "beltrollers",
+  "code_ref": "gen3/beltrollers/part_0037.scad",
+  "expected_bbox_mm": [
+   42.0,
+   42.0,
+   22.0
+  ]
+ },
+ {
+  "source_id": "gen3_cams_0034",
+  "corpus": "gen3",
+  "family": "cams",
+  "code_ref": "gen3/cams/part_0034.scad",
+  "expected_bbox_mm": [
+   54.869,
+   64.0,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen3_cardans_0036",
+  "corpus": "gen3",
+  "family": "cardans",
+  "code_ref": "gen3/cardans/part_0036.scad",
+  "expected_bbox_mm": [
+   76.0,
+   76.0,
+   11.43
+  ]
+ },
+ {
+  "source_id": "gen3_chassisframes_0046",
+  "corpus": "gen3",
+  "family": "chassisframes",
+  "code_ref": "gen3/chassisframes/part_0046.scad",
+  "expected_bbox_mm": [
+   221.84,
+   81.84,
+   31.84
+  ]
+ },
+ {
+  "source_id": "gen3_cleats_0060",
+  "corpus": "gen3",
+  "family": "cleats",
+  "code_ref": "gen3/cleats/part_0060.scad",
+  "expected_bbox_mm": [
+   70.0,
+   34.0,
+   55.0
+  ]
+ },
+ {
+  "source_id": "gen3_fairings_0035",
+  "corpus": "gen3",
+  "family": "fairings",
+  "code_ref": "gen3/fairings/part_0035.scad",
+  "expected_bbox_mm": [
+   160.4,
+   46.0,
+   39.0
+  ]
+ },
+ {
+  "source_id": "gen3_heatsinks_0090",
+  "corpus": "gen3",
+  "family": "heatsinks",
+  "code_ref": "gen3/heatsinks/part_0090.scad",
+  "expected_bbox_mm": [
+   60.0,
+   50.0,
+   38.0
+  ]
+ },
+ {
+  "source_id": "gen3_herringbones_0081",
+  "corpus": "gen3",
+  "family": "herringbones",
+  "code_ref": "gen3/herringbones/part_0081.scad",
+  "expected_bbox_mm": [
+   66.0,
+   66.0,
+   28.0
+  ]
+ },
+ {
+  "source_id": "gen3_hexlattices_0004",
+  "corpus": "gen3",
+  "family": "hexlattices",
+  "code_ref": "gen3/hexlattices/part_0004.scad",
+  "expected_bbox_mm": [
+   84.29,
+   63.11,
+   13.0
+  ]
+ },
+ {
+  "source_id": "gen3_hooks_0024",
+  "corpus": "gen3",
+  "family": "hooks",
+  "code_ref": "gen3/hooks/part_0024.scad",
+  "expected_bbox_mm": [
+   77.893,
+   94.0,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen3_levers_0054",
+  "corpus": "gen3",
+  "family": "levers",
+  "code_ref": "gen3/levers/part_0054.scad",
+  "expected_bbox_mm": [
+   134.0,
+   38.8,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen3_livinghinges_0090",
+  "corpus": "gen3",
+  "family": "livinghinges",
+  "code_ref": "gen3/livinghinges/part_0090.scad",
+  "expected_bbox_mm": [
+   48.0,
+   36.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen3_pipeclamps_0078",
+  "corpus": "gen3",
+  "family": "pipeclamps",
+  "code_ref": "gen3/pipeclamps/part_0078.scad",
+  "expected_bbox_mm": [
+   41.664,
+   54.54,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen3_ringgears_0020",
+  "corpus": "gen3",
+  "family": "ringgears",
+  "code_ref": "gen3/ringgears/part_0020.scad",
+  "expected_bbox_mm": [
+   65.968,
+   65.968,
+   25.0
+  ]
+ },
+ {
+  "source_id": "gen3_scissorgrids_0038",
+  "corpus": "gen3",
+  "family": "scissorgrids",
+  "code_ref": "gen3/scissorgrids/part_0038.scad",
+  "expected_bbox_mm": [
+   202.62,
+   202.62,
+   10.62
+  ]
+ },
+ {
+  "source_id": "gen3_slottedpanels_0008",
+  "corpus": "gen3",
+  "family": "slottedpanels",
+  "code_ref": "gen3/slottedpanels/part_0008.scad",
+  "expected_bbox_mm": [
+   180.0,
+   100.0,
+   15.0
+  ]
+ },
+ {
+  "source_id": "gen3_snapfits_0090",
+  "corpus": "gen3",
+  "family": "snapfits",
+  "code_ref": "gen3/snapfits/part_0090.scad",
+  "expected_bbox_mm": [
+   38.4,
+   38.4,
+   22.0
+  ]
+ },
+ {
+  "source_id": "gen3_springclamps_0012",
+  "corpus": "gen3",
+  "family": "springclamps",
+  "code_ref": "gen3/springclamps/part_0012.scad",
+  "expected_bbox_mm": [
+   55.984,
+   50.936,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen3_steptowers_0099",
+  "corpus": "gen3",
+  "family": "steptowers",
+  "code_ref": "gen3/steptowers/part_0099.scad",
+  "expected_bbox_mm": [
+   82.18,
+   82.18,
+   247.98
+  ]
+ },
+ {
+  "source_id": "gen3_threadcaps_0015",
+  "corpus": "gen3",
+  "family": "threadcaps",
+  "code_ref": "gen3/threadcaps/part_0015.scad",
+  "expected_bbox_mm": [
+   30.0,
+   30.0,
+   18.0
+  ]
+ },
+ {
+  "source_id": "gen3_threads_0035",
+  "corpus": "gen3",
+  "family": "threads",
+  "code_ref": "gen3/threads/part_0035.scad",
+  "expected_bbox_mm": [
+   41.11,
+   35.6,
+   74.4
+  ]
+ },
+ {
+  "source_id": "gen3_thumbscrews_0087",
+  "corpus": "gen3",
+  "family": "thumbscrews",
+  "code_ref": "gen3/thumbscrews/part_0087.scad",
+  "expected_bbox_mm": [
+   33.0,
+   29.136,
+   22.0
+  ]
+ },
+ {
+  "source_id": "gen3_wormwheels_0089",
+  "corpus": "gen3",
+  "family": "wormwheels",
+  "code_ref": "gen3/wormwheels/part_0089.scad",
+  "expected_bbox_mm": [
+   55.0,
+   55.0,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen2_bearings_0044",
+  "corpus": "gen2",
+  "family": "bearings",
+  "code_ref": "gen2/bearings/part_0044.scad",
+  "expected_bbox_mm": [
+   32.25,
+   32.25,
+   11.4
+  ]
+ },
+ {
+  "source_id": "gen2_bezels_0025",
+  "corpus": "gen2",
+  "family": "bezels",
+  "code_ref": "gen2/bezels/part_0025.scad",
+  "expected_bbox_mm": [
+   180.0,
+   120.0,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen2_caps_0051",
+  "corpus": "gen2",
+  "family": "caps",
+  "code_ref": "gen2/caps/part_0051.scad",
+  "expected_bbox_mm": [
+   71.0,
+   71.0,
+   17.0
+  ]
+ },
+ {
+  "source_id": "gen2_clips_0044",
+  "corpus": "gen2",
+  "family": "clips",
+  "code_ref": "gen2/clips/part_0044.scad",
+  "expected_bbox_mm": [
+   40.0,
+   22.0,
+   18.0
+  ]
+ },
+ {
+  "source_id": "gen2_ducts_0032",
+  "corpus": "gen2",
+  "family": "ducts",
+  "code_ref": "gen2/ducts/part_0032.scad",
+  "expected_bbox_mm": [
+   120.0,
+   72.0,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen2_enclosures_0022",
+  "corpus": "gen2",
+  "family": "enclosures",
+  "code_ref": "gen2/enclosures/part_0022.scad",
+  "expected_bbox_mm": [
+   116.0,
+   50.0,
+   60.0
+  ]
+ },
+ {
+  "source_id": "gen2_flanges_0009",
+  "corpus": "gen2",
+  "family": "flanges",
+  "code_ref": "gen2/flanges/part_0009.scad",
+  "expected_bbox_mm": [
+   70.0,
+   70.0,
+   16.0
+  ]
+ },
+ {
+  "source_id": "gen2_handles_0075",
+  "corpus": "gen2",
+  "family": "handles",
+  "code_ref": "gen2/handles/part_0075.scad",
+  "expected_bbox_mm": [
+   150.0,
+   36.0,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen2_helicalgears_0064",
+  "corpus": "gen2",
+  "family": "helicalgears",
+  "code_ref": "gen2/helicalgears/part_0064.scad",
+  "expected_bbox_mm": [
+   46.0,
+   46.0,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen2_hinges_0075",
+  "corpus": "gen2",
+  "family": "hinges",
+  "code_ref": "gen2/hinges/part_0075.scad",
+  "expected_bbox_mm": [
+   40.0,
+   34.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen2_ibeams_0020",
+  "corpus": "gen2",
+  "family": "ibeams",
+  "code_ref": "gen2/ibeams/part_0020.scad",
+  "expected_bbox_mm": [
+   158.4,
+   8.4,
+   48.4
+  ]
+ },
+ {
+  "source_id": "gen2_impellers_0055",
+  "corpus": "gen2",
+  "family": "impellers",
+  "code_ref": "gen2/impellers/part_0055.scad",
+  "expected_bbox_mm": [
+   102.0,
+   102.0,
+   35.0
+  ]
+ },
+ {
+  "source_id": "gen2_knobs_0048",
+  "corpus": "gen2",
+  "family": "knobs",
+  "code_ref": "gen2/knobs/part_0048.scad",
+  "expected_bbox_mm": [
+   45.6,
+   45.6,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen2_lbrackets_0080",
+  "corpus": "gen2",
+  "family": "lbrackets",
+  "code_ref": "gen2/lbrackets/part_0080.scad",
+  "expected_bbox_mm": [
+   40.0,
+   32.0,
+   35.0
+  ]
+ },
+ {
+  "source_id": "gen2_lids_0032",
+  "corpus": "gen2",
+  "family": "lids",
+  "code_ref": "gen2/lids/part_0032.scad",
+  "expected_bbox_mm": [
+   80.0,
+   40.0,
+   9.2
+  ]
+ },
+ {
+  "source_id": "gen2_motormounts_0006",
+  "corpus": "gen2",
+  "family": "motormounts",
+  "code_ref": "gen2/motormounts/part_0006.scad",
+  "expected_bbox_mm": [
+   85.6,
+   89.6,
+   7.0
+  ]
+ },
+ {
+  "source_id": "gen2_oldhams_0007",
+  "corpus": "gen2",
+  "family": "oldhams",
+  "code_ref": "gen2/oldhams/part_0007.scad",
+  "expected_bbox_mm": [
+   40.0,
+   40.0,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen2_pipes_0031",
+  "corpus": "gen2",
+  "family": "pipes",
+  "code_ref": "gen2/pipes/part_0031.scad",
+  "expected_bbox_mm": [
+   184.0,
+   124.0,
+   84.0
+  ]
+ },
+ {
+  "source_id": "gen2_pulleys_0078",
+  "corpus": "gen2",
+  "family": "pulleys",
+  "code_ref": "gen2/pulleys/part_0078.scad",
+  "expected_bbox_mm": [
+   24.67,
+   24.67,
+   13.0
+  ]
+ },
+ {
+  "source_id": "gen2_quadframes_0064",
+  "corpus": "gen2",
+  "family": "quadframes",
+  "code_ref": "gen2/quadframes/part_0064.scad",
+  "expected_bbox_mm": [
+   172.05,
+   172.05,
+   7.0
+  ]
+ },
+ {
+  "source_id": "gen2_racks_0069",
+  "corpus": "gen2",
+  "family": "racks",
+  "code_ref": "gen2/racks/part_0069.scad",
+  "expected_bbox_mm": [
+   233.63,
+   30.0,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen2_shafts_0059",
+  "corpus": "gen2",
+  "family": "shafts",
+  "code_ref": "gen2/shafts/part_0059.scad",
+  "expected_bbox_mm": [
+   30.0,
+   30.0,
+   55.0
+  ]
+ },
+ {
+  "source_id": "gen2_spacers_0042",
+  "corpus": "gen2",
+  "family": "spacers",
+  "code_ref": "gen2/spacers/part_0042.scad",
+  "expected_bbox_mm": [
+   23.2,
+   23.2,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen2_spurgears_0016",
+  "corpus": "gen2",
+  "family": "spurgears",
+  "code_ref": "gen2/spurgears/part_0016.scad",
+  "expected_bbox_mm": [
+   87.5,
+   87.5,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen2_towers_0005",
+  "corpus": "gen2",
+  "family": "towers",
+  "code_ref": "gen2/towers/part_0005.scad",
+  "expected_bbox_mm": [
+   59.6,
+   59.6,
+   248.1
+  ]
+ },
+ {
+  "source_id": "gen2_trusses_0046",
+  "corpus": "gen2",
+  "family": "trusses",
+  "code_ref": "gen2/trusses/part_0046.scad",
+  "expected_bbox_mm": [
+   247.2,
+   7.2,
+   67.2
+  ]
+ },
+ {
+  "source_id": "gen2_ubrackets_0006",
+  "corpus": "gen2",
+  "family": "ubrackets",
+  "code_ref": "gen2/ubrackets/part_0006.scad",
+  "expected_bbox_mm": [
+   110.0,
+   70.0,
+   25.0
+  ]
+ },
+ {
+  "source_id": "gen2_zbrackets_0080",
+  "corpus": "gen2",
+  "family": "zbrackets",
+  "code_ref": "gen2/zbrackets/part_0080.scad",
+  "expected_bbox_mm": [
+   45.0,
+   35.0,
+   50.0
+  ]
+ },
+ {
+  "source_id": "gen3_airducts_0062",
+  "corpus": "gen3",
+  "family": "airducts",
+  "code_ref": "gen3/airducts/part_0062.scad",
+  "expected_bbox_mm": [
+   154.0,
+   81.9,
+   32.0
+  ]
+ },
+ {
+  "source_id": "gen3_archtrusses_0019",
+  "corpus": "gen3",
+  "family": "archtrusses",
+  "code_ref": "gen3/archtrusses/part_0019.scad",
+  "expected_bbox_mm": [
+   213.84,
+   9.84,
+   81.24
+  ]
+ },
+ {
+  "source_id": "gen3_bearingblocks_0100",
+  "corpus": "gen3",
+  "family": "bearingblocks",
+  "code_ref": "gen3/bearingblocks/part_0100.scad",
+  "expected_bbox_mm": [
+   80.0,
+   68.0,
+   48.4
+  ]
+ },
+ {
+  "source_id": "gen3_beltrollers_0082",
+  "corpus": "gen3",
+  "family": "beltrollers",
+  "code_ref": "gen3/beltrollers/part_0082.scad",
+  "expected_bbox_mm": [
+   68.0,
+   68.0,
+   34.0
+  ]
+ },
+ {
+  "source_id": "gen3_cams_0061",
+  "corpus": "gen3",
+  "family": "cams",
+  "code_ref": "gen3/cams/part_0061.scad",
+  "expected_bbox_mm": [
+   46.64,
+   51.936,
+   22.0
+  ]
+ },
+ {
+  "source_id": "gen3_cardans_0028",
+  "corpus": "gen3",
+  "family": "cardans",
+  "code_ref": "gen3/cardans/part_0028.scad",
+  "expected_bbox_mm": [
+   60.0,
+   60.0,
+   11.43
+  ]
+ },
+ {
+  "source_id": "gen3_chassisframes_0048",
+  "corpus": "gen3",
+  "family": "chassisframes",
+  "code_ref": "gen3/chassisframes/part_0048.scad",
+  "expected_bbox_mm": [
+   180.82,
+   90.82,
+   55.82
+  ]
+ },
+ {
+  "source_id": "gen3_cleats_0054",
+  "corpus": "gen3",
+  "family": "cleats",
+  "code_ref": "gen3/cleats/part_0054.scad",
+  "expected_bbox_mm": [
+   90.0,
+   34.0,
+   45.0
+  ]
+ },
+ {
+  "source_id": "gen3_fairings_0045",
+  "corpus": "gen3",
+  "family": "fairings",
+  "code_ref": "gen3/fairings/part_0045.scad",
+  "expected_bbox_mm": [
+   140.4,
+   40.0,
+   40.0
+  ]
+ },
+ {
+  "source_id": "gen3_heatsinks_0042",
+  "corpus": "gen3",
+  "family": "heatsinks",
+  "code_ref": "gen3/heatsinks/part_0042.scad",
+  "expected_bbox_mm": [
+   59.0,
+   50.0,
+   23.0
+  ]
+ },
+ {
+  "source_id": "gen3_herringbones_0026",
+  "corpus": "gen3",
+  "family": "herringbones",
+  "code_ref": "gen3/herringbones/part_0026.scad",
+  "expected_bbox_mm": [
+   66.0,
+   66.0,
+   34.0
+  ]
+ },
+ {
+  "source_id": "gen3_hexlattices_0047",
+  "corpus": "gen3",
+  "family": "hexlattices",
+  "code_ref": "gen3/hexlattices/part_0047.scad",
+  "expected_bbox_mm": [
+   152.58,
+   89.11,
+   5.0
+  ]
+ },
+ {
+  "source_id": "gen3_hooks_0043",
+  "corpus": "gen3",
+  "family": "hooks",
+  "code_ref": "gen3/hooks/part_0043.scad",
+  "expected_bbox_mm": [
+   49.985,
+   78.0,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen3_levers_0006",
+  "corpus": "gen3",
+  "family": "levers",
+  "code_ref": "gen3/levers/part_0006.scad",
+  "expected_bbox_mm": [
+   119.0,
+   37.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen3_livinghinges_0062",
+  "corpus": "gen3",
+  "family": "livinghinges",
+  "code_ref": "gen3/livinghinges/part_0062.scad",
+  "expected_bbox_mm": [
+   42.0,
+   30.0,
+   7.0
+  ]
+ },
+ {
+  "source_id": "gen3_pipeclamps_0016",
+  "corpus": "gen3",
+  "family": "pipeclamps",
+  "code_ref": "gen3/pipeclamps/part_0016.scad",
+  "expected_bbox_mm": [
+   35.393,
+   48.98,
+   16.0
+  ]
+ },
+ {
+  "source_id": "gen3_ringgears_0082",
+  "corpus": "gen3",
+  "family": "ringgears",
+  "code_ref": "gen3/ringgears/part_0082.scad",
+  "expected_bbox_mm": [
+   34.966,
+   34.966,
+   21.0
+  ]
+ },
+ {
+  "source_id": "gen3_scissorgrids_0072",
+  "corpus": "gen3",
+  "family": "scissorgrids",
+  "code_ref": "gen3/scissorgrids/part_0072.scad",
+  "expected_bbox_mm": [
+   248.02,
+   188.72,
+   10.82
+  ]
+ },
+ {
+  "source_id": "gen3_slottedpanels_0016",
+  "corpus": "gen3",
+  "family": "slottedpanels",
+  "code_ref": "gen3/slottedpanels/part_0016.scad",
+  "expected_bbox_mm": [
+   120.0,
+   90.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen3_snapfits_0054",
+  "corpus": "gen3",
+  "family": "snapfits",
+  "code_ref": "gen3/snapfits/part_0054.scad",
+  "expected_bbox_mm": [
+   52.0,
+   52.0,
+   23.0
+  ]
+ },
+ {
+  "source_id": "gen3_springclamps_0092",
+  "corpus": "gen3",
+  "family": "springclamps",
+  "code_ref": "gen3/springclamps/part_0092.scad",
+  "expected_bbox_mm": [
+   39.983,
+   51.321,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen3_steptowers_0014",
+  "corpus": "gen3",
+  "family": "steptowers",
+  "code_ref": "gen3/steptowers/part_0014.scad",
+  "expected_bbox_mm": [
+   90.18,
+   90.18,
+   178.18
+  ]
+ },
+ {
+  "source_id": "gen3_threadcaps_0097",
+  "corpus": "gen3",
+  "family": "threadcaps",
+  "code_ref": "gen3/threadcaps/part_0097.scad",
+  "expected_bbox_mm": [
+   45.0,
+   45.0,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen3_threads_0059",
+  "corpus": "gen3",
+  "family": "threads",
+  "code_ref": "gen3/threads/part_0059.scad",
+  "expected_bbox_mm": [
+   46.88,
+   40.6,
+   86.5
+  ]
+ },
+ {
+  "source_id": "gen3_thumbscrews_0032",
+  "corpus": "gen3",
+  "family": "thumbscrews",
+  "code_ref": "gen3/thumbscrews/part_0032.scad",
+  "expected_bbox_mm": [
+   29.159,
+   29.648,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen3_wormwheels_0009",
+  "corpus": "gen3",
+  "family": "wormwheels",
+  "code_ref": "gen3/wormwheels/part_0009.scad",
+  "expected_bbox_mm": [
+   66.0,
+   66.0,
+   32.0
+  ]
+ },
+ {
+  "source_id": "gen2_bearings_0067",
+  "corpus": "gen2",
+  "family": "bearings",
+  "code_ref": "gen2/bearings/part_0067.scad",
+  "expected_bbox_mm": [
+   45.1,
+   45.1,
+   15.4
+  ]
+ },
+ {
+  "source_id": "gen2_bezels_0029",
+  "corpus": "gen2",
+  "family": "bezels",
+  "code_ref": "gen2/bezels/part_0029.scad",
+  "expected_bbox_mm": [
+   100.0,
+   100.0,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen2_caps_0008",
+  "corpus": "gen2",
+  "family": "caps",
+  "code_ref": "gen2/caps/part_0008.scad",
+  "expected_bbox_mm": [
+   48.0,
+   48.0,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen2_clips_0025",
+  "corpus": "gen2",
+  "family": "clips",
+  "code_ref": "gen2/clips/part_0025.scad",
+  "expected_bbox_mm": [
+   36.0,
+   24.0,
+   18.0
+  ]
+ },
+ {
+  "source_id": "gen2_ducts_0064",
+  "corpus": "gen2",
+  "family": "ducts",
+  "code_ref": "gen2/ducts/part_0064.scad",
+  "expected_bbox_mm": [
+   150.0,
+   30.0,
+   15.0
+  ]
+ },
+ {
+  "source_id": "gen2_enclosures_0027",
+  "corpus": "gen2",
+  "family": "enclosures",
+  "code_ref": "gen2/enclosures/part_0027.scad",
+  "expected_bbox_mm": [
+   138.0,
+   100.0,
+   60.0
+  ]
+ },
+ {
+  "source_id": "gen2_flanges_0002",
+  "corpus": "gen2",
+  "family": "flanges",
+  "code_ref": "gen2/flanges/part_0002.scad",
+  "expected_bbox_mm": [
+   120.0,
+   120.0,
+   16.6
+  ]
+ },
+ {
+  "source_id": "gen2_handles_0080",
+  "corpus": "gen2",
+  "family": "handles",
+  "code_ref": "gen2/handles/part_0080.scad",
+  "expected_bbox_mm": [
+   60.0,
+   23.1,
+   18.0
+  ]
+ },
+ {
+  "source_id": "gen2_helicalgears_0014",
+  "corpus": "gen2",
+  "family": "helicalgears",
+  "code_ref": "gen2/helicalgears/part_0014.scad",
+  "expected_bbox_mm": [
+   78.0,
+   78.0,
+   28.0
+  ]
+ },
+ {
+  "source_id": "gen2_hinges_0049",
+  "corpus": "gen2",
+  "family": "hinges",
+  "code_ref": "gen2/hinges/part_0049.scad",
+  "expected_bbox_mm": [
+   100.0,
+   39.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen2_ibeams_0054",
+  "corpus": "gen2",
+  "family": "ibeams",
+  "code_ref": "gen2/ibeams/part_0054.scad",
+  "expected_bbox_mm": [
+   248.0,
+   9.6,
+   59.6
+  ]
+ },
+ {
+  "source_id": "gen2_impellers_0008",
+  "corpus": "gen2",
+  "family": "impellers",
+  "code_ref": "gen2/impellers/part_0008.scad",
+  "expected_bbox_mm": [
+   82.0,
+   82.0,
+   34.5
+  ]
+ },
+ {
+  "source_id": "gen2_knobs_0072",
+  "corpus": "gen2",
+  "family": "knobs",
+  "code_ref": "gen2/knobs/part_0072.scad",
+  "expected_bbox_mm": [
+   39.9,
+   35.96,
+   18.0
+  ]
+ },
+ {
+  "source_id": "gen2_lbrackets_0010",
+  "corpus": "gen2",
+  "family": "lbrackets",
+  "code_ref": "gen2/lbrackets/part_0010.scad",
+  "expected_bbox_mm": [
+   70.0,
+   32.0,
+   50.0
+  ]
+ },
+ {
+  "source_id": "gen2_lids_0065",
+  "corpus": "gen2",
+  "family": "lids",
+  "code_ref": "gen2/lids/part_0065.scad",
+  "expected_bbox_mm": [
+   160.0,
+   80.0,
+   9.0
+  ]
+ },
+ {
+  "source_id": "gen2_motormounts_0051",
+  "corpus": "gen2",
+  "family": "motormounts",
+  "code_ref": "gen2/motormounts/part_0051.scad",
+  "expected_bbox_mm": [
+   47.0,
+   61.0,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen2_oldhams_0049",
+  "corpus": "gen2",
+  "family": "oldhams",
+  "code_ref": "gen2/oldhams/part_0049.scad",
+  "expected_bbox_mm": [
+   28.0,
+   28.0,
+   21.0
+  ]
+ },
+ {
+  "source_id": "gen2_pipes_0051",
+  "corpus": "gen2",
+  "family": "pipes",
+  "code_ref": "gen2/pipes/part_0051.scad",
+  "expected_bbox_mm": [
+   142.0,
+   156.0,
+   56.0
+  ]
+ },
+ {
+  "source_id": "gen2_pulleys_0046",
+  "corpus": "gen2",
+  "family": "pulleys",
+  "code_ref": "gen2/pulleys/part_0046.scad",
+  "expected_bbox_mm": [
+   40.7,
+   40.7,
+   21.0
+  ]
+ },
+ {
+  "source_id": "gen2_quadframes_0034",
+  "corpus": "gen2",
+  "family": "quadframes",
+  "code_ref": "gen2/quadframes/part_0034.scad",
+  "expected_bbox_mm": [
+   188.06,
+   188.06,
+   5.0
+  ]
+ },
+ {
+  "source_id": "gen2_racks_0079",
+  "corpus": "gen2",
+  "family": "racks",
+  "code_ref": "gen2/racks/part_0079.scad",
+  "expected_bbox_mm": [
+   94.54,
+   12.0,
+   17.25
+  ]
+ },
+ {
+  "source_id": "gen2_shafts_0054",
+  "corpus": "gen2",
+  "family": "shafts",
+  "code_ref": "gen2/shafts/part_0054.scad",
+  "expected_bbox_mm": [
+   40.0,
+   40.0,
+   80.0
+  ]
+ },
+ {
+  "source_id": "gen2_spacers_0043",
+  "corpus": "gen2",
+  "family": "spacers",
+  "code_ref": "gen2/spacers/part_0043.scad",
+  "expected_bbox_mm": [
+   19.5,
+   19.5,
+   5.0
+  ]
+ },
+ {
+  "source_id": "gen2_spurgears_0032",
+  "corpus": "gen2",
+  "family": "spurgears",
+  "code_ref": "gen2/spurgears/part_0032.scad",
+  "expected_bbox_mm": [
+   70.0,
+   70.0,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen2_towers_0038",
+  "corpus": "gen2",
+  "family": "towers",
+  "code_ref": "gen2/towers/part_0038.scad",
+  "expected_bbox_mm": [
+   89.6,
+   89.6,
+   190.8
+  ]
+ },
+ {
+  "source_id": "gen2_trusses_0078",
+  "corpus": "gen2",
+  "family": "trusses",
+  "code_ref": "gen2/trusses/part_0078.scad",
+  "expected_bbox_mm": [
+   247.6,
+   8.4,
+   78.4
+  ]
+ },
+ {
+  "source_id": "gen2_ubrackets_0005",
+  "corpus": "gen2",
+  "family": "ubrackets",
+  "code_ref": "gen2/ubrackets/part_0005.scad",
+  "expected_bbox_mm": [
+   100.0,
+   40.0,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen2_zbrackets_0003",
+  "corpus": "gen2",
+  "family": "zbrackets",
+  "code_ref": "gen2/zbrackets/part_0003.scad",
+  "expected_bbox_mm": [
+   40.0,
+   35.0,
+   50.0
+  ]
+ },
+ {
+  "source_id": "gen3_airducts_0039",
+  "corpus": "gen3",
+  "family": "airducts",
+  "code_ref": "gen3/airducts/part_0039.scad",
+  "expected_bbox_mm": [
+   156.0,
+   94.1,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen3_archtrusses_0066",
+  "corpus": "gen3",
+  "family": "archtrusses",
+  "code_ref": "gen3/archtrusses/part_0066.scad",
+  "expected_bbox_mm": [
+   141.46,
+   11.46,
+   55.5
+  ]
+ },
+ {
+  "source_id": "gen3_bearingblocks_0013",
+  "corpus": "gen3",
+  "family": "bearingblocks",
+  "code_ref": "gen3/bearingblocks/part_0013.scad",
+  "expected_bbox_mm": [
+   100.0,
+   52.0,
+   52.4
+  ]
+ },
+ {
+  "source_id": "gen3_beltrollers_0005",
+  "corpus": "gen3",
+  "family": "beltrollers",
+  "code_ref": "gen3/beltrollers/part_0005.scad",
+  "expected_bbox_mm": [
+   57.2,
+   57.2,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen3_cams_0063",
+  "corpus": "gen3",
+  "family": "cams",
+  "code_ref": "gen3/cams/part_0063.scad",
+  "expected_bbox_mm": [
+   36.068,
+   46.0,
+   22.0
+  ]
+ },
+ {
+  "source_id": "gen3_cardans_0086",
+  "corpus": "gen3",
+  "family": "cardans",
+  "code_ref": "gen3/cardans/part_0086.scad",
+  "expected_bbox_mm": [
+   52.0,
+   52.0,
+   15.24
+  ]
+ },
+ {
+  "source_id": "gen3_chassisframes_0078",
+  "corpus": "gen3",
+  "family": "chassisframes",
+  "code_ref": "gen3/chassisframes/part_0078.scad",
+  "expected_bbox_mm": [
+   221.46,
+   101.46,
+   39.46
+  ]
+ },
+ {
+  "source_id": "gen3_cleats_0040",
+  "corpus": "gen3",
+  "family": "cleats",
+  "code_ref": "gen3/cleats/part_0040.scad",
+  "expected_bbox_mm": [
+   40.0,
+   28.0,
+   39.0
+  ]
+ },
+ {
+  "source_id": "gen3_fairings_0093",
+  "corpus": "gen3",
+  "family": "fairings",
+  "code_ref": "gen3/fairings/part_0093.scad",
+  "expected_bbox_mm": [
+   200.4,
+   52.0,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen3_heatsinks_0018",
+  "corpus": "gen3",
+  "family": "heatsinks",
+  "code_ref": "gen3/heatsinks/part_0018.scad",
+  "expected_bbox_mm": [
+   50.0,
+   40.0,
+   23.0
+  ]
+ },
+ {
+  "source_id": "gen3_herringbones_0078",
+  "corpus": "gen3",
+  "family": "herringbones",
+  "code_ref": "gen3/herringbones/part_0078.scad",
+  "expected_bbox_mm": [
+   60.0,
+   60.0,
+   32.0
+  ]
+ },
+ {
+  "source_id": "gen3_hexlattices_0073",
+  "corpus": "gen3",
+  "family": "hexlattices",
+  "code_ref": "gen3/hexlattices/part_0073.scad",
+  "expected_bbox_mm": [
+   116.13,
+   76.34,
+   16.0
+  ]
+ },
+ {
+  "source_id": "gen3_hooks_0059",
+  "corpus": "gen3",
+  "family": "hooks",
+  "code_ref": "gen3/hooks/part_0059.scad",
+  "expected_bbox_mm": [
+   65.909,
+   86.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen3_levers_0032",
+  "corpus": "gen3",
+  "family": "levers",
+  "code_ref": "gen3/levers/part_0032.scad",
+  "expected_bbox_mm": [
+   103.85,
+   29.65,
+   6.0
+  ]
+ },
+ {
+  "source_id": "gen3_livinghinges_0005",
+  "corpus": "gen3",
+  "family": "livinghinges",
+  "code_ref": "gen3/livinghinges/part_0005.scad",
+  "expected_bbox_mm": [
+   58.0,
+   36.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen3_pipeclamps_0090",
+  "corpus": "gen3",
+  "family": "pipeclamps",
+  "code_ref": "gen3/pipeclamps/part_0090.scad",
+  "expected_bbox_mm": [
+   32.615,
+   37.99,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen3_ringgears_0033",
+  "corpus": "gen3",
+  "family": "ringgears",
+  "code_ref": "gen3/ringgears/part_0033.scad",
+  "expected_bbox_mm": [
+   83.28,
+   83.28,
+   23.0
+  ]
+ },
+ {
+  "source_id": "gen3_scissorgrids_0077",
+  "corpus": "gen3",
+  "family": "scissorgrids",
+  "code_ref": "gen3/scissorgrids/part_0077.scad",
+  "expected_bbox_mm": [
+   137.52,
+   137.52,
+   11.52
+  ]
+ },
+ {
+  "source_id": "gen3_slottedpanels_0075",
+  "corpus": "gen3",
+  "family": "slottedpanels",
+  "code_ref": "gen3/slottedpanels/part_0075.scad",
+  "expected_bbox_mm": [
+   150.0,
+   70.0,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen3_snapfits_0086",
+  "corpus": "gen3",
+  "family": "snapfits",
+  "code_ref": "gen3/snapfits/part_0086.scad",
+  "expected_bbox_mm": [
+   44.0,
+   44.6,
+   23.0
+  ]
+ },
+ {
+  "source_id": "gen3_springclamps_0036",
+  "corpus": "gen3",
+  "family": "springclamps",
+  "code_ref": "gen3/springclamps/part_0036.scad",
+  "expected_bbox_mm": [
+   39.988,
+   50.383,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen3_steptowers_0033",
+  "corpus": "gen3",
+  "family": "steptowers",
+  "code_ref": "gen3/steptowers/part_0033.scad",
+  "expected_bbox_mm": [
+   68.76,
+   68.76,
+   180.76
+  ]
+ },
+ {
+  "source_id": "gen3_threadcaps_0008",
+  "corpus": "gen3",
+  "family": "threadcaps",
+  "code_ref": "gen3/threadcaps/part_0008.scad",
+  "expected_bbox_mm": [
+   51.0,
+   51.0,
+   21.0
+  ]
+ },
+ {
+  "source_id": "gen3_threads_0062",
+  "corpus": "gen3",
+  "family": "threads",
+  "code_ref": "gen3/threads/part_0062.scad",
+  "expected_bbox_mm": [
+   23.44,
+   20.3,
+   48.3
+  ]
+ },
+ {
+  "source_id": "gen3_thumbscrews_0021",
+  "corpus": "gen3",
+  "family": "thumbscrews",
+  "code_ref": "gen3/thumbscrews/part_0021.scad",
+  "expected_bbox_mm": [
+   46.4,
+   46.4,
+   24.0
+  ]
+ },
+ {
+  "source_id": "gen3_wormwheels_0036",
+  "corpus": "gen3",
+  "family": "wormwheels",
+  "code_ref": "gen3/wormwheels/part_0036.scad",
+  "expected_bbox_mm": [
+   44.1,
+   44.1,
+   28.0
+  ]
+ },
+ {
+  "source_id": "gen2_bearings_0073",
+  "corpus": "gen2",
+  "family": "bearings",
+  "code_ref": "gen2/bearings/part_0073.scad",
+  "expected_bbox_mm": [
+   52.25,
+   52.25,
+   18.4
+  ]
+ },
+ {
+  "source_id": "gen2_bezels_0026",
+  "corpus": "gen2",
+  "family": "bezels",
+  "code_ref": "gen2/bezels/part_0026.scad",
+  "expected_bbox_mm": [
+   100.0,
+   80.0,
+   6.0
+  ]
+ },
+ {
+  "source_id": "gen2_caps_0061",
+  "corpus": "gen2",
+  "family": "caps",
+  "code_ref": "gen2/caps/part_0061.scad",
+  "expected_bbox_mm": [
+   56.0,
+   56.0,
+   7.0
+  ]
+ },
+ {
+  "source_id": "gen2_clips_0074",
+  "corpus": "gen2",
+  "family": "clips",
+  "code_ref": "gen2/clips/part_0074.scad",
+  "expected_bbox_mm": [
+   27.0,
+   23.0,
+   19.0
+  ]
+ },
+ {
+  "source_id": "gen2_ducts_0037",
+  "corpus": "gen2",
+  "family": "ducts",
+  "code_ref": "gen2/ducts/part_0037.scad",
+  "expected_bbox_mm": [
+   120.0,
+   30.0,
+   40.0
+  ]
+ },
+ {
+  "source_id": "gen2_enclosures_0024",
+  "corpus": "gen2",
+  "family": "enclosures",
+  "code_ref": "gen2/enclosures/part_0024.scad",
+  "expected_bbox_mm": [
+   100.0,
+   100.0,
+   40.0
+  ]
+ },
+ {
+  "source_id": "gen2_flanges_0057",
+  "corpus": "gen2",
+  "family": "flanges",
+  "code_ref": "gen2/flanges/part_0057.scad",
+  "expected_bbox_mm": [
+   80.0,
+   80.0,
+   29.0
+  ]
+ },
+ {
+  "source_id": "gen2_handles_0049",
+  "corpus": "gen2",
+  "family": "handles",
+  "code_ref": "gen2/handles/part_0049.scad",
+  "expected_bbox_mm": [
+   150.0,
+   27.3,
+   24.0
+  ]
+ },
+ {
+  "source_id": "gen2_helicalgears_0037",
+  "corpus": "gen2",
+  "family": "helicalgears",
+  "code_ref": "gen2/helicalgears/part_0037.scad",
+  "expected_bbox_mm": [
+   81.0,
+   81.0,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen2_hinges_0031",
+  "corpus": "gen2",
+  "family": "hinges",
+  "code_ref": "gen2/hinges/part_0031.scad",
+  "expected_bbox_mm": [
+   80.0,
+   52.0,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen2_ibeams_0068",
+  "corpus": "gen2",
+  "family": "ibeams",
+  "code_ref": "gen2/ibeams/part_0068.scad",
+  "expected_bbox_mm": [
+   169.6,
+   9.6,
+   34.6
+  ]
+ },
+ {
+  "source_id": "gen2_impellers_0052",
+  "corpus": "gen2",
+  "family": "impellers",
+  "code_ref": "gen2/impellers/part_0052.scad",
+  "expected_bbox_mm": [
+   86.76,
+   86.76,
+   33.0
+  ]
+ },
+ {
+  "source_id": "gen2_knobs_0062",
+  "corpus": "gen2",
+  "family": "knobs",
+  "code_ref": "gen2/knobs/part_0062.scad",
+  "expected_bbox_mm": [
+   28.5,
+   28.5,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen2_lbrackets_0012",
+  "corpus": "gen2",
+  "family": "lbrackets",
+  "code_ref": "gen2/lbrackets/part_0012.scad",
+  "expected_bbox_mm": [
+   70.0,
+   16.0,
+   35.0
+  ]
+ },
+ {
+  "source_id": "gen2_lids_0044",
+  "corpus": "gen2",
+  "family": "lids",
+  "code_ref": "gen2/lids/part_0044.scad",
+  "expected_bbox_mm": [
+   120.0,
+   100.0,
+   5.0
+  ]
+ },
+ {
+  "source_id": "gen2_motormounts_0010",
+  "corpus": "gen2",
+  "family": "motormounts",
+  "code_ref": "gen2/motormounts/part_0010.scad",
+  "expected_bbox_mm": [
+   71.14,
+   71.14,
+   50.0
+  ]
+ },
+ {
+  "source_id": "gen2_oldhams_0041",
+  "corpus": "gen2",
+  "family": "oldhams",
+  "code_ref": "gen2/oldhams/part_0041.scad",
+  "expected_bbox_mm": [
+   26.0,
+   26.0,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen2_pipes_0008",
+  "corpus": "gen2",
+  "family": "pipes",
+  "code_ref": "gen2/pipes/part_0008.scad",
+  "expected_bbox_mm": [
+   149.0,
+   157.0,
+   87.0
+  ]
+ },
+ {
+  "source_id": "gen2_pulleys_0015",
+  "corpus": "gen2",
+  "family": "pulleys",
+  "code_ref": "gen2/pulleys/part_0015.scad",
+  "expected_bbox_mm": [
+   9.94,
+   9.94,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen2_quadframes_0052",
+  "corpus": "gen2",
+  "family": "quadframes",
+  "code_ref": "gen2/quadframes/part_0052.scad",
+  "expected_bbox_mm": [
+   156.5,
+   156.5,
+   7.0
+  ]
+ },
+ {
+  "source_id": "gen2_racks_0016",
+  "corpus": "gen2",
+  "family": "racks",
+  "code_ref": "gen2/racks/part_0016.scad",
+  "expected_bbox_mm": [
+   187.93,
+   25.0,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen2_shafts_0009",
+  "corpus": "gen2",
+  "family": "shafts",
+  "code_ref": "gen2/shafts/part_0009.scad",
+  "expected_bbox_mm": [
+   40.0,
+   40.0,
+   115.0
+  ]
+ },
+ {
+  "source_id": "gen2_spacers_0007",
+  "corpus": "gen2",
+  "family": "spacers",
+  "code_ref": "gen2/spacers/part_0007.scad",
+  "expected_bbox_mm": [
+   29.2,
+   29.2,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen2_spurgears_0033",
+  "corpus": "gen2",
+  "family": "spurgears",
+  "code_ref": "gen2/spurgears/part_0033.scad",
+  "expected_bbox_mm": [
+   20.0,
+   20.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen2_towers_0070",
+  "corpus": "gen2",
+  "family": "towers",
+  "code_ref": "gen2/towers/part_0070.scad",
+  "expected_bbox_mm": [
+   89.6,
+   89.6,
+   159.6
+  ]
+ },
+ {
+  "source_id": "gen2_trusses_0038",
+  "corpus": "gen2",
+  "family": "trusses",
+  "code_ref": "gen2/trusses/part_0038.scad",
+  "expected_bbox_mm": [
+   128.4,
+   8.4,
+   80.4
+  ]
+ },
+ {
+  "source_id": "gen2_ubrackets_0028",
+  "corpus": "gen2",
+  "family": "ubrackets",
+  "code_ref": "gen2/ubrackets/part_0028.scad",
+  "expected_bbox_mm": [
+   90.0,
+   30.0,
+   45.0
+  ]
+ },
+ {
+  "source_id": "gen2_zbrackets_0059",
+  "corpus": "gen2",
+  "family": "zbrackets",
+  "code_ref": "gen2/zbrackets/part_0059.scad",
+  "expected_bbox_mm": [
+   50.0,
+   50.0,
+   25.0
+  ]
+ },
+ {
+  "source_id": "gen3_airducts_0010",
+  "corpus": "gen3",
+  "family": "airducts",
+  "code_ref": "gen3/airducts/part_0010.scad",
+  "expected_bbox_mm": [
+   66.3,
+   66.3,
+   32.0
+  ]
+ },
+ {
+  "source_id": "gen3_archtrusses_0044",
+  "corpus": "gen3",
+  "family": "archtrusses",
+  "code_ref": "gen3/archtrusses/part_0044.scad",
+  "expected_bbox_mm": [
+   194.88,
+   12.88,
+   75.3
+  ]
+ },
+ {
+  "source_id": "gen3_bearingblocks_0009",
+  "corpus": "gen3",
+  "family": "bearingblocks",
+  "code_ref": "gen3/bearingblocks/part_0009.scad",
+  "expected_bbox_mm": [
+   80.0,
+   68.0,
+   56.76
+  ]
+ },
+ {
+  "source_id": "gen3_beltrollers_0010",
+  "corpus": "gen3",
+  "family": "beltrollers",
+  "code_ref": "gen3/beltrollers/part_0010.scad",
+  "expected_bbox_mm": [
+   58.8,
+   58.8,
+   18.0
+  ]
+ },
+ {
+  "source_id": "gen3_cams_0068",
+  "corpus": "gen3",
+  "family": "cams",
+  "code_ref": "gen3/cams/part_0068.scad",
+  "expected_bbox_mm": [
+   65.374,
+   48.0,
+   18.0
+  ]
+ },
+ {
+  "source_id": "gen3_cardans_0018",
+  "corpus": "gen3",
+  "family": "cardans",
+  "code_ref": "gen3/cardans/part_0018.scad",
+  "expected_bbox_mm": [
+   60.0,
+   60.0,
+   17.78
+  ]
+ },
+ {
+  "source_id": "gen3_chassisframes_0081",
+  "corpus": "gen3",
+  "family": "chassisframes",
+  "code_ref": "gen3/chassisframes/part_0081.scad",
+  "expected_bbox_mm": [
+   183.22,
+   103.22,
+   41.22
+  ]
+ },
+ {
+  "source_id": "gen3_cleats_0016",
+  "corpus": "gen3",
+  "family": "cleats",
+  "code_ref": "gen3/cleats/part_0016.scad",
+  "expected_bbox_mm": [
+   80.0,
+   26.0,
+   43.0
+  ]
+ },
+ {
+  "source_id": "gen3_fairings_0057",
+  "corpus": "gen3",
+  "family": "fairings",
+  "code_ref": "gen3/fairings/part_0057.scad",
+  "expected_bbox_mm": [
+   200.4,
+   40.0,
+   39.0
+  ]
+ },
+ {
+  "source_id": "gen3_heatsinks_0089",
+  "corpus": "gen3",
+  "family": "heatsinks",
+  "code_ref": "gen3/heatsinks/part_0089.scad",
+  "expected_bbox_mm": [
+   58.0,
+   56.0,
+   31.0
+  ]
+ },
+ {
+  "source_id": "gen3_herringbones_0049",
+  "corpus": "gen3",
+  "family": "herringbones",
+  "code_ref": "gen3/herringbones/part_0049.scad",
+  "expected_bbox_mm": [
+   66.0,
+   66.0,
+   40.0
+  ]
+ },
+ {
+  "source_id": "gen3_hexlattices_0033",
+  "corpus": "gen3",
+  "family": "hexlattices",
+  "code_ref": "gen3/hexlattices/part_0033.scad",
+  "expected_bbox_mm": [
+   100.21,
+   99.73,
+   6.0
+  ]
+ },
+ {
+  "source_id": "gen3_hooks_0069",
+  "corpus": "gen3",
+  "family": "hooks",
+  "code_ref": "gen3/hooks/part_0069.scad",
+  "expected_bbox_mm": [
+   61.915,
+   71.0,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen3_levers_0070",
+  "corpus": "gen3",
+  "family": "levers",
+  "code_ref": "gen3/levers/part_0070.scad",
+  "expected_bbox_mm": [
+   106.0,
+   33.2,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen3_livinghinges_0027",
+  "corpus": "gen3",
+  "family": "livinghinges",
+  "code_ref": "gen3/livinghinges/part_0027.scad",
+  "expected_bbox_mm": [
+   40.0,
+   30.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen3_pipeclamps_0086",
+  "corpus": "gen3",
+  "family": "pipeclamps",
+  "code_ref": "gen3/pipeclamps/part_0086.scad",
+  "expected_bbox_mm": [
+   33.823,
+   39.44,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen3_ringgears_0037",
+  "corpus": "gen3",
+  "family": "ringgears",
+  "code_ref": "gen3/ringgears/part_0037.scad",
+  "expected_bbox_mm": [
+   55.954,
+   55.954,
+   25.0
+  ]
+ },
+ {
+  "source_id": "gen3_scissorgrids_0029",
+  "corpus": "gen3",
+  "family": "scissorgrids",
+  "code_ref": "gen3/scissorgrids/part_0029.scad",
+  "expected_bbox_mm": [
+   137.84,
+   137.84,
+   11.84
+  ]
+ },
+ {
+  "source_id": "gen3_slottedpanels_0085",
+  "corpus": "gen3",
+  "family": "slottedpanels",
+  "code_ref": "gen3/slottedpanels/part_0085.scad",
+  "expected_bbox_mm": [
+   180.0,
+   100.0,
+   5.0
+  ]
+ },
+ {
+  "source_id": "gen3_snapfits_0072",
+  "corpus": "gen3",
+  "family": "snapfits",
+  "code_ref": "gen3/snapfits/part_0072.scad",
+  "expected_bbox_mm": [
+   44.0,
+   44.0,
+   34.0
+  ]
+ },
+ {
+  "source_id": "gen3_springclamps_0047",
+  "corpus": "gen3",
+  "family": "springclamps",
+  "code_ref": "gen3/springclamps/part_0047.scad",
+  "expected_bbox_mm": [
+   63.981,
+   58.213,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen3_steptowers_0098",
+  "corpus": "gen3",
+  "family": "steptowers",
+  "code_ref": "gen3/steptowers/part_0098.scad",
+  "expected_bbox_mm": [
+   84.0,
+   84.0,
+   192.0
+  ]
+ },
+ {
+  "source_id": "gen3_threadcaps_0078",
+  "corpus": "gen3",
+  "family": "threadcaps",
+  "code_ref": "gen3/threadcaps/part_0078.scad",
+  "expected_bbox_mm": [
+   30.0,
+   30.0,
+   22.0
+  ]
+ },
+ {
+  "source_id": "gen3_threads_0013",
+  "corpus": "gen3",
+  "family": "threads",
+  "code_ref": "gen3/threads/part_0013.scad",
+  "expected_bbox_mm": [
+   23.44,
+   20.3,
+   68.3
+  ]
+ },
+ {
+  "source_id": "gen3_thumbscrews_0015",
+  "corpus": "gen3",
+  "family": "thumbscrews",
+  "code_ref": "gen3/thumbscrews/part_0015.scad",
+  "expected_bbox_mm": [
+   36.0,
+   36.0,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen3_wormwheels_0039",
+  "corpus": "gen3",
+  "family": "wormwheels",
+  "code_ref": "gen3/wormwheels/part_0039.scad",
+  "expected_bbox_mm": [
+   78.0,
+   78.0,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen2_bearings_0046",
+  "corpus": "gen2",
+  "family": "bearings",
+  "code_ref": "gen2/bearings/part_0046.scad",
+  "expected_bbox_mm": [
+   54.15,
+   54.15,
+   15.4
+  ]
+ },
+ {
+  "source_id": "gen2_bezels_0067",
+  "corpus": "gen2",
+  "family": "bezels",
+  "code_ref": "gen2/bezels/part_0067.scad",
+  "expected_bbox_mm": [
+   60.0,
+   50.0,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen2_caps_0055",
+  "corpus": "gen2",
+  "family": "caps",
+  "code_ref": "gen2/caps/part_0055.scad",
+  "expected_bbox_mm": [
+   38.0,
+   38.0,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen2_clips_0023",
+  "corpus": "gen2",
+  "family": "clips",
+  "code_ref": "gen2/clips/part_0023.scad",
+  "expected_bbox_mm": [
+   25.0,
+   17.0,
+   17.0
+  ]
+ },
+ {
+  "source_id": "gen2_ducts_0053",
+  "corpus": "gen2",
+  "family": "ducts",
+  "code_ref": "gen2/ducts/part_0053.scad",
+  "expected_bbox_mm": [
+   180.0,
+   50.0,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen2_enclosures_0060",
+  "corpus": "gen2",
+  "family": "enclosures",
+  "code_ref": "gen2/enclosures/part_0060.scad",
+  "expected_bbox_mm": [
+   60.0,
+   50.0,
+   80.0
+  ]
+ },
+ {
+  "source_id": "gen2_flanges_0076",
+  "corpus": "gen2",
+  "family": "flanges",
+  "code_ref": "gen2/flanges/part_0076.scad",
+  "expected_bbox_mm": [
+   70.0,
+   70.0,
+   24.0
+  ]
+ },
+ {
+  "source_id": "gen2_handles_0009",
+  "corpus": "gen2",
+  "family": "handles",
+  "code_ref": "gen2/handles/part_0009.scad",
+  "expected_bbox_mm": [
+   60.0,
+   30.0,
+   28.0
+  ]
+ },
+ {
+  "source_id": "gen2_helicalgears_0065",
+  "corpus": "gen2",
+  "family": "helicalgears",
+  "code_ref": "gen2/helicalgears/part_0065.scad",
+  "expected_bbox_mm": [
+   81.0,
+   81.0,
+   25.0
+  ]
+ },
+ {
+  "source_id": "gen2_hinges_0017",
+  "corpus": "gen2",
+  "family": "hinges",
+  "code_ref": "gen2/hinges/part_0017.scad",
+  "expected_bbox_mm": [
+   60.0,
+   39.5,
+   9.0
+  ]
+ },
+ {
+  "source_id": "gen2_ibeams_0079",
+  "corpus": "gen2",
+  "family": "ibeams",
+  "code_ref": "gen2/ibeams/part_0079.scad",
+  "expected_bbox_mm": [
+   89.6,
+   9.6,
+   49.6
+  ]
+ },
+ {
+  "source_id": "gen2_impellers_0036",
+  "corpus": "gen2",
+  "family": "impellers",
+  "code_ref": "gen2/impellers/part_0036.scad",
+  "expected_bbox_mm": [
+   102.0,
+   102.0,
+   40.0
+  ]
+ },
+ {
+  "source_id": "gen2_knobs_0053",
+  "corpus": "gen2",
+  "family": "knobs",
+  "code_ref": "gen2/knobs/part_0053.scad",
+  "expected_bbox_mm": [
+   32.1,
+   32.97,
+   33.75
+  ]
+ },
+ {
+  "source_id": "gen2_lbrackets_0043",
+  "corpus": "gen2",
+  "family": "lbrackets",
+  "code_ref": "gen2/lbrackets/part_0043.scad",
+  "expected_bbox_mm": [
+   100.0,
+   24.0,
+   35.0
+  ]
+ },
+ {
+  "source_id": "gen2_lids_0038",
+  "corpus": "gen2",
+  "family": "lids",
+  "code_ref": "gen2/lids/part_0038.scad",
+  "expected_bbox_mm": [
+   120.0,
+   50.0,
+   8.2
+  ]
+ },
+ {
+  "source_id": "gen2_motormounts_0043",
+  "corpus": "gen2",
+  "family": "motormounts",
+  "code_ref": "gen2/motormounts/part_0043.scad",
+  "expected_bbox_mm": [
+   77.14,
+   67.14,
+   6.0
+  ]
+ },
+ {
+  "source_id": "gen2_oldhams_0060",
+  "corpus": "gen2",
+  "family": "oldhams",
+  "code_ref": "gen2/oldhams/part_0060.scad",
+  "expected_bbox_mm": [
+   28.0,
+   28.0,
+   19.0
+  ]
+ },
+ {
+  "source_id": "gen2_pipes_0014",
+  "corpus": "gen2",
+  "family": "pipes",
+  "code_ref": "gen2/pipes/part_0014.scad",
+  "expected_bbox_mm": [
+   112.0,
+   132.0,
+   72.0
+  ]
+ },
+ {
+  "source_id": "gen2_pulleys_0007",
+  "corpus": "gen2",
+  "family": "pulleys",
+  "code_ref": "gen2/pulleys/part_0007.scad",
+  "expected_bbox_mm": [
+   9.94,
+   9.94,
+   19.0
+  ]
+ },
+ {
+  "source_id": "gen2_quadframes_0065",
+  "corpus": "gen2",
+  "family": "quadframes",
+  "code_ref": "gen2/quadframes/part_0065.scad",
+  "expected_bbox_mm": [
+   176.29,
+   176.29,
+   5.0
+  ]
+ },
+ {
+  "source_id": "gen2_racks_0071",
+  "corpus": "gen2",
+  "family": "racks",
+  "code_ref": "gen2/racks/part_0071.scad",
+  "expected_bbox_mm": [
+   85.4,
+   25.0,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen2_shafts_0047",
+  "corpus": "gen2",
+  "family": "shafts",
+  "code_ref": "gen2/shafts/part_0047.scad",
+  "expected_bbox_mm": [
+   50.0,
+   50.0,
+   60.0
+  ]
+ },
+ {
+  "source_id": "gen2_spacers_0070",
+  "corpus": "gen2",
+  "family": "spacers",
+  "code_ref": "gen2/spacers/part_0070.scad",
+  "expected_bbox_mm": [
+   24.3,
+   24.3,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen2_spurgears_0071",
+  "corpus": "gen2",
+  "family": "spurgears",
+  "code_ref": "gen2/spurgears/part_0071.scad",
+  "expected_bbox_mm": [
+   96.0,
+   96.0,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen2_towers_0026",
+  "corpus": "gen2",
+  "family": "towers",
+  "code_ref": "gen2/towers/part_0026.scad",
+  "expected_bbox_mm": [
+   49.6,
+   49.6,
+   248.3
+  ]
+ },
+ {
+  "source_id": "gen2_trusses_0064",
+  "corpus": "gen2",
+  "family": "trusses",
+  "code_ref": "gen2/trusses/part_0064.scad",
+  "expected_bbox_mm": [
+   219.6,
+   9.6,
+   49.6
+  ]
+ },
+ {
+  "source_id": "gen2_ubrackets_0010",
+  "corpus": "gen2",
+  "family": "ubrackets",
+  "code_ref": "gen2/ubrackets/part_0010.scad",
+  "expected_bbox_mm": [
+   55.0,
+   45.0,
+   40.0
+  ]
+ },
+ {
+  "source_id": "gen2_zbrackets_0004",
+  "corpus": "gen2",
+  "family": "zbrackets",
+  "code_ref": "gen2/zbrackets/part_0004.scad",
+  "expected_bbox_mm": [
+   45.0,
+   30.0,
+   50.0
+  ]
+ },
+ {
+  "source_id": "gen3_airducts_0097",
+  "corpus": "gen3",
+  "family": "airducts",
+  "code_ref": "gen3/airducts/part_0097.scad",
+  "expected_bbox_mm": [
+   85.81,
+   85.81,
+   32.0
+  ]
+ },
+ {
+  "source_id": "gen3_archtrusses_0050",
+  "corpus": "gen3",
+  "family": "archtrusses",
+  "code_ref": "gen3/archtrusses/part_0050.scad",
+  "expected_bbox_mm": [
+   219.52,
+   11.52,
+   90.14
+  ]
+ },
+ {
+  "source_id": "gen3_bearingblocks_0007",
+  "corpus": "gen3",
+  "family": "bearingblocks",
+  "code_ref": "gen3/bearingblocks/part_0007.scad",
+  "expected_bbox_mm": [
+   100.0,
+   68.0,
+   40.04
+  ]
+ },
+ {
+  "source_id": "gen3_beltrollers_0020",
+  "corpus": "gen3",
+  "family": "beltrollers",
+  "code_ref": "gen3/beltrollers/part_0020.scad",
+  "expected_bbox_mm": [
+   40.0,
+   40.0,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen3_cams_0056",
+  "corpus": "gen3",
+  "family": "cams",
+  "code_ref": "gen3/cams/part_0056.scad",
+  "expected_bbox_mm": [
+   56.912,
+   56.912,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen3_cardans_0091",
+  "corpus": "gen3",
+  "family": "cardans",
+  "code_ref": "gen3/cardans/part_0091.scad",
+  "expected_bbox_mm": [
+   68.0,
+   68.0,
+   11.43
+  ]
+ },
+ {
+  "source_id": "gen3_chassisframes_0034",
+  "corpus": "gen3",
+  "family": "chassisframes",
+  "code_ref": "gen3/chassisframes/part_0034.scad",
+  "expected_bbox_mm": [
+   204.16,
+   104.16,
+   42.16
+  ]
+ },
+ {
+  "source_id": "gen3_cleats_0018",
+  "corpus": "gen3",
+  "family": "cleats",
+  "code_ref": "gen3/cleats/part_0018.scad",
+  "expected_bbox_mm": [
+   56.0,
+   24.0,
+   43.0
+  ]
+ },
+ {
+  "source_id": "gen3_fairings_0062",
+  "corpus": "gen3",
+  "family": "fairings",
+  "code_ref": "gen3/fairings/part_0062.scad",
+  "expected_bbox_mm": [
+   140.4,
+   58.0,
+   36.0
+  ]
+ },
+ {
+  "source_id": "gen3_heatsinks_0019",
+  "corpus": "gen3",
+  "family": "heatsinks",
+  "code_ref": "gen3/heatsinks/part_0019.scad",
+  "expected_bbox_mm": [
+   50.0,
+   50.0,
+   34.0
+  ]
+ },
+ {
+  "source_id": "gen3_herringbones_0066",
+  "corpus": "gen3",
+  "family": "herringbones",
+  "code_ref": "gen3/herringbones/part_0066.scad",
+  "expected_bbox_mm": [
+   50.0,
+   50.0,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen3_hexlattices_0007",
+  "corpus": "gen3",
+  "family": "hexlattices",
+  "code_ref": "gen3/hexlattices/part_0007.scad",
+  "expected_bbox_mm": [
+   69.63,
+   51.46,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen3_hooks_0003",
+  "corpus": "gen3",
+  "family": "hooks",
+  "code_ref": "gen3/hooks/part_0003.scad",
+  "expected_bbox_mm": [
+   53.967,
+   77.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen3_levers_0090",
+  "corpus": "gen3",
+  "family": "levers",
+  "code_ref": "gen3/levers/part_0090.scad",
+  "expected_bbox_mm": [
+   116.0,
+   32.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen3_livinghinges_0017",
+  "corpus": "gen3",
+  "family": "livinghinges",
+  "code_ref": "gen3/livinghinges/part_0017.scad",
+  "expected_bbox_mm": [
+   38.0,
+   42.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen3_pipeclamps_0041",
+  "corpus": "gen3",
+  "family": "pipeclamps",
+  "code_ref": "gen3/pipeclamps/part_0041.scad",
+  "expected_bbox_mm": [
+   32.006,
+   37.27,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen3_ringgears_0076",
+  "corpus": "gen3",
+  "family": "ringgears",
+  "code_ref": "gen3/ringgears/part_0076.scad",
+  "expected_bbox_mm": [
+   54.972,
+   54.972,
+   23.0
+  ]
+ },
+ {
+  "source_id": "gen3_scissorgrids_0016",
+  "corpus": "gen3",
+  "family": "scissorgrids",
+  "code_ref": "gen3/scissorgrids/part_0016.scad",
+  "expected_bbox_mm": [
+   228.32,
+   174.32,
+   12.32
+  ]
+ },
+ {
+  "source_id": "gen3_slottedpanels_0014",
+  "corpus": "gen3",
+  "family": "slottedpanels",
+  "code_ref": "gen3/slottedpanels/part_0014.scad",
+  "expected_bbox_mm": [
+   150.0,
+   80.0,
+   15.0
+  ]
+ },
+ {
+  "source_id": "gen3_snapfits_0075",
+  "corpus": "gen3",
+  "family": "snapfits",
+  "code_ref": "gen3/snapfits/part_0075.scad",
+  "expected_bbox_mm": [
+   45.8,
+   45.8,
+   35.0
+  ]
+ },
+ {
+  "source_id": "gen3_springclamps_0048",
+  "corpus": "gen3",
+  "family": "springclamps",
+  "code_ref": "gen3/springclamps/part_0048.scad",
+  "expected_bbox_mm": [
+   39.983,
+   47.321,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen3_steptowers_0009",
+  "corpus": "gen3",
+  "family": "steptowers",
+  "code_ref": "gen3/steptowers/part_0009.scad",
+  "expected_bbox_mm": [
+   75.88,
+   75.88,
+   119.88
+  ]
+ },
+ {
+  "source_id": "gen3_threadcaps_0081",
+  "corpus": "gen3",
+  "family": "threadcaps",
+  "code_ref": "gen3/threadcaps/part_0081.scad",
+  "expected_bbox_mm": [
+   45.0,
+   45.0,
+   22.0
+  ]
+ },
+ {
+  "source_id": "gen3_threads_0077",
+  "corpus": "gen3",
+  "family": "threads",
+  "code_ref": "gen3/threads/part_0077.scad",
+  "expected_bbox_mm": [
+   58.66,
+   50.8,
+   70.6
+  ]
+ },
+ {
+  "source_id": "gen3_thumbscrews_0037",
+  "corpus": "gen3",
+  "family": "thumbscrews",
+  "code_ref": "gen3/thumbscrews/part_0037.scad",
+  "expected_bbox_mm": [
+   41.443,
+   42.174,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen3_wormwheels_0054",
+  "corpus": "gen3",
+  "family": "wormwheels",
+  "code_ref": "gen3/wormwheels/part_0054.scad",
+  "expected_bbox_mm": [
+   54.0,
+   54.0,
+   28.0
+  ]
+ },
+ {
+  "source_id": "gen2_bearings_0056",
+  "corpus": "gen2",
+  "family": "bearings",
+  "code_ref": "gen2/bearings/part_0056.scad",
+  "expected_bbox_mm": [
+   71.1,
+   71.1,
+   24.4
+  ]
+ },
+ {
+  "source_id": "gen2_bezels_0015",
+  "corpus": "gen2",
+  "family": "bezels",
+  "code_ref": "gen2/bezels/part_0015.scad",
+  "expected_bbox_mm": [
+   120.0,
+   40.0,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen2_caps_0053",
+  "corpus": "gen2",
+  "family": "caps",
+  "code_ref": "gen2/caps/part_0053.scad",
+  "expected_bbox_mm": [
+   67.0,
+   67.0,
+   11.0
+  ]
+ },
+ {
+  "source_id": "gen2_clips_0065",
+  "corpus": "gen2",
+  "family": "clips",
+  "code_ref": "gen2/clips/part_0065.scad",
+  "expected_bbox_mm": [
+   52.0,
+   28.0,
+   22.0
+  ]
+ },
+ {
+  "source_id": "gen2_ducts_0001",
+  "corpus": "gen2",
+  "family": "ducts",
+  "code_ref": "gen2/ducts/part_0001.scad",
+  "expected_bbox_mm": [
+   180.0,
+   40.0,
+   15.0
+  ]
+ },
+ {
+  "source_id": "gen2_enclosures_0009",
+  "corpus": "gen2",
+  "family": "enclosures",
+  "code_ref": "gen2/enclosures/part_0009.scad",
+  "expected_bbox_mm": [
+   68.0,
+   60.0,
+   80.0
+  ]
+ },
+ {
+  "source_id": "gen2_flanges_0074",
+  "corpus": "gen2",
+  "family": "flanges",
+  "code_ref": "gen2/flanges/part_0074.scad",
+  "expected_bbox_mm": [
+   100.0,
+   100.0,
+   18.0
+  ]
+ },
+ {
+  "source_id": "gen2_handles_0073",
+  "corpus": "gen2",
+  "family": "handles",
+  "code_ref": "gen2/handles/part_0073.scad",
+  "expected_bbox_mm": [
+   150.0,
+   42.0,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen2_helicalgears_0031",
+  "corpus": "gen2",
+  "family": "helicalgears",
+  "code_ref": "gen2/helicalgears/part_0031.scad",
+  "expected_bbox_mm": [
+   57.0,
+   57.0,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen2_hinges_0003",
+  "corpus": "gen2",
+  "family": "hinges",
+  "code_ref": "gen2/hinges/part_0003.scad",
+  "expected_bbox_mm": [
+   40.0,
+   50.4,
+   10.8
+  ]
+ },
+ {
+  "source_id": "gen2_ibeams_0046",
+  "corpus": "gen2",
+  "family": "ibeams",
+  "code_ref": "gen2/ibeams/part_0046.scad",
+  "expected_bbox_mm": [
+   247.2,
+   7.2,
+   67.2
+  ]
+ },
+ {
+  "source_id": "gen2_impellers_0078",
+  "corpus": "gen2",
+  "family": "impellers",
+  "code_ref": "gen2/impellers/part_0078.scad",
+  "expected_bbox_mm": [
+   100.18,
+   100.18,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen2_knobs_0019",
+  "corpus": "gen2",
+  "family": "knobs",
+  "code_ref": "gen2/knobs/part_0019.scad",
+  "expected_bbox_mm": [
+   20.0,
+   20.0,
+   13.5
+  ]
+ },
+ {
+  "source_id": "gen2_lbrackets_0046",
+  "corpus": "gen2",
+  "family": "lbrackets",
+  "code_ref": "gen2/lbrackets/part_0046.scad",
+  "expected_bbox_mm": [
+   30.0,
+   25.0,
+   25.0
+  ]
+ },
+ {
+  "source_id": "gen2_lids_0025",
+  "corpus": "gen2",
+  "family": "lids",
+  "code_ref": "gen2/lids/part_0025.scad",
+  "expected_bbox_mm": [
+   100.0,
+   50.0,
+   9.2
+  ]
+ },
+ {
+  "source_id": "gen2_motormounts_0071",
+  "corpus": "gen2",
+  "family": "motormounts",
+  "code_ref": "gen2/motormounts/part_0071.scad",
+  "expected_bbox_mm": [
+   71.14,
+   67.14,
+   50.0
+  ]
+ },
+ {
+  "source_id": "gen2_oldhams_0024",
+  "corpus": "gen2",
+  "family": "oldhams",
+  "code_ref": "gen2/oldhams/part_0024.scad",
+  "expected_bbox_mm": [
+   28.0,
+   28.0,
+   18.0
+  ]
+ },
+ {
+  "source_id": "gen2_pipes_0063",
+  "corpus": "gen2",
+  "family": "pipes",
+  "code_ref": "gen2/pipes/part_0063.scad",
+  "expected_bbox_mm": [
+   129.2,
+   152.6,
+   72.6
+  ]
+ },
+ {
+  "source_id": "gen2_pulleys_0016",
+  "corpus": "gen2",
+  "family": "pulleys",
+  "code_ref": "gen2/pulleys/part_0016.scad",
+  "expected_bbox_mm": [
+   50.25,
+   50.25,
+   24.0
+  ]
+ },
+ {
+  "source_id": "gen2_quadframes_0020",
+  "corpus": "gen2",
+  "family": "quadframes",
+  "code_ref": "gen2/quadframes/part_0020.scad",
+  "expected_bbox_mm": [
+   248.0,
+   248.0,
+   7.0
+  ]
+ },
+ {
+  "source_id": "gen2_racks_0020",
+  "corpus": "gen2",
+  "family": "racks",
+  "code_ref": "gen2/racks/part_0020.scad",
+  "expected_bbox_mm": [
+   89.12,
+   25.0,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen2_shafts_0018",
+  "corpus": "gen2",
+  "family": "shafts",
+  "code_ref": "gen2/shafts/part_0018.scad",
+  "expected_bbox_mm": [
+   50.0,
+   50.0,
+   95.0
+  ]
+ },
+ {
+  "source_id": "gen2_spacers_0025",
+  "corpus": "gen2",
+  "family": "spacers",
+  "code_ref": "gen2/spacers/part_0025.scad",
+  "expected_bbox_mm": [
+   28.5,
+   28.5,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen2_spurgears_0075",
+  "corpus": "gen2",
+  "family": "spurgears",
+  "code_ref": "gen2/spurgears/part_0075.scad",
+  "expected_bbox_mm": [
+   38.0,
+   38.0,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen2_towers_0018",
+  "corpus": "gen2",
+  "family": "towers",
+  "code_ref": "gen2/towers/part_0018.scad",
+  "expected_bbox_mm": [
+   49.6,
+   49.6,
+   248.1
+  ]
+ },
+ {
+  "source_id": "gen2_trusses_0049",
+  "corpus": "gen2",
+  "family": "trusses",
+  "code_ref": "gen2/trusses/part_0049.scad",
+  "expected_bbox_mm": [
+   162.0,
+   12.0,
+   102.0
+  ]
+ },
+ {
+  "source_id": "gen2_ubrackets_0070",
+  "corpus": "gen2",
+  "family": "ubrackets",
+  "code_ref": "gen2/ubrackets/part_0070.scad",
+  "expected_bbox_mm": [
+   40.0,
+   40.0,
+   35.0
+  ]
+ },
+ {
+  "source_id": "gen2_zbrackets_0012",
+  "corpus": "gen2",
+  "family": "zbrackets",
+  "code_ref": "gen2/zbrackets/part_0012.scad",
+  "expected_bbox_mm": [
+   45.0,
+   35.0,
+   35.0
+  ]
+ },
+ {
+  "source_id": "gen3_airducts_0014",
+  "corpus": "gen3",
+  "family": "airducts",
+  "code_ref": "gen3/airducts/part_0014.scad",
+  "expected_bbox_mm": [
+   154.0,
+   71.9,
+   44.0
+  ]
+ },
+ {
+  "source_id": "gen3_archtrusses_0068",
+  "corpus": "gen3",
+  "family": "archtrusses",
+  "code_ref": "gen3/archtrusses/part_0068.scad",
+  "expected_bbox_mm": [
+   191.84,
+   9.84,
+   63.07
+  ]
+ },
+ {
+  "source_id": "gen3_bearingblocks_0054",
+  "corpus": "gen3",
+  "family": "bearingblocks",
+  "code_ref": "gen3/bearingblocks/part_0054.scad",
+  "expected_bbox_mm": [
+   80.0,
+   52.0,
+   50.4
+  ]
+ },
+ {
+  "source_id": "gen3_beltrollers_0084",
+  "corpus": "gen3",
+  "family": "beltrollers",
+  "code_ref": "gen3/beltrollers/part_0084.scad",
+  "expected_bbox_mm": [
+   64.0,
+   64.0,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen3_cams_0018",
+  "corpus": "gen3",
+  "family": "cams",
+  "code_ref": "gen3/cams/part_0018.scad",
+  "expected_bbox_mm": [
+   58.824,
+   64.028,
+   18.0
+  ]
+ },
+ {
+  "source_id": "gen3_cardans_0017",
+  "corpus": "gen3",
+  "family": "cardans",
+  "code_ref": "gen3/cardans/part_0017.scad",
+  "expected_bbox_mm": [
+   76.0,
+   76.0,
+   17.78
+  ]
+ },
+ {
+  "source_id": "gen3_chassisframes_0080",
+  "corpus": "gen3",
+  "family": "chassisframes",
+  "code_ref": "gen3/chassisframes/part_0080.scad",
+  "expected_bbox_mm": [
+   221.46,
+   101.46,
+   66.46
+  ]
+ },
+ {
+  "source_id": "gen3_cleats_0044",
+  "corpus": "gen3",
+  "family": "cleats",
+  "code_ref": "gen3/cleats/part_0044.scad",
+  "expected_bbox_mm": [
+   80.0,
+   34.0,
+   45.0
+  ]
+ },
+ {
+  "source_id": "gen3_fairings_0084",
+  "corpus": "gen3",
+  "family": "fairings",
+  "code_ref": "gen3/fairings/part_0084.scad",
+  "expected_bbox_mm": [
+   160.4,
+   46.0,
+   42.0
+  ]
+ },
+ {
+  "source_id": "gen3_heatsinks_0025",
+  "corpus": "gen3",
+  "family": "heatsinks",
+  "code_ref": "gen3/heatsinks/part_0025.scad",
+  "expected_bbox_mm": [
+   50.0,
+   56.0,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen3_herringbones_0075",
+  "corpus": "gen3",
+  "family": "herringbones",
+  "code_ref": "gen3/herringbones/part_0075.scad",
+  "expected_bbox_mm": [
+   64.0,
+   64.0,
+   38.0
+  ]
+ },
+ {
+  "source_id": "gen3_hexlattices_0087",
+  "corpus": "gen3",
+  "family": "hexlattices",
+  "code_ref": "gen3/hexlattices/part_0087.scad",
+  "expected_bbox_mm": [
+   71.63,
+   62.34,
+   16.0
+  ]
+ },
+ {
+  "source_id": "gen3_hooks_0048",
+  "corpus": "gen3",
+  "family": "hooks",
+  "code_ref": "gen3/hooks/part_0048.scad",
+  "expected_bbox_mm": [
+   63.939,
+   78.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen3_levers_0099",
+  "corpus": "gen3",
+  "family": "levers",
+  "code_ref": "gen3/levers/part_0099.scad",
+  "expected_bbox_mm": [
+   104.0,
+   34.6,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen3_livinghinges_0050",
+  "corpus": "gen3",
+  "family": "livinghinges",
+  "code_ref": "gen3/livinghinges/part_0050.scad",
+  "expected_bbox_mm": [
+   40.0,
+   42.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen3_pipeclamps_0027",
+  "corpus": "gen3",
+  "family": "pipeclamps",
+  "code_ref": "gen3/pipeclamps/part_0027.scad",
+  "expected_bbox_mm": [
+   38.744,
+   48.65,
+   16.0
+  ]
+ },
+ {
+  "source_id": "gen3_ringgears_0087",
+  "corpus": "gen3",
+  "family": "ringgears",
+  "code_ref": "gen3/ringgears/part_0087.scad",
+  "expected_bbox_mm": [
+   52.47,
+   52.47,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen3_scissorgrids_0028",
+  "corpus": "gen3",
+  "family": "scissorgrids",
+  "code_ref": "gen3/scissorgrids/part_0028.scad",
+  "expected_bbox_mm": [
+   173.46,
+   173.46,
+   11.46
+  ]
+ },
+ {
+  "source_id": "gen3_slottedpanels_0043",
+  "corpus": "gen3",
+  "family": "slottedpanels",
+  "code_ref": "gen3/slottedpanels/part_0043.scad",
+  "expected_bbox_mm": [
+   180.0,
+   100.0,
+   11.0
+  ]
+ },
+ {
+  "source_id": "gen3_snapfits_0073",
+  "corpus": "gen3",
+  "family": "snapfits",
+  "code_ref": "gen3/snapfits/part_0073.scad",
+  "expected_bbox_mm": [
+   44.0,
+   44.0,
+   34.0
+  ]
+ },
+ {
+  "source_id": "gen3_springclamps_0002",
+  "corpus": "gen3",
+  "family": "springclamps",
+  "code_ref": "gen3/springclamps/part_0002.scad",
+  "expected_bbox_mm": [
+   39.983,
+   37.321,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen3_steptowers_0020",
+  "corpus": "gen3",
+  "family": "steptowers",
+  "code_ref": "gen3/steptowers/part_0020.scad",
+  "expected_bbox_mm": [
+   68.76,
+   68.76,
+   180.76
+  ]
+ },
+ {
+  "source_id": "gen3_threadcaps_0062",
+  "corpus": "gen3",
+  "family": "threadcaps",
+  "code_ref": "gen3/threadcaps/part_0062.scad",
+  "expected_bbox_mm": [
+   36.0,
+   36.0,
+   18.0
+  ]
+ },
+ {
+  "source_id": "gen3_threads_0022",
+  "corpus": "gen3",
+  "family": "threads",
+  "code_ref": "gen3/threads/part_0022.scad",
+  "expected_bbox_mm": [
+   46.88,
+   40.6,
+   96.5
+  ]
+ },
+ {
+  "source_id": "gen3_thumbscrews_0010",
+  "corpus": "gen3",
+  "family": "thumbscrews",
+  "code_ref": "gen3/thumbscrews/part_0010.scad",
+  "expected_bbox_mm": [
+   33.0,
+   33.0,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen3_wormwheels_0045",
+  "corpus": "gen3",
+  "family": "wormwheels",
+  "code_ref": "gen3/wormwheels/part_0045.scad",
+  "expected_bbox_mm": [
+   65.0,
+   65.0,
+   24.0
+  ]
+ },
+ {
+  "source_id": "gen2_bearings_0006",
+  "corpus": "gen2",
+  "family": "bearings",
+  "code_ref": "gen2/bearings/part_0006.scad",
+  "expected_bbox_mm": [
+   73.1,
+   73.1,
+   20.4
+  ]
+ },
+ {
+  "source_id": "gen2_bezels_0024",
+  "corpus": "gen2",
+  "family": "bezels",
+  "code_ref": "gen2/bezels/part_0024.scad",
+  "expected_bbox_mm": [
+   140.0,
+   100.0,
+   6.0
+  ]
+ },
+ {
+  "source_id": "gen2_caps_0052",
+  "corpus": "gen2",
+  "family": "caps",
+  "code_ref": "gen2/caps/part_0052.scad",
+  "expected_bbox_mm": [
+   44.0,
+   44.0,
+   13.0
+  ]
+ },
+ {
+  "source_id": "gen2_clips_0051",
+  "corpus": "gen2",
+  "family": "clips",
+  "code_ref": "gen2/clips/part_0051.scad",
+  "expected_bbox_mm": [
+   29.0,
+   19.0,
+   18.0
+  ]
+ },
+ {
+  "source_id": "gen2_ducts_0010",
+  "corpus": "gen2",
+  "family": "ducts",
+  "code_ref": "gen2/ducts/part_0010.scad",
+  "expected_bbox_mm": [
+   80.0,
+   59.0,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen2_enclosures_0018",
+  "corpus": "gen2",
+  "family": "enclosures",
+  "code_ref": "gen2/enclosures/part_0018.scad",
+  "expected_bbox_mm": [
+   160.0,
+   60.0,
+   50.0
+  ]
+ },
+ {
+  "source_id": "gen2_flanges_0043",
+  "corpus": "gen2",
+  "family": "flanges",
+  "code_ref": "gen2/flanges/part_0043.scad",
+  "expected_bbox_mm": [
+   80.0,
+   80.0,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen2_handles_0051",
+  "corpus": "gen2",
+  "family": "handles",
+  "code_ref": "gen2/handles/part_0051.scad",
+  "expected_bbox_mm": [
+   100.0,
+   36.0,
+   22.0
+  ]
+ },
+ {
+  "source_id": "gen2_helicalgears_0021",
+  "corpus": "gen2",
+  "family": "helicalgears",
+  "code_ref": "gen2/helicalgears/part_0021.scad",
+  "expected_bbox_mm": [
+   42.0,
+   42.0,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen2_hinges_0030",
+  "corpus": "gen2",
+  "family": "hinges",
+  "code_ref": "gen2/hinges/part_0030.scad",
+  "expected_bbox_mm": [
+   50.0,
+   29.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen2_ibeams_0010",
+  "corpus": "gen2",
+  "family": "ibeams",
+  "code_ref": "gen2/ibeams/part_0010.scad",
+  "expected_bbox_mm": [
+   108.4,
+   8.4,
+   58.4
+  ]
+ },
+ {
+  "source_id": "gen2_impellers_0034",
+  "corpus": "gen2",
+  "family": "impellers",
+  "code_ref": "gen2/impellers/part_0034.scad",
+  "expected_bbox_mm": [
+   72.0,
+   72.0,
+   32.5
+  ]
+ },
+ {
+  "source_id": "gen2_knobs_0040",
+  "corpus": "gen2",
+  "family": "knobs",
+  "code_ref": "gen2/knobs/part_0040.scad",
+  "expected_bbox_mm": [
+   20.0,
+   20.0,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen2_lbrackets_0051",
+  "corpus": "gen2",
+  "family": "lbrackets",
+  "code_ref": "gen2/lbrackets/part_0051.scad",
+  "expected_bbox_mm": [
+   30.0,
+   16.0,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen2_lids_0023",
+  "corpus": "gen2",
+  "family": "lids",
+  "code_ref": "gen2/lids/part_0023.scad",
+  "expected_bbox_mm": [
+   140.0,
+   100.0,
+   13.2
+  ]
+ },
+ {
+  "source_id": "gen2_motormounts_0040",
+  "corpus": "gen2",
+  "family": "motormounts",
+  "code_ref": "gen2/motormounts/part_0040.scad",
+  "expected_bbox_mm": [
+   93.6,
+   83.6,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen2_oldhams_0079",
+  "corpus": "gen2",
+  "family": "oldhams",
+  "code_ref": "gen2/oldhams/part_0079.scad",
+  "expected_bbox_mm": [
+   28.0,
+   28.0,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen2_pipes_0028",
+  "corpus": "gen2",
+  "family": "pipes",
+  "code_ref": "gen2/pipes/part_0028.scad",
+  "expected_bbox_mm": [
+   139.2,
+   132.6,
+   72.6
+  ]
+ },
+ {
+  "source_id": "gen2_pulleys_0065",
+  "corpus": "gen2",
+  "family": "pulleys",
+  "code_ref": "gen2/pulleys/part_0065.scad",
+  "expected_bbox_mm": [
+   37.6,
+   37.6,
+   16.0
+  ]
+ },
+ {
+  "source_id": "gen2_quadframes_0024",
+  "corpus": "gen2",
+  "family": "quadframes",
+  "code_ref": "gen2/quadframes/part_0024.scad",
+  "expected_bbox_mm": [
+   248.0,
+   248.0,
+   5.0
+  ]
+ },
+ {
+  "source_id": "gen2_racks_0010",
+  "corpus": "gen2",
+  "family": "racks",
+  "code_ref": "gen2/racks/part_0010.scad",
+  "expected_bbox_mm": [
+   247.62,
+   16.0,
+   19.0
+  ]
+ },
+ {
+  "source_id": "gen2_shafts_0024",
+  "corpus": "gen2",
+  "family": "shafts",
+  "code_ref": "gen2/shafts/part_0024.scad",
+  "expected_bbox_mm": [
+   50.0,
+   50.0,
+   105.0
+  ]
+ },
+ {
+  "source_id": "gen2_spacers_0006",
+  "corpus": "gen2",
+  "family": "spacers",
+  "code_ref": "gen2/spacers/part_0006.scad",
+  "expected_bbox_mm": [
+   21.5,
+   21.5,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen2_spurgears_0079",
+  "corpus": "gen2",
+  "family": "spurgears",
+  "code_ref": "gen2/spurgears/part_0079.scad",
+  "expected_bbox_mm": [
+   117.5,
+   117.5,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen2_towers_0023",
+  "corpus": "gen2",
+  "family": "towers",
+  "code_ref": "gen2/towers/part_0023.scad",
+  "expected_bbox_mm": [
+   94.4,
+   94.4,
+   247.9
+  ]
+ },
+ {
+  "source_id": "gen2_trusses_0027",
+  "corpus": "gen2",
+  "family": "trusses",
+  "code_ref": "gen2/trusses/part_0027.scad",
+  "expected_bbox_mm": [
+   147.2,
+   7.2,
+   47.2
+  ]
+ },
+ {
+  "source_id": "gen2_ubrackets_0042",
+  "corpus": "gen2",
+  "family": "ubrackets",
+  "code_ref": "gen2/ubrackets/part_0042.scad",
+  "expected_bbox_mm": [
+   40.0,
+   40.0,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen2_zbrackets_0045",
+  "corpus": "gen2",
+  "family": "zbrackets",
+  "code_ref": "gen2/zbrackets/part_0045.scad",
+  "expected_bbox_mm": [
+   55.0,
+   25.0,
+   25.0
+  ]
+ },
+ {
+  "source_id": "gen3_airducts_0049",
+  "corpus": "gen3",
+  "family": "airducts",
+  "code_ref": "gen3/airducts/part_0049.scad",
+  "expected_bbox_mm": [
+   52.11,
+   52.11,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen3_archtrusses_0015",
+  "corpus": "gen3",
+  "family": "archtrusses",
+  "code_ref": "gen3/archtrusses/part_0015.scad",
+  "expected_bbox_mm": [
+   222.88,
+   12.88,
+   91.06
+  ]
+ },
+ {
+  "source_id": "gen3_bearingblocks_0071",
+  "corpus": "gen3",
+  "family": "bearingblocks",
+  "code_ref": "gen3/bearingblocks/part_0071.scad",
+  "expected_bbox_mm": [
+   90.0,
+   68.0,
+   50.76
+  ]
+ },
+ {
+  "source_id": "gen3_beltrollers_0085",
+  "corpus": "gen3",
+  "family": "beltrollers",
+  "code_ref": "gen3/beltrollers/part_0085.scad",
+  "expected_bbox_mm": [
+   42.8,
+   42.8,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen3_cams_0070",
+  "corpus": "gen3",
+  "family": "cams",
+  "code_ref": "gen3/cams/part_0070.scad",
+  "expected_bbox_mm": [
+   49.106,
+   56.0,
+   24.0
+  ]
+ },
+ {
+  "source_id": "gen3_cardans_0097",
+  "corpus": "gen3",
+  "family": "cardans",
+  "code_ref": "gen3/cardans/part_0097.scad",
+  "expected_bbox_mm": [
+   76.0,
+   76.0,
+   20.32
+  ]
+ },
+ {
+  "source_id": "gen3_chassisframes_0097",
+  "corpus": "gen3",
+  "family": "chassisframes",
+  "code_ref": "gen3/chassisframes/part_0097.scad",
+  "expected_bbox_mm": [
+   182.48,
+   82.48,
+   67.48
+  ]
+ },
+ {
+  "source_id": "gen3_cleats_0064",
+  "corpus": "gen3",
+  "family": "cleats",
+  "code_ref": "gen3/cleats/part_0064.scad",
+  "expected_bbox_mm": [
+   40.0,
+   28.0,
+   43.0
+  ]
+ },
+ {
+  "source_id": "gen3_fairings_0079",
+  "corpus": "gen3",
+  "family": "fairings",
+  "code_ref": "gen3/fairings/part_0079.scad",
+  "expected_bbox_mm": [
+   200.4,
+   52.0,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen3_heatsinks_0034",
+  "corpus": "gen3",
+  "family": "heatsinks",
+  "code_ref": "gen3/heatsinks/part_0034.scad",
+  "expected_bbox_mm": [
+   50.0,
+   45.0,
+   39.0
+  ]
+ },
+ {
+  "source_id": "gen3_herringbones_0006",
+  "corpus": "gen3",
+  "family": "herringbones",
+  "code_ref": "gen3/herringbones/part_0006.scad",
+  "expected_bbox_mm": [
+   48.0,
+   48.0,
+   32.0
+  ]
+ },
+ {
+  "source_id": "gen3_hexlattices_0021",
+  "corpus": "gen3",
+  "family": "hexlattices",
+  "code_ref": "gen3/hexlattices/part_0021.scad",
+  "expected_bbox_mm": [
+   85.46,
+   84.79,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen3_hooks_0045",
+  "corpus": "gen3",
+  "family": "hooks",
+  "code_ref": "gen3/hooks/part_0045.scad",
+  "expected_bbox_mm": [
+   52.314,
+   77.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen3_levers_0080",
+  "corpus": "gen3",
+  "family": "levers",
+  "code_ref": "gen3/levers/part_0080.scad",
+  "expected_bbox_mm": [
+   132.0,
+   18.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen3_livinghinges_0057",
+  "corpus": "gen3",
+  "family": "livinghinges",
+  "code_ref": "gen3/livinghinges/part_0057.scad",
+  "expected_bbox_mm": [
+   58.0,
+   42.0,
+   9.0
+  ]
+ },
+ {
+  "source_id": "gen3_pipeclamps_0047",
+  "corpus": "gen3",
+  "family": "pipeclamps",
+  "code_ref": "gen3/pipeclamps/part_0047.scad",
+  "expected_bbox_mm": [
+   38.671,
+   46.36,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen3_ringgears_0025",
+  "corpus": "gen3",
+  "family": "ringgears",
+  "code_ref": "gen3/ringgears/part_0025.scad",
+  "expected_bbox_mm": [
+   62.956,
+   62.956,
+   21.0
+  ]
+ },
+ {
+  "source_id": "gen3_scissorgrids_0098",
+  "corpus": "gen3",
+  "family": "scissorgrids",
+  "code_ref": "gen3/scissorgrids/part_0098.scad",
+  "expected_bbox_mm": [
+   227.46,
+   173.46,
+   11.46
+  ]
+ },
+ {
+  "source_id": "gen3_slottedpanels_0049",
+  "corpus": "gen3",
+  "family": "slottedpanels",
+  "code_ref": "gen3/slottedpanels/part_0049.scad",
+  "expected_bbox_mm": [
+   120.0,
+   80.0,
+   5.0
+  ]
+ },
+ {
+  "source_id": "gen3_snapfits_0036",
+  "corpus": "gen3",
+  "family": "snapfits",
+  "code_ref": "gen3/snapfits/part_0036.scad",
+  "expected_bbox_mm": [
+   44.0,
+   44.0,
+   22.0
+  ]
+ },
+ {
+  "source_id": "gen3_springclamps_0057",
+  "corpus": "gen3",
+  "family": "springclamps",
+  "code_ref": "gen3/springclamps/part_0057.scad",
+  "expected_bbox_mm": [
+   55.976,
+   62.249,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen3_steptowers_0094",
+  "corpus": "gen3",
+  "family": "steptowers",
+  "code_ref": "gen3/steptowers/part_0094.scad",
+  "expected_bbox_mm": [
+   74.18,
+   74.18,
+   234.18
+  ]
+ },
+ {
+  "source_id": "gen3_threadcaps_0048",
+  "corpus": "gen3",
+  "family": "threadcaps",
+  "code_ref": "gen3/threadcaps/part_0048.scad",
+  "expected_bbox_mm": [
+   30.0,
+   30.0,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen3_threads_0004",
+  "corpus": "gen3",
+  "family": "threads",
+  "code_ref": "gen3/threads/part_0004.scad",
+  "expected_bbox_mm": [
+   35.22,
+   30.5,
+   82.4
+  ]
+ },
+ {
+  "source_id": "gen3_thumbscrews_0009",
+  "corpus": "gen3",
+  "family": "thumbscrews",
+  "code_ref": "gen3/thumbscrews/part_0009.scad",
+  "expected_bbox_mm": [
+   40.643,
+   41.622,
+   16.0
+  ]
+ },
+ {
+  "source_id": "gen3_wormwheels_0043",
+  "corpus": "gen3",
+  "family": "wormwheels",
+  "code_ref": "gen3/wormwheels/part_0043.scad",
+  "expected_bbox_mm": [
+   66.0,
+   66.0,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen2_bearings_0010",
+  "corpus": "gen2",
+  "family": "bearings",
+  "code_ref": "gen2/bearings/part_0010.scad",
+  "expected_bbox_mm": [
+   56.1,
+   56.1,
+   16.4
+  ]
+ },
+ {
+  "source_id": "gen2_bezels_0046",
+  "corpus": "gen2",
+  "family": "bezels",
+  "code_ref": "gen2/bezels/part_0046.scad",
+  "expected_bbox_mm": [
+   100.0,
+   120.0,
+   5.0
+  ]
+ },
+ {
+  "source_id": "gen2_caps_0046",
+  "corpus": "gen2",
+  "family": "caps",
+  "code_ref": "gen2/caps/part_0046.scad",
+  "expected_bbox_mm": [
+   60.0,
+   60.0,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen2_clips_0080",
+  "corpus": "gen2",
+  "family": "clips",
+  "code_ref": "gen2/clips/part_0080.scad",
+  "expected_bbox_mm": [
+   28.0,
+   16.0,
+   17.0
+  ]
+ },
+ {
+  "source_id": "gen2_ducts_0051",
+  "corpus": "gen2",
+  "family": "ducts",
+  "code_ref": "gen2/ducts/part_0051.scad",
+  "expected_bbox_mm": [
+   60.0,
+   40.0,
+   25.0
+  ]
+ },
+ {
+  "source_id": "gen2_enclosures_0038",
+  "corpus": "gen2",
+  "family": "enclosures",
+  "code_ref": "gen2/enclosures/part_0038.scad",
+  "expected_bbox_mm": [
+   148.0,
+   40.0,
+   50.0
+  ]
+ },
+ {
+  "source_id": "gen2_flanges_0061",
+  "corpus": "gen2",
+  "family": "flanges",
+  "code_ref": "gen2/flanges/part_0061.scad",
+  "expected_bbox_mm": [
+   80.0,
+   80.0,
+   27.0
+  ]
+ },
+ {
+  "source_id": "gen2_handles_0008",
+  "corpus": "gen2",
+  "family": "handles",
+  "code_ref": "gen2/handles/part_0008.scad",
+  "expected_bbox_mm": [
+   180.0,
+   30.0,
+   22.0
+  ]
+ },
+ {
+  "source_id": "gen2_helicalgears_0054",
+  "corpus": "gen2",
+  "family": "helicalgears",
+  "code_ref": "gen2/helicalgears/part_0054.scad",
+  "expected_bbox_mm": [
+   42.0,
+   42.0,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen2_hinges_0001",
+  "corpus": "gen2",
+  "family": "hinges",
+  "code_ref": "gen2/hinges/part_0001.scad",
+  "expected_bbox_mm": [
+   40.0,
+   40.4,
+   10.8
+  ]
+ },
+ {
+  "source_id": "gen2_ibeams_0029",
+  "corpus": "gen2",
+  "family": "ibeams",
+  "code_ref": "gen2/ibeams/part_0029.scad",
+  "expected_bbox_mm": [
+   107.2,
+   7.2,
+   27.2
+  ]
+ },
+ {
+  "source_id": "gen2_impellers_0041",
+  "corpus": "gen2",
+  "family": "impellers",
+  "code_ref": "gen2/impellers/part_0041.scad",
+  "expected_bbox_mm": [
+   88.93,
+   89.47,
+   36.0
+  ]
+ },
+ {
+  "source_id": "gen2_knobs_0058",
+  "corpus": "gen2",
+  "family": "knobs",
+  "code_ref": "gen2/knobs/part_0058.scad",
+  "expected_bbox_mm": [
+   50.0,
+   50.0,
+   25.0
+  ]
+ },
+ {
+  "source_id": "gen2_lbrackets_0056",
+  "corpus": "gen2",
+  "family": "lbrackets",
+  "code_ref": "gen2/lbrackets/part_0056.scad",
+  "expected_bbox_mm": [
+   30.0,
+   25.0,
+   45.0
+  ]
+ },
+ {
+  "source_id": "gen2_lids_0050",
+  "corpus": "gen2",
+  "family": "lids",
+  "code_ref": "gen2/lids/part_0050.scad",
+  "expected_bbox_mm": [
+   80.0,
+   50.0,
+   11.2
+  ]
+ },
+ {
+  "source_id": "gen2_motormounts_0030",
+  "corpus": "gen2",
+  "family": "motormounts",
+  "code_ref": "gen2/motormounts/part_0030.scad",
+  "expected_bbox_mm": [
+   55.0,
+   45.0,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen2_oldhams_0025",
+  "corpus": "gen2",
+  "family": "oldhams",
+  "code_ref": "gen2/oldhams/part_0025.scad",
+  "expected_bbox_mm": [
+   40.0,
+   40.0,
+   24.0
+  ]
+ },
+ {
+  "source_id": "gen2_pipes_0076",
+  "corpus": "gen2",
+  "family": "pipes",
+  "code_ref": "gen2/pipes/part_0076.scad",
+  "expected_bbox_mm": [
+   164.4,
+   164.4,
+   44.4
+  ]
+ },
+ {
+  "source_id": "gen2_pulleys_0012",
+  "corpus": "gen2",
+  "family": "pulleys",
+  "code_ref": "gen2/pulleys/part_0012.scad",
+  "expected_bbox_mm": [
+   17.03,
+   17.03,
+   18.4
+  ]
+ },
+ {
+  "source_id": "gen2_quadframes_0060",
+  "corpus": "gen2",
+  "family": "quadframes",
+  "code_ref": "gen2/quadframes/part_0060.scad",
+  "expected_bbox_mm": [
+   173.42,
+   173.42,
+   6.0
+  ]
+ },
+ {
+  "source_id": "gen2_racks_0062",
+  "corpus": "gen2",
+  "family": "racks",
+  "code_ref": "gen2/racks/part_0062.scad",
+  "expected_bbox_mm": [
+   141.74,
+   30.0,
+   11.25
+  ]
+ },
+ {
+  "source_id": "gen2_shafts_0008",
+  "corpus": "gen2",
+  "family": "shafts",
+  "code_ref": "gen2/shafts/part_0008.scad",
+  "expected_bbox_mm": [
+   25.0,
+   25.0,
+   75.0
+  ]
+ },
+ {
+  "source_id": "gen2_spacers_0045",
+  "corpus": "gen2",
+  "family": "spacers",
+  "code_ref": "gen2/spacers/part_0045.scad",
+  "expected_bbox_mm": [
+   21.3,
+   21.3,
+   5.0
+  ]
+ },
+ {
+  "source_id": "gen2_spurgears_0018",
+  "corpus": "gen2",
+  "family": "spurgears",
+  "code_ref": "gen2/spurgears/part_0018.scad",
+  "expected_bbox_mm": [
+   37.5,
+   37.5,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen2_towers_0050",
+  "corpus": "gen2",
+  "family": "towers",
+  "code_ref": "gen2/towers/part_0050.scad",
+  "expected_bbox_mm": [
+   90.8,
+   90.8,
+   210.8
+  ]
+ },
+ {
+  "source_id": "gen2_trusses_0016",
+  "corpus": "gen2",
+  "family": "trusses",
+  "code_ref": "gen2/trusses/part_0016.scad",
+  "expected_bbox_mm": [
+   247.8,
+   8.4,
+   88.4
+  ]
+ },
+ {
+  "source_id": "gen2_ubrackets_0066",
+  "corpus": "gen2",
+  "family": "ubrackets",
+  "code_ref": "gen2/ubrackets/part_0066.scad",
+  "expected_bbox_mm": [
+   90.0,
+   40.0,
+   50.0
+  ]
+ },
+ {
+  "source_id": "gen2_zbrackets_0041",
+  "corpus": "gen2",
+  "family": "zbrackets",
+  "code_ref": "gen2/zbrackets/part_0041.scad",
+  "expected_bbox_mm": [
+   40.0,
+   25.0,
+   50.0
+  ]
+ },
+ {
+  "source_id": "gen3_airducts_0093",
+  "corpus": "gen3",
+  "family": "airducts",
+  "code_ref": "gen3/airducts/part_0093.scad",
+  "expected_bbox_mm": [
+   60.0,
+   60.0,
+   38.0
+  ]
+ },
+ {
+  "source_id": "gen3_archtrusses_0065",
+  "corpus": "gen3",
+  "family": "archtrusses",
+  "code_ref": "gen3/archtrusses/part_0065.scad",
+  "expected_bbox_mm": [
+   143.52,
+   11.52,
+   53.63
+  ]
+ },
+ {
+  "source_id": "gen3_bearingblocks_0022",
+  "corpus": "gen3",
+  "family": "bearingblocks",
+  "code_ref": "gen3/bearingblocks/part_0022.scad",
+  "expected_bbox_mm": [
+   100.0,
+   68.0,
+   43.22
+  ]
+ },
+ {
+  "source_id": "gen3_beltrollers_0077",
+  "corpus": "gen3",
+  "family": "beltrollers",
+  "code_ref": "gen3/beltrollers/part_0077.scad",
+  "expected_bbox_mm": [
+   57.2,
+   57.2,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen3_cams_0012",
+  "corpus": "gen3",
+  "family": "cams",
+  "code_ref": "gen3/cams/part_0012.scad",
+  "expected_bbox_mm": [
+   55.354,
+   44.658,
+   18.0
+  ]
+ },
+ {
+  "source_id": "gen3_cardans_0069",
+  "corpus": "gen3",
+  "family": "cardans",
+  "code_ref": "gen3/cardans/part_0069.scad",
+  "expected_bbox_mm": [
+   68.0,
+   68.0,
+   11.43
+  ]
+ },
+ {
+  "source_id": "gen3_chassisframes_0071",
+  "corpus": "gen3",
+  "family": "chassisframes",
+  "code_ref": "gen3/chassisframes/part_0071.scad",
+  "expected_bbox_mm": [
+   183.22,
+   93.22,
+   49.22
+  ]
+ },
+ {
+  "source_id": "gen3_cleats_0024",
+  "corpus": "gen3",
+  "family": "cleats",
+  "code_ref": "gen3/cleats/part_0024.scad",
+  "expected_bbox_mm": [
+   90.0,
+   34.0,
+   43.0
+  ]
+ },
+ {
+  "source_id": "gen3_fairings_0012",
+  "corpus": "gen3",
+  "family": "fairings",
+  "code_ref": "gen3/fairings/part_0012.scad",
+  "expected_bbox_mm": [
+   180.4,
+   52.0,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen3_heatsinks_0061",
+  "corpus": "gen3",
+  "family": "heatsinks",
+  "code_ref": "gen3/heatsinks/part_0061.scad",
+  "expected_bbox_mm": [
+   56.0,
+   56.0,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen3_herringbones_0005",
+  "corpus": "gen3",
+  "family": "herringbones",
+  "code_ref": "gen3/herringbones/part_0005.scad",
+  "expected_bbox_mm": [
+   64.0,
+   64.0,
+   36.0
+  ]
+ },
+ {
+  "source_id": "gen3_hexlattices_0012",
+  "corpus": "gen3",
+  "family": "hexlattices",
+  "code_ref": "gen3/hexlattices/part_0012.scad",
+  "expected_bbox_mm": [
+   104.41,
+   78.34,
+   13.0
+  ]
+ },
+ {
+  "source_id": "gen3_hooks_0077",
+  "corpus": "gen3",
+  "family": "hooks",
+  "code_ref": "gen3/hooks/part_0077.scad",
+  "expected_bbox_mm": [
+   48.439,
+   65.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen3_levers_0027",
+  "corpus": "gen3",
+  "family": "levers",
+  "code_ref": "gen3/levers/part_0027.scad",
+  "expected_bbox_mm": [
+   106.0,
+   33.2,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen3_livinghinges_0073",
+  "corpus": "gen3",
+  "family": "livinghinges",
+  "code_ref": "gen3/livinghinges/part_0073.scad",
+  "expected_bbox_mm": [
+   40.0,
+   30.0,
+   9.0
+  ]
+ },
+ {
+  "source_id": "gen3_pipeclamps_0065",
+  "corpus": "gen3",
+  "family": "pipeclamps",
+  "code_ref": "gen3/pipeclamps/part_0065.scad",
+  "expected_bbox_mm": [
+   32.214,
+   39.9,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen3_ringgears_0018",
+  "corpus": "gen3",
+  "family": "ringgears",
+  "code_ref": "gen3/ringgears/part_0018.scad",
+  "expected_bbox_mm": [
+   33.4,
+   33.4,
+   29.0
+  ]
+ },
+ {
+  "source_id": "gen3_scissorgrids_0084",
+  "corpus": "gen3",
+  "family": "scissorgrids",
+  "code_ref": "gen3/scissorgrids/part_0084.scad",
+  "expected_bbox_mm": [
+   190.82,
+   190.82,
+   10.82
+  ]
+ },
+ {
+  "source_id": "gen3_slottedpanels_0077",
+  "corpus": "gen3",
+  "family": "slottedpanels",
+  "code_ref": "gen3/slottedpanels/part_0077.scad",
+  "expected_bbox_mm": [
+   150.0,
+   90.0,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen3_snapfits_0066",
+  "corpus": "gen3",
+  "family": "snapfits",
+  "code_ref": "gen3/snapfits/part_0066.scad",
+  "expected_bbox_mm": [
+   44.0,
+   44.0,
+   36.0
+  ]
+ },
+ {
+  "source_id": "gen3_springclamps_0068",
+  "corpus": "gen3",
+  "family": "springclamps",
+  "code_ref": "gen3/springclamps/part_0068.scad",
+  "expected_bbox_mm": [
+   39.983,
+   37.321,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen3_steptowers_0046",
+  "corpus": "gen3",
+  "family": "steptowers",
+  "code_ref": "gen3/steptowers/part_0046.scad",
+  "expected_bbox_mm": [
+   76.0,
+   76.0,
+   222.0
+  ]
+ },
+ {
+  "source_id": "gen3_threadcaps_0038",
+  "corpus": "gen3",
+  "family": "threadcaps",
+  "code_ref": "gen3/threadcaps/part_0038.scad",
+  "expected_bbox_mm": [
+   46.0,
+   46.0,
+   23.0
+  ]
+ },
+ {
+  "source_id": "gen3_threads_0085",
+  "corpus": "gen3",
+  "family": "threads",
+  "code_ref": "gen3/threads/part_0085.scad",
+  "expected_bbox_mm": [
+   70.44,
+   61.0,
+   84.8
+  ]
+ },
+ {
+  "source_id": "gen3_thumbscrews_0097",
+  "corpus": "gen3",
+  "family": "thumbscrews",
+  "code_ref": "gen3/thumbscrews/part_0097.scad",
+  "expected_bbox_mm": [
+   36.0,
+   32.178,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen3_wormwheels_0008",
+  "corpus": "gen3",
+  "family": "wormwheels",
+  "code_ref": "gen3/wormwheels/part_0008.scad",
+  "expected_bbox_mm": [
+   54.0,
+   54.0,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen2_bearings_0058",
+  "corpus": "gen2",
+  "family": "bearings",
+  "code_ref": "gen2/bearings/part_0058.scad",
+  "expected_bbox_mm": [
+   69.1,
+   69.1,
+   22.4
+  ]
+ },
+ {
+  "source_id": "gen2_bezels_0060",
+  "corpus": "gen2",
+  "family": "bezels",
+  "code_ref": "gen2/bezels/part_0060.scad",
+  "expected_bbox_mm": [
+   180.0,
+   100.0,
+   6.0
+  ]
+ },
+ {
+  "source_id": "gen2_caps_0044",
+  "corpus": "gen2",
+  "family": "caps",
+  "code_ref": "gen2/caps/part_0044.scad",
+  "expected_bbox_mm": [
+   56.0,
+   56.0,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen2_clips_0059",
+  "corpus": "gen2",
+  "family": "clips",
+  "code_ref": "gen2/clips/part_0059.scad",
+  "expected_bbox_mm": [
+   36.0,
+   30.0,
+   27.0
+  ]
+ },
+ {
+  "source_id": "gen2_ducts_0050",
+  "corpus": "gen2",
+  "family": "ducts",
+  "code_ref": "gen2/ducts/part_0050.scad",
+  "expected_bbox_mm": [
+   150.0,
+   50.0,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen2_enclosures_0071",
+  "corpus": "gen2",
+  "family": "enclosures",
+  "code_ref": "gen2/enclosures/part_0071.scad",
+  "expected_bbox_mm": [
+   134.0,
+   80.0,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen2_flanges_0022",
+  "corpus": "gen2",
+  "family": "flanges",
+  "code_ref": "gen2/flanges/part_0022.scad",
+  "expected_bbox_mm": [
+   60.0,
+   60.0,
+   28.0
+  ]
+ },
+ {
+  "source_id": "gen2_handles_0019",
+  "corpus": "gen2",
+  "family": "handles",
+  "code_ref": "gen2/handles/part_0019.scad",
+  "expected_bbox_mm": [
+   120.0,
+   36.0,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen2_helicalgears_0076",
+  "corpus": "gen2",
+  "family": "helicalgears",
+  "code_ref": "gen2/helicalgears/part_0076.scad",
+  "expected_bbox_mm": [
+   35.0,
+   35.0,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen2_hinges_0040",
+  "corpus": "gen2",
+  "family": "hinges",
+  "code_ref": "gen2/hinges/part_0040.scad",
+  "expected_bbox_mm": [
+   100.0,
+   40.4,
+   10.8
+  ]
+ },
+ {
+  "source_id": "gen2_ibeams_0052",
+  "corpus": "gen2",
+  "family": "ibeams",
+  "code_ref": "gen2/ibeams/part_0052.scad",
+  "expected_bbox_mm": [
+   129.6,
+   9.6,
+   29.6
+  ]
+ },
+ {
+  "source_id": "gen2_impellers_0009",
+  "corpus": "gen2",
+  "family": "impellers",
+  "code_ref": "gen2/impellers/part_0009.scad",
+  "expected_bbox_mm": [
+   58.14,
+   58.14,
+   29.0
+  ]
+ },
+ {
+  "source_id": "gen2_knobs_0052",
+  "corpus": "gen2",
+  "family": "knobs",
+  "code_ref": "gen2/knobs/part_0052.scad",
+  "expected_bbox_mm": [
+   25.0,
+   25.0,
+   20.25
+  ]
+ },
+ {
+  "source_id": "gen2_lbrackets_0065",
+  "corpus": "gen2",
+  "family": "lbrackets",
+  "code_ref": "gen2/lbrackets/part_0065.scad",
+  "expected_bbox_mm": [
+   55.0,
+   24.0,
+   70.0
+  ]
+ },
+ {
+  "source_id": "gen2_lids_0035",
+  "corpus": "gen2",
+  "family": "lids",
+  "code_ref": "gen2/lids/part_0035.scad",
+  "expected_bbox_mm": [
+   80.0,
+   80.0,
+   9.0
+  ]
+ },
+ {
+  "source_id": "gen2_motormounts_0079",
+  "corpus": "gen2",
+  "family": "motormounts",
+  "code_ref": "gen2/motormounts/part_0079.scad",
+  "expected_bbox_mm": [
+   71.14,
+   67.14,
+   5.0
+  ]
+ },
+ {
+  "source_id": "gen2_oldhams_0026",
+  "corpus": "gen2",
+  "family": "oldhams",
+  "code_ref": "gen2/oldhams/part_0026.scad",
+  "expected_bbox_mm": [
+   22.0,
+   22.0,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen2_pipes_0038",
+  "corpus": "gen2",
+  "family": "pipes",
+  "code_ref": "gen2/pipes/part_0038.scad",
+  "expected_bbox_mm": [
+   154.4,
+   118.2,
+   68.2
+  ]
+ },
+ {
+  "source_id": "gen2_pulleys_0039",
+  "corpus": "gen2",
+  "family": "pulleys",
+  "code_ref": "gen2/pulleys/part_0039.scad",
+  "expected_bbox_mm": [
+   30.3,
+   30.3,
+   18.0
+  ]
+ },
+ {
+  "source_id": "gen2_quadframes_0008",
+  "corpus": "gen2",
+  "family": "quadframes",
+  "code_ref": "gen2/quadframes/part_0008.scad",
+  "expected_bbox_mm": [
+   143.77,
+   143.77,
+   5.0
+  ]
+ },
+ {
+  "source_id": "gen2_racks_0028",
+  "corpus": "gen2",
+  "family": "racks",
+  "code_ref": "gen2/racks/part_0028.scad",
+  "expected_bbox_mm": [
+   154.23,
+   15.0,
+   22.0
+  ]
+ },
+ {
+  "source_id": "gen2_shafts_0057",
+  "corpus": "gen2",
+  "family": "shafts",
+  "code_ref": "gen2/shafts/part_0057.scad",
+  "expected_bbox_mm": [
+   50.0,
+   50.0,
+   125.0
+  ]
+ },
+ {
+  "source_id": "gen2_spacers_0019",
+  "corpus": "gen2",
+  "family": "spacers",
+  "code_ref": "gen2/spacers/part_0019.scad",
+  "expected_bbox_mm": [
+   16.2,
+   16.2,
+   25.0
+  ]
+ },
+ {
+  "source_id": "gen2_spurgears_0076",
+  "corpus": "gen2",
+  "family": "spurgears",
+  "code_ref": "gen2/spurgears/part_0076.scad",
+  "expected_bbox_mm": [
+   55.0,
+   55.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen2_towers_0065",
+  "corpus": "gen2",
+  "family": "towers",
+  "code_ref": "gen2/towers/part_0065.scad",
+  "expected_bbox_mm": [
+   92.0,
+   92.0,
+   212.0
+  ]
+ },
+ {
+  "source_id": "gen2_trusses_0020",
+  "corpus": "gen2",
+  "family": "trusses",
+  "code_ref": "gen2/trusses/part_0020.scad",
+  "expected_bbox_mm": [
+   209.6,
+   9.6,
+   99.6
+  ]
+ },
+ {
+  "source_id": "gen2_ubrackets_0036",
+  "corpus": "gen2",
+  "family": "ubrackets",
+  "code_ref": "gen2/ubrackets/part_0036.scad",
+  "expected_bbox_mm": [
+   60.0,
+   70.0,
+   50.0
+  ]
+ },
+ {
+  "source_id": "gen2_zbrackets_0032",
+  "corpus": "gen2",
+  "family": "zbrackets",
+  "code_ref": "gen2/zbrackets/part_0032.scad",
+  "expected_bbox_mm": [
+   70.0,
+   30.0,
+   45.0
+  ]
+ },
+ {
+  "source_id": "gen3_airducts_0043",
+  "corpus": "gen3",
+  "family": "airducts",
+  "code_ref": "gen3/airducts/part_0043.scad",
+  "expected_bbox_mm": [
+   52.11,
+   52.11,
+   32.0
+  ]
+ },
+ {
+  "source_id": "gen3_archtrusses_0095",
+  "corpus": "gen3",
+  "family": "archtrusses",
+  "code_ref": "gen3/archtrusses/part_0095.scad",
+  "expected_bbox_mm": [
+   121.84,
+   11.84,
+   60.5
+  ]
+ },
+ {
+  "source_id": "gen3_bearingblocks_0058",
+  "corpus": "gen3",
+  "family": "bearingblocks",
+  "code_ref": "gen3/bearingblocks/part_0058.scad",
+  "expected_bbox_mm": [
+   80.0,
+   52.0,
+   49.22
+  ]
+ },
+ {
+  "source_id": "gen3_beltrollers_0091",
+  "corpus": "gen3",
+  "family": "beltrollers",
+  "code_ref": "gen3/beltrollers/part_0091.scad",
+  "expected_bbox_mm": [
+   56.0,
+   56.0,
+   18.0
+  ]
+ },
+ {
+  "source_id": "gen3_cams_0002",
+  "corpus": "gen3",
+  "family": "cams",
+  "code_ref": "gen3/cams/part_0002.scad",
+  "expected_bbox_mm": [
+   54.273,
+   59.81,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen3_cardans_0087",
+  "corpus": "gen3",
+  "family": "cardans",
+  "code_ref": "gen3/cardans/part_0087.scad",
+  "expected_bbox_mm": [
+   60.0,
+   60.0,
+   20.32
+  ]
+ },
+ {
+  "source_id": "gen3_chassisframes_0070",
+  "corpus": "gen3",
+  "family": "chassisframes",
+  "code_ref": "gen3/chassisframes/part_0070.scad",
+  "expected_bbox_mm": [
+   222.88,
+   102.88,
+   40.88
+  ]
+ },
+ {
+  "source_id": "gen3_cleats_0012",
+  "corpus": "gen3",
+  "family": "cleats",
+  "code_ref": "gen3/cleats/part_0012.scad",
+  "expected_bbox_mm": [
+   90.0,
+   34.0,
+   39.0
+  ]
+ },
+ {
+  "source_id": "gen3_fairings_0051",
+  "corpus": "gen3",
+  "family": "fairings",
+  "code_ref": "gen3/fairings/part_0051.scad",
+  "expected_bbox_mm": [
+   180.4,
+   46.0,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen3_heatsinks_0062",
+  "corpus": "gen3",
+  "family": "heatsinks",
+  "code_ref": "gen3/heatsinks/part_0062.scad",
+  "expected_bbox_mm": [
+   40.0,
+   56.0,
+   31.0
+  ]
+ },
+ {
+  "source_id": "gen3_herringbones_0088",
+  "corpus": "gen3",
+  "family": "herringbones",
+  "code_ref": "gen3/herringbones/part_0088.scad",
+  "expected_bbox_mm": [
+   80.0,
+   80.0,
+   36.0
+  ]
+ },
+ {
+  "source_id": "gen3_hexlattices_0061",
+  "corpus": "gen3",
+  "family": "hexlattices",
+  "code_ref": "gen3/hexlattices/part_0061.scad",
+  "expected_bbox_mm": [
+   71.63,
+   53.46,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen3_hooks_0018",
+  "corpus": "gen3",
+  "family": "hooks",
+  "code_ref": "gen3/hooks/part_0018.scad",
+  "expected_bbox_mm": [
+   49.985,
+   67.0,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen3_levers_0100",
+  "corpus": "gen3",
+  "family": "levers",
+  "code_ref": "gen3/levers/part_0100.scad",
+  "expected_bbox_mm": [
+   87.0,
+   20.0,
+   6.0
+  ]
+ },
+ {
+  "source_id": "gen3_livinghinges_0079",
+  "corpus": "gen3",
+  "family": "livinghinges",
+  "code_ref": "gen3/livinghinges/part_0079.scad",
+  "expected_bbox_mm": [
+   40.0,
+   42.0,
+   7.0
+  ]
+ },
+ {
+  "source_id": "gen3_pipeclamps_0088",
+  "corpus": "gen3",
+  "family": "pipeclamps",
+  "code_ref": "gen3/pipeclamps/part_0088.scad",
+  "expected_bbox_mm": [
+   34.273,
+   40.3,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen3_ringgears_0058",
+  "corpus": "gen3",
+  "family": "ringgears",
+  "code_ref": "gen3/ringgears/part_0058.scad",
+  "expected_bbox_mm": [
+   62.982,
+   62.982,
+   27.0
+  ]
+ },
+ {
+  "source_id": "gen3_scissorgrids_0079",
+  "corpus": "gen3",
+  "family": "scissorgrids",
+  "code_ref": "gen3/scissorgrids/part_0079.scad",
+  "expected_bbox_mm": [
+   189.02,
+   247.92,
+   12.32
+  ]
+ },
+ {
+  "source_id": "gen3_slottedpanels_0046",
+  "corpus": "gen3",
+  "family": "slottedpanels",
+  "code_ref": "gen3/slottedpanels/part_0046.scad",
+  "expected_bbox_mm": [
+   180.0,
+   70.0,
+   5.0
+  ]
+ },
+ {
+  "source_id": "gen3_snapfits_0009",
+  "corpus": "gen3",
+  "family": "snapfits",
+  "code_ref": "gen3/snapfits/part_0009.scad",
+  "expected_bbox_mm": [
+   48.0,
+   48.0,
+   34.0
+  ]
+ },
+ {
+  "source_id": "gen3_springclamps_0022",
+  "corpus": "gen3",
+  "family": "springclamps",
+  "code_ref": "gen3/springclamps/part_0022.scad",
+  "expected_bbox_mm": [
+   63.981,
+   58.213,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen3_steptowers_0040",
+  "corpus": "gen3",
+  "family": "steptowers",
+  "code_ref": "gen3/steptowers/part_0040.scad",
+  "expected_bbox_mm": [
+   75.88,
+   75.88,
+   137.88
+  ]
+ },
+ {
+  "source_id": "gen3_threadcaps_0028",
+  "corpus": "gen3",
+  "family": "threadcaps",
+  "code_ref": "gen3/threadcaps/part_0028.scad",
+  "expected_bbox_mm": [
+   55.0,
+   55.0,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen3_threads_0042",
+  "corpus": "gen3",
+  "family": "threads",
+  "code_ref": "gen3/threads/part_0042.scad",
+  "expected_bbox_mm": [
+   46.88,
+   40.6,
+   86.5
+  ]
+ },
+ {
+  "source_id": "gen3_thumbscrews_0082",
+  "corpus": "gen3",
+  "family": "thumbscrews",
+  "code_ref": "gen3/thumbscrews/part_0082.scad",
+  "expected_bbox_mm": [
+   42.4,
+   42.4,
+   16.0
+  ]
+ },
+ {
+  "source_id": "gen3_wormwheels_0010",
+  "corpus": "gen3",
+  "family": "wormwheels",
+  "code_ref": "gen3/wormwheels/part_0010.scad",
+  "expected_bbox_mm": [
+   91.0,
+   91.0,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen2_bearings_0019",
+  "corpus": "gen2",
+  "family": "bearings",
+  "code_ref": "gen2/bearings/part_0019.scad",
+  "expected_bbox_mm": [
+   41.2,
+   41.2,
+   16.4
+  ]
+ },
+ {
+  "source_id": "gen2_bezels_0055",
+  "corpus": "gen2",
+  "family": "bezels",
+  "code_ref": "gen2/bezels/part_0055.scad",
+  "expected_bbox_mm": [
+   80.0,
+   120.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen2_caps_0027",
+  "corpus": "gen2",
+  "family": "caps",
+  "code_ref": "gen2/caps/part_0027.scad",
+  "expected_bbox_mm": [
+   59.0,
+   59.0,
+   15.0
+  ]
+ },
+ {
+  "source_id": "gen2_clips_0009",
+  "corpus": "gen2",
+  "family": "clips",
+  "code_ref": "gen2/clips/part_0009.scad",
+  "expected_bbox_mm": [
+   28.0,
+   12.0,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen2_ducts_0042",
+  "corpus": "gen2",
+  "family": "ducts",
+  "code_ref": "gen2/ducts/part_0042.scad",
+  "expected_bbox_mm": [
+   60.0,
+   52.0,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen2_enclosures_0067",
+  "corpus": "gen2",
+  "family": "enclosures",
+  "code_ref": "gen2/enclosures/part_0067.scad",
+  "expected_bbox_mm": [
+   150.0,
+   80.0,
+   40.0
+  ]
+ },
+ {
+  "source_id": "gen2_flanges_0050",
+  "corpus": "gen2",
+  "family": "flanges",
+  "code_ref": "gen2/flanges/part_0050.scad",
+  "expected_bbox_mm": [
+   150.0,
+   150.0,
+   19.6
+  ]
+ },
+ {
+  "source_id": "gen2_handles_0076",
+  "corpus": "gen2",
+  "family": "handles",
+  "code_ref": "gen2/handles/part_0076.scad",
+  "expected_bbox_mm": [
+   80.0,
+   30.0,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen2_helicalgears_0072",
+  "corpus": "gen2",
+  "family": "helicalgears",
+  "code_ref": "gen2/helicalgears/part_0072.scad",
+  "expected_bbox_mm": [
+   60.0,
+   60.0,
+   17.0
+  ]
+ },
+ {
+  "source_id": "gen2_hinges_0037",
+  "corpus": "gen2",
+  "family": "hinges",
+  "code_ref": "gen2/hinges/part_0037.scad",
+  "expected_bbox_mm": [
+   80.0,
+   50.0,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen2_ibeams_0078",
+  "corpus": "gen2",
+  "family": "ibeams",
+  "code_ref": "gen2/ibeams/part_0078.scad",
+  "expected_bbox_mm": [
+   209.6,
+   9.6,
+   49.6
+  ]
+ },
+ {
+  "source_id": "gen2_impellers_0024",
+  "corpus": "gen2",
+  "family": "impellers",
+  "code_ref": "gen2/impellers/part_0024.scad",
+  "expected_bbox_mm": [
+   82.0,
+   82.0,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen2_knobs_0064",
+  "corpus": "gen2",
+  "family": "knobs",
+  "code_ref": "gen2/knobs/part_0064.scad",
+  "expected_bbox_mm": [
+   21.4,
+   21.98,
+   33.75
+  ]
+ },
+ {
+  "source_id": "gen2_lbrackets_0022",
+  "corpus": "gen2",
+  "family": "lbrackets",
+  "code_ref": "gen2/lbrackets/part_0022.scad",
+  "expected_bbox_mm": [
+   30.0,
+   16.0,
+   35.0
+  ]
+ },
+ {
+  "source_id": "gen2_lids_0060",
+  "corpus": "gen2",
+  "family": "lids",
+  "code_ref": "gen2/lids/part_0060.scad",
+  "expected_bbox_mm": [
+   80.0,
+   100.0,
+   9.0
+  ]
+ },
+ {
+  "source_id": "gen2_motormounts_0073",
+  "corpus": "gen2",
+  "family": "motormounts",
+  "code_ref": "gen2/motormounts/part_0073.scad",
+  "expected_bbox_mm": [
+   67.14,
+   63.14,
+   6.0
+  ]
+ },
+ {
+  "source_id": "gen2_oldhams_0058",
+  "corpus": "gen2",
+  "family": "oldhams",
+  "code_ref": "gen2/oldhams/part_0058.scad",
+  "expected_bbox_mm": [
+   36.0,
+   36.0,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen2_pipes_0057",
+  "corpus": "gen2",
+  "family": "pipes",
+  "code_ref": "gen2/pipes/part_0057.scad",
+  "expected_bbox_mm": [
+   144.4,
+   104.4,
+   54.4
+  ]
+ },
+ {
+  "source_id": "gen2_pulleys_0020",
+  "corpus": "gen2",
+  "family": "pulleys",
+  "code_ref": "gen2/pulleys/part_0020.scad",
+  "expected_bbox_mm": [
+   22.57,
+   22.57,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen2_quadframes_0028",
+  "corpus": "gen2",
+  "family": "quadframes",
+  "code_ref": "gen2/quadframes/part_0028.scad",
+  "expected_bbox_mm": [
+   176.29,
+   176.29,
+   5.0
+  ]
+ },
+ {
+  "source_id": "gen2_racks_0018",
+  "corpus": "gen2",
+  "family": "racks",
+  "code_ref": "gen2/racks/part_0018.scad",
+  "expected_bbox_mm": [
+   148.66,
+   15.0,
+   17.5
+  ]
+ },
+ {
+  "source_id": "gen2_shafts_0026",
+  "corpus": "gen2",
+  "family": "shafts",
+  "code_ref": "gen2/shafts/part_0026.scad",
+  "expected_bbox_mm": [
+   30.0,
+   30.0,
+   105.0
+  ]
+ },
+ {
+  "source_id": "gen2_spacers_0010",
+  "corpus": "gen2",
+  "family": "spacers",
+  "code_ref": "gen2/spacers/part_0010.scad",
+  "expected_bbox_mm": [
+   23.5,
+   23.5,
+   5.0
+  ]
+ },
+ {
+  "source_id": "gen2_spurgears_0019",
+  "corpus": "gen2",
+  "family": "spurgears",
+  "code_ref": "gen2/spurgears/part_0019.scad",
+  "expected_bbox_mm": [
+   45.0,
+   45.0,
+   16.0
+  ]
+ },
+ {
+  "source_id": "gen2_towers_0072",
+  "corpus": "gen2",
+  "family": "towers",
+  "code_ref": "gen2/towers/part_0072.scad",
+  "expected_bbox_mm": [
+   50.8,
+   50.8,
+   210.8
+  ]
+ },
+ {
+  "source_id": "gen2_trusses_0068",
+  "corpus": "gen2",
+  "family": "trusses",
+  "code_ref": "gen2/trusses/part_0068.scad",
+  "expected_bbox_mm": [
+   247.9,
+   12.0,
+   92.0
+  ]
+ },
+ {
+  "source_id": "gen2_ubrackets_0025",
+  "corpus": "gen2",
+  "family": "ubrackets",
+  "code_ref": "gen2/ubrackets/part_0025.scad",
+  "expected_bbox_mm": [
+   60.0,
+   40.0,
+   55.0
+  ]
+ },
+ {
+  "source_id": "gen2_zbrackets_0063",
+  "corpus": "gen2",
+  "family": "zbrackets",
+  "code_ref": "gen2/zbrackets/part_0063.scad",
+  "expected_bbox_mm": [
+   60.0,
+   40.0,
+   50.0
+  ]
+ },
+ {
+  "source_id": "gen3_airducts_0080",
+  "corpus": "gen3",
+  "family": "airducts",
+  "code_ref": "gen3/airducts/part_0080.scad",
+  "expected_bbox_mm": [
+   126.0,
+   80.65,
+   32.0
+  ]
+ },
+ {
+  "source_id": "gen3_archtrusses_0031",
+  "corpus": "gen3",
+  "family": "archtrusses",
+  "code_ref": "gen3/archtrusses/part_0031.scad",
+  "expected_bbox_mm": [
+   247.62,
+   13.22,
+   108.38
+  ]
+ },
+ {
+  "source_id": "gen3_bearingblocks_0029",
+  "corpus": "gen3",
+  "family": "bearingblocks",
+  "code_ref": "gen3/bearingblocks/part_0029.scad",
+  "expected_bbox_mm": [
+   90.0,
+   68.0,
+   45.22
+  ]
+ },
+ {
+  "source_id": "gen3_beltrollers_0019",
+  "corpus": "gen3",
+  "family": "beltrollers",
+  "code_ref": "gen3/beltrollers/part_0019.scad",
+  "expected_bbox_mm": [
+   68.0,
+   68.0,
+   40.0
+  ]
+ },
+ {
+  "source_id": "gen3_cams_0096",
+  "corpus": "gen3",
+  "family": "cams",
+  "code_ref": "gen3/cams/part_0096.scad",
+  "expected_bbox_mm": [
+   42.828,
+   48.004,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen3_cardans_0049",
+  "corpus": "gen3",
+  "family": "cardans",
+  "code_ref": "gen3/cardans/part_0049.scad",
+  "expected_bbox_mm": [
+   60.0,
+   60.0,
+   15.24
+  ]
+ },
+ {
+  "source_id": "gen3_chassisframes_0072",
+  "corpus": "gen3",
+  "family": "chassisframes",
+  "code_ref": "gen3/chassisframes/part_0072.scad",
+  "expected_bbox_mm": [
+   161.84,
+   91.84,
+   31.84
+  ]
+ },
+ {
+  "source_id": "gen3_cleats_0010",
+  "corpus": "gen3",
+  "family": "cleats",
+  "code_ref": "gen3/cleats/part_0010.scad",
+  "expected_bbox_mm": [
+   90.0,
+   34.0,
+   43.0
+  ]
+ },
+ {
+  "source_id": "gen3_fairings_0100",
+  "corpus": "gen3",
+  "family": "fairings",
+  "code_ref": "gen3/fairings/part_0100.scad",
+  "expected_bbox_mm": [
+   160.4,
+   58.0,
+   36.0
+  ]
+ },
+ {
+  "source_id": "gen3_heatsinks_0035",
+  "corpus": "gen3",
+  "family": "heatsinks",
+  "code_ref": "gen3/heatsinks/part_0035.scad",
+  "expected_bbox_mm": [
+   72.0,
+   45.0,
+   23.0
+  ]
+ },
+ {
+  "source_id": "gen3_herringbones_0007",
+  "corpus": "gen3",
+  "family": "herringbones",
+  "code_ref": "gen3/herringbones/part_0007.scad",
+  "expected_bbox_mm": [
+   36.0,
+   36.0,
+   28.0
+  ]
+ },
+ {
+  "source_id": "gen3_hexlattices_0071",
+  "corpus": "gen3",
+  "family": "hexlattices",
+  "code_ref": "gen3/hexlattices/part_0071.scad",
+  "expected_bbox_mm": [
+   108.41,
+   74.69,
+   5.0
+  ]
+ },
+ {
+  "source_id": "gen3_hooks_0009",
+  "corpus": "gen3",
+  "family": "hooks",
+  "code_ref": "gen3/hooks/part_0009.scad",
+  "expected_bbox_mm": [
+   57.983,
+   74.0,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen3_levers_0097",
+  "corpus": "gen3",
+  "family": "levers",
+  "code_ref": "gen3/levers/part_0097.scad",
+  "expected_bbox_mm": [
+   117.0,
+   20.0,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen3_livinghinges_0054",
+  "corpus": "gen3",
+  "family": "livinghinges",
+  "code_ref": "gen3/livinghinges/part_0054.scad",
+  "expected_bbox_mm": [
+   46.0,
+   30.0,
+   7.0
+  ]
+ },
+ {
+  "source_id": "gen3_pipeclamps_0064",
+  "corpus": "gen3",
+  "family": "pipeclamps",
+  "code_ref": "gen3/pipeclamps/part_0064.scad",
+  "expected_bbox_mm": [
+   41.664,
+   48.54,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen3_ringgears_0003",
+  "corpus": "gen3",
+  "family": "ringgears",
+  "code_ref": "gen3/ringgears/part_0003.scad",
+  "expected_bbox_mm": [
+   53.964,
+   53.964,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen3_scissorgrids_0002",
+  "corpus": "gen3",
+  "family": "scissorgrids",
+  "code_ref": "gen3/scissorgrids/part_0002.scad",
+  "expected_bbox_mm": [
+   204.48,
+   204.48,
+   12.48
+  ]
+ },
+ {
+  "source_id": "gen3_slottedpanels_0029",
+  "corpus": "gen3",
+  "family": "slottedpanels",
+  "code_ref": "gen3/slottedpanels/part_0029.scad",
+  "expected_bbox_mm": [
+   120.0,
+   80.0,
+   15.0
+  ]
+ },
+ {
+  "source_id": "gen3_snapfits_0020",
+  "corpus": "gen3",
+  "family": "snapfits",
+  "code_ref": "gen3/snapfits/part_0020.scad",
+  "expected_bbox_mm": [
+   48.0,
+   48.0,
+   23.0
+  ]
+ },
+ {
+  "source_id": "gen3_springclamps_0100",
+  "corpus": "gen3",
+  "family": "springclamps",
+  "code_ref": "gen3/springclamps/part_0100.scad",
+  "expected_bbox_mm": [
+   47.98,
+   44.785,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen3_steptowers_0095",
+  "corpus": "gen3",
+  "family": "steptowers",
+  "code_ref": "gen3/steptowers/part_0095.scad",
+  "expected_bbox_mm": [
+   75.88,
+   75.88,
+   235.88
+  ]
+ },
+ {
+  "source_id": "gen3_threadcaps_0077",
+  "corpus": "gen3",
+  "family": "threadcaps",
+  "code_ref": "gen3/threadcaps/part_0077.scad",
+  "expected_bbox_mm": [
+   40.0,
+   40.0,
+   22.0
+  ]
+ },
+ {
+  "source_id": "gen3_threads_0046",
+  "corpus": "gen3",
+  "family": "threads",
+  "code_ref": "gen3/threads/part_0046.scad",
+  "expected_bbox_mm": [
+   58.66,
+   50.8,
+   100.6
+  ]
+ },
+ {
+  "source_id": "gen3_thumbscrews_0013",
+  "corpus": "gen3",
+  "family": "thumbscrews",
+  "code_ref": "gen3/thumbscrews/part_0013.scad",
+  "expected_bbox_mm": [
+   44.0,
+   44.0,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen3_wormwheels_0027",
+  "corpus": "gen3",
+  "family": "wormwheels",
+  "code_ref": "gen3/wormwheels/part_0027.scad",
+  "expected_bbox_mm": [
+   65.0,
+   65.0,
+   22.0
+  ]
+ },
+ {
+  "source_id": "gen2_bearings_0071",
+  "corpus": "gen2",
+  "family": "bearings",
+  "code_ref": "gen2/bearings/part_0071.scad",
+  "expected_bbox_mm": [
+   66.2,
+   66.2,
+   23.4
+  ]
+ },
+ {
+  "source_id": "gen2_bezels_0068",
+  "corpus": "gen2",
+  "family": "bezels",
+  "code_ref": "gen2/bezels/part_0068.scad",
+  "expected_bbox_mm": [
+   180.0,
+   50.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen2_caps_0030",
+  "corpus": "gen2",
+  "family": "caps",
+  "code_ref": "gen2/caps/part_0030.scad",
+  "expected_bbox_mm": [
+   47.0,
+   47.0,
+   7.0
+  ]
+ },
+ {
+  "source_id": "gen2_clips_0013",
+  "corpus": "gen2",
+  "family": "clips",
+  "code_ref": "gen2/clips/part_0013.scad",
+  "expected_bbox_mm": [
+   25.0,
+   17.0,
+   18.0
+  ]
+ },
+ {
+  "source_id": "gen2_ducts_0066",
+  "corpus": "gen2",
+  "family": "ducts",
+  "code_ref": "gen2/ducts/part_0066.scad",
+  "expected_bbox_mm": [
+   100.0,
+   70.0,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen2_enclosures_0073",
+  "corpus": "gen2",
+  "family": "enclosures",
+  "code_ref": "gen2/enclosures/part_0073.scad",
+  "expected_bbox_mm": [
+   178.0,
+   50.0,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen2_flanges_0038",
+  "corpus": "gen2",
+  "family": "flanges",
+  "code_ref": "gen2/flanges/part_0038.scad",
+  "expected_bbox_mm": [
+   60.0,
+   60.0,
+   21.0
+  ]
+ },
+ {
+  "source_id": "gen2_handles_0052",
+  "corpus": "gen2",
+  "family": "handles",
+  "code_ref": "gen2/handles/part_0052.scad",
+  "expected_bbox_mm": [
+   80.0,
+   22.0,
+   16.0
+  ]
+ },
+ {
+  "source_id": "gen2_helicalgears_0010",
+  "corpus": "gen2",
+  "family": "helicalgears",
+  "code_ref": "gen2/helicalgears/part_0010.scad",
+  "expected_bbox_mm": [
+   92.5,
+   92.5,
+   15.0
+  ]
+ },
+ {
+  "source_id": "gen2_hinges_0068",
+  "corpus": "gen2",
+  "family": "hinges",
+  "code_ref": "gen2/hinges/part_0068.scad",
+  "expected_bbox_mm": [
+   100.0,
+   51.0,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen2_ibeams_0045",
+  "corpus": "gen2",
+  "family": "ibeams",
+  "code_ref": "gen2/ibeams/part_0045.scad",
+  "expected_bbox_mm": [
+   157.2,
+   7.2,
+   57.2
+  ]
+ },
+ {
+  "source_id": "gen2_impellers_0054",
+  "corpus": "gen2",
+  "family": "impellers",
+  "code_ref": "gen2/impellers/part_0054.scad",
+  "expected_bbox_mm": [
+   68.94,
+   68.94,
+   34.0
+  ]
+ },
+ {
+  "source_id": "gen2_knobs_0049",
+  "corpus": "gen2",
+  "family": "knobs",
+  "code_ref": "gen2/knobs/part_0049.scad",
+  "expected_bbox_mm": [
+   40.0,
+   40.0,
+   20.25
+  ]
+ },
+ {
+  "source_id": "gen2_lbrackets_0009",
+  "corpus": "gen2",
+  "family": "lbrackets",
+  "code_ref": "gen2/lbrackets/part_0009.scad",
+  "expected_bbox_mm": [
+   90.0,
+   25.0,
+   35.0
+  ]
+ },
+ {
+  "source_id": "gen2_lids_0041",
+  "corpus": "gen2",
+  "family": "lids",
+  "code_ref": "gen2/lids/part_0041.scad",
+  "expected_bbox_mm": [
+   160.0,
+   80.0,
+   10.2
+  ]
+ },
+ {
+  "source_id": "gen2_motormounts_0011",
+  "corpus": "gen2",
+  "family": "motormounts",
+  "code_ref": "gen2/motormounts/part_0011.scad",
+  "expected_bbox_mm": [
+   71.14,
+   63.14,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen2_oldhams_0071",
+  "corpus": "gen2",
+  "family": "oldhams",
+  "code_ref": "gen2/oldhams/part_0071.scad",
+  "expected_bbox_mm": [
+   30.0,
+   30.0,
+   18.0
+  ]
+ },
+ {
+  "source_id": "gen2_pipes_0049",
+  "corpus": "gen2",
+  "family": "pipes",
+  "code_ref": "gen2/pipes/part_0049.scad",
+  "expected_bbox_mm": [
+   139.2,
+   132.6,
+   62.6
+  ]
+ },
+ {
+  "source_id": "gen2_pulleys_0040",
+  "corpus": "gen2",
+  "family": "pulleys",
+  "code_ref": "gen2/pulleys/part_0040.scad",
+  "expected_bbox_mm": [
+   20.85,
+   20.85,
+   17.0
+  ]
+ },
+ {
+  "source_id": "gen2_quadframes_0007",
+  "corpus": "gen2",
+  "family": "quadframes",
+  "code_ref": "gen2/quadframes/part_0007.scad",
+  "expected_bbox_mm": [
+   243.36,
+   243.36,
+   7.0
+  ]
+ },
+ {
+  "source_id": "gen2_racks_0048",
+  "corpus": "gen2",
+  "family": "racks",
+  "code_ref": "gen2/racks/part_0048.scad",
+  "expected_bbox_mm": [
+   215.35,
+   25.0,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen2_shafts_0007",
+  "corpus": "gen2",
+  "family": "shafts",
+  "code_ref": "gen2/shafts/part_0007.scad",
+  "expected_bbox_mm": [
+   40.0,
+   40.0,
+   80.0
+  ]
+ },
+ {
+  "source_id": "gen2_spacers_0039",
+  "corpus": "gen2",
+  "family": "spacers",
+  "code_ref": "gen2/spacers/part_0039.scad",
+  "expected_bbox_mm": [
+   28.2,
+   28.2,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen2_spurgears_0058",
+  "corpus": "gen2",
+  "family": "spurgears",
+  "code_ref": "gen2/spurgears/part_0058.scad",
+  "expected_bbox_mm": [
+   31.5,
+   31.5,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen2_towers_0068",
+  "corpus": "gen2",
+  "family": "towers",
+  "code_ref": "gen2/towers/part_0068.scad",
+  "expected_bbox_mm": [
+   69.6,
+   69.6,
+   248.0
+  ]
+ },
+ {
+  "source_id": "gen2_trusses_0004",
+  "corpus": "gen2",
+  "family": "trusses",
+  "code_ref": "gen2/trusses/part_0004.scad",
+  "expected_bbox_mm": [
+   219.6,
+   9.6,
+   49.6
+  ]
+ },
+ {
+  "source_id": "gen2_ubrackets_0051",
+  "corpus": "gen2",
+  "family": "ubrackets",
+  "code_ref": "gen2/ubrackets/part_0051.scad",
+  "expected_bbox_mm": [
+   40.0,
+   30.0,
+   25.0
+  ]
+ },
+ {
+  "source_id": "gen2_zbrackets_0050",
+  "corpus": "gen2",
+  "family": "zbrackets",
+  "code_ref": "gen2/zbrackets/part_0050.scad",
+  "expected_bbox_mm": [
+   60.0,
+   25.0,
+   35.0
+  ]
+ },
+ {
+  "source_id": "gen3_airducts_0026",
+  "corpus": "gen3",
+  "family": "airducts",
+  "code_ref": "gen3/airducts/part_0026.scad",
+  "expected_bbox_mm": [
+   150.0,
+   79.9,
+   38.0
+  ]
+ },
+ {
+  "source_id": "gen3_archtrusses_0030",
+  "corpus": "gen3",
+  "family": "archtrusses",
+  "code_ref": "gen3/archtrusses/part_0030.scad",
+  "expected_bbox_mm": [
+   193.46,
+   11.46,
+   87.55
+  ]
+ },
+ {
+  "source_id": "gen3_bearingblocks_0097",
+  "corpus": "gen3",
+  "family": "bearingblocks",
+  "code_ref": "gen3/bearingblocks/part_0097.scad",
+  "expected_bbox_mm": [
+   80.0,
+   68.0,
+   56.76
+  ]
+ },
+ {
+  "source_id": "gen3_beltrollers_0004",
+  "corpus": "gen3",
+  "family": "beltrollers",
+  "code_ref": "gen3/beltrollers/part_0004.scad",
+  "expected_bbox_mm": [
+   56.0,
+   56.0,
+   18.0
+  ]
+ },
+ {
+  "source_id": "gen3_cams_0093",
+  "corpus": "gen3",
+  "family": "cams",
+  "code_ref": "gen3/cams/part_0093.scad",
+  "expected_bbox_mm": [
+   48.0,
+   58.0,
+   22.0
+  ]
+ },
+ {
+  "source_id": "gen3_cardans_0009",
+  "corpus": "gen3",
+  "family": "cardans",
+  "code_ref": "gen3/cardans/part_0009.scad",
+  "expected_bbox_mm": [
+   68.0,
+   68.0,
+   15.24
+  ]
+ },
+ {
+  "source_id": "gen3_chassisframes_0059",
+  "corpus": "gen3",
+  "family": "chassisframes",
+  "code_ref": "gen3/chassisframes/part_0059.scad",
+  "expected_bbox_mm": [
+   181.84,
+   81.84,
+   56.84
+  ]
+ },
+ {
+  "source_id": "gen3_cleats_0066",
+  "corpus": "gen3",
+  "family": "cleats",
+  "code_ref": "gen3/cleats/part_0066.scad",
+  "expected_bbox_mm": [
+   56.0,
+   32.0,
+   37.0
+  ]
+ },
+ {
+  "source_id": "gen3_fairings_0078",
+  "corpus": "gen3",
+  "family": "fairings",
+  "code_ref": "gen3/fairings/part_0078.scad",
+  "expected_bbox_mm": [
+   200.4,
+   40.0,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen3_heatsinks_0040",
+  "corpus": "gen3",
+  "family": "heatsinks",
+  "code_ref": "gen3/heatsinks/part_0040.scad",
+  "expected_bbox_mm": [
+   40.0,
+   45.0,
+   28.0
+  ]
+ },
+ {
+  "source_id": "gen3_herringbones_0029",
+  "corpus": "gen3",
+  "family": "herringbones",
+  "code_ref": "gen3/herringbones/part_0029.scad",
+  "expected_bbox_mm": [
+   52.0,
+   52.0,
+   32.0
+  ]
+ },
+ {
+  "source_id": "gen3_hexlattices_0077",
+  "corpus": "gen3",
+  "family": "hexlattices",
+  "code_ref": "gen3/hexlattices/part_0077.scad",
+  "expected_bbox_mm": [
+   62.77,
+   63.73,
+   6.0
+  ]
+ },
+ {
+  "source_id": "gen3_hooks_0046",
+  "corpus": "gen3",
+  "family": "hooks",
+  "code_ref": "gen3/hooks/part_0046.scad",
+  "expected_bbox_mm": [
+   69.979,
+   82.0,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen3_levers_0009",
+  "corpus": "gen3",
+  "family": "levers",
+  "code_ref": "gen3/levers/part_0009.scad",
+  "expected_bbox_mm": [
+   87.0,
+   18.0,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen3_livinghinges_0046",
+  "corpus": "gen3",
+  "family": "livinghinges",
+  "code_ref": "gen3/livinghinges/part_0046.scad",
+  "expected_bbox_mm": [
+   38.0,
+   36.0,
+   7.0
+  ]
+ },
+ {
+  "source_id": "gen3_pipeclamps_0026",
+  "corpus": "gen3",
+  "family": "pipeclamps",
+  "code_ref": "gen3/pipeclamps/part_0026.scad",
+  "expected_bbox_mm": [
+   41.752,
+   49.15,
+   16.0
+  ]
+ },
+ {
+  "source_id": "gen3_ringgears_0054",
+  "corpus": "gen3",
+  "family": "ringgears",
+  "code_ref": "gen3/ringgears/part_0054.scad",
+  "expected_bbox_mm": [
+   34.966,
+   34.966,
+   27.0
+  ]
+ },
+ {
+  "source_id": "gen3_scissorgrids_0048",
+  "corpus": "gen3",
+  "family": "scissorgrids",
+  "code_ref": "gen3/scissorgrids/part_0048.scad",
+  "expected_bbox_mm": [
+   173.52,
+   173.52,
+   11.52
+  ]
+ },
+ {
+  "source_id": "gen3_slottedpanels_0076",
+  "corpus": "gen3",
+  "family": "slottedpanels",
+  "code_ref": "gen3/slottedpanels/part_0076.scad",
+  "expected_bbox_mm": [
+   200.0,
+   90.0,
+   5.0
+  ]
+ },
+ {
+  "source_id": "gen3_snapfits_0025",
+  "corpus": "gen3",
+  "family": "snapfits",
+  "code_ref": "gen3/snapfits/part_0025.scad",
+  "expected_bbox_mm": [
+   44.0,
+   44.0,
+   27.0
+  ]
+ },
+ {
+  "source_id": "gen3_springclamps_0062",
+  "corpus": "gen3",
+  "family": "springclamps",
+  "code_ref": "gen3/springclamps/part_0062.scad",
+  "expected_bbox_mm": [
+   55.871,
+   53.377,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen3_steptowers_0083",
+  "corpus": "gen3",
+  "family": "steptowers",
+  "code_ref": "gen3/steptowers/part_0083.scad",
+  "expected_bbox_mm": [
+   76.0,
+   76.0,
+   222.0
+  ]
+ },
+ {
+  "source_id": "gen3_threadcaps_0007",
+  "corpus": "gen3",
+  "family": "threadcaps",
+  "code_ref": "gen3/threadcaps/part_0007.scad",
+  "expected_bbox_mm": [
+   60.0,
+   60.0,
+   35.0
+  ]
+ },
+ {
+  "source_id": "gen3_threads_0033",
+  "corpus": "gen3",
+  "family": "threads",
+  "code_ref": "gen3/threads/part_0033.scad",
+  "expected_bbox_mm": [
+   35.22,
+   30.5,
+   52.4
+  ]
+ },
+ {
+  "source_id": "gen3_thumbscrews_0035",
+  "corpus": "gen3",
+  "family": "thumbscrews",
+  "code_ref": "gen3/thumbscrews/part_0035.scad",
+  "expected_bbox_mm": [
+   41.0,
+   41.0,
+   22.0
+  ]
+ },
+ {
+  "source_id": "gen3_wormwheels_0028",
+  "corpus": "gen3",
+  "family": "wormwheels",
+  "code_ref": "gen3/wormwheels/part_0028.scad",
+  "expected_bbox_mm": [
+   63.0,
+   63.0,
+   24.0
+  ]
+ },
+ {
+  "source_id": "gen2_bearings_0013",
+  "corpus": "gen2",
+  "family": "bearings",
+  "code_ref": "gen2/bearings/part_0013.scad",
+  "expected_bbox_mm": [
+   56.2,
+   56.2,
+   17.4
+  ]
+ },
+ {
+  "source_id": "gen2_bezels_0031",
+  "corpus": "gen2",
+  "family": "bezels",
+  "code_ref": "gen2/bezels/part_0031.scad",
+  "expected_bbox_mm": [
+   120.0,
+   80.0,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen2_caps_0036",
+  "corpus": "gen2",
+  "family": "caps",
+  "code_ref": "gen2/caps/part_0036.scad",
+  "expected_bbox_mm": [
+   44.0,
+   44.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen2_clips_0078",
+  "corpus": "gen2",
+  "family": "clips",
+  "code_ref": "gen2/clips/part_0078.scad",
+  "expected_bbox_mm": [
+   44.0,
+   30.0,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen2_ducts_0027",
+  "corpus": "gen2",
+  "family": "ducts",
+  "code_ref": "gen2/ducts/part_0027.scad",
+  "expected_bbox_mm": [
+   60.0,
+   68.0,
+   40.0
+  ]
+ },
+ {
+  "source_id": "gen2_enclosures_0078",
+  "corpus": "gen2",
+  "family": "enclosures",
+  "code_ref": "gen2/enclosures/part_0078.scad",
+  "expected_bbox_mm": [
+   120.0,
+   100.0,
+   25.0
+  ]
+ },
+ {
+  "source_id": "gen2_flanges_0044",
+  "corpus": "gen2",
+  "family": "flanges",
+  "code_ref": "gen2/flanges/part_0044.scad",
+  "expected_bbox_mm": [
+   70.0,
+   70.0,
+   22.0
+  ]
+ },
+ {
+  "source_id": "gen2_handles_0047",
+  "corpus": "gen2",
+  "family": "handles",
+  "code_ref": "gen2/handles/part_0047.scad",
+  "expected_bbox_mm": [
+   180.0,
+   30.0,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen2_helicalgears_0025",
+  "corpus": "gen2",
+  "family": "helicalgears",
+  "code_ref": "gen2/helicalgears/part_0025.scad",
+  "expected_bbox_mm": [
+   62.0,
+   62.0,
+   25.0
+  ]
+ },
+ {
+  "source_id": "gen2_hinges_0028",
+  "corpus": "gen2",
+  "family": "hinges",
+  "code_ref": "gen2/hinges/part_0028.scad",
+  "expected_bbox_mm": [
+   50.0,
+   39.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen2_ibeams_0036",
+  "corpus": "gen2",
+  "family": "ibeams",
+  "code_ref": "gen2/ibeams/part_0036.scad",
+  "expected_bbox_mm": [
+   247.2,
+   7.2,
+   27.2
+  ]
+ },
+ {
+  "source_id": "gen2_impellers_0029",
+  "corpus": "gen2",
+  "family": "impellers",
+  "code_ref": "gen2/impellers/part_0029.scad",
+  "expected_bbox_mm": [
+   59.62,
+   59.62,
+   22.0
+  ]
+ },
+ {
+  "source_id": "gen2_knobs_0059",
+  "corpus": "gen2",
+  "family": "knobs",
+  "code_ref": "gen2/knobs/part_0059.scad",
+  "expected_bbox_mm": [
+   69.6,
+   40.0,
+   40.0
+  ]
+ },
+ {
+  "source_id": "gen2_lbrackets_0063",
+  "corpus": "gen2",
+  "family": "lbrackets",
+  "code_ref": "gen2/lbrackets/part_0063.scad",
+  "expected_bbox_mm": [
+   40.0,
+   30.0,
+   40.0
+  ]
+ },
+ {
+  "source_id": "gen2_lids_0048",
+  "corpus": "gen2",
+  "family": "lids",
+  "code_ref": "gen2/lids/part_0048.scad",
+  "expected_bbox_mm": [
+   160.0,
+   40.0,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen2_motormounts_0019",
+  "corpus": "gen2",
+  "family": "motormounts",
+  "code_ref": "gen2/motormounts/part_0019.scad",
+  "expected_bbox_mm": [
+   47.0,
+   61.0,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen2_oldhams_0054",
+  "corpus": "gen2",
+  "family": "oldhams",
+  "code_ref": "gen2/oldhams/part_0054.scad",
+  "expected_bbox_mm": [
+   28.0,
+   28.0,
+   24.0
+  ]
+ },
+ {
+  "source_id": "gen2_pipes_0029",
+  "corpus": "gen2",
+  "family": "pipes",
+  "code_ref": "gen2/pipes/part_0029.scad",
+  "expected_bbox_mm": [
+   144.0,
+   157.0,
+   87.0
+  ]
+ },
+ {
+  "source_id": "gen2_pulleys_0022",
+  "corpus": "gen2",
+  "family": "pulleys",
+  "code_ref": "gen2/pulleys/part_0022.scad",
+  "expected_bbox_mm": [
+   21.6,
+   21.6,
+   16.4
+  ]
+ },
+ {
+  "source_id": "gen2_quadframes_0005",
+  "corpus": "gen2",
+  "family": "quadframes",
+  "code_ref": "gen2/quadframes/part_0005.scad",
+  "expected_bbox_mm": [
+   172.05,
+   172.05,
+   6.0
+  ]
+ },
+ {
+  "source_id": "gen2_racks_0067",
+  "corpus": "gen2",
+  "family": "racks",
+  "code_ref": "gen2/racks/part_0067.scad",
+  "expected_bbox_mm": [
+   235.91,
+   20.0,
+   20.5
+  ]
+ },
+ {
+  "source_id": "gen2_shafts_0073",
+  "corpus": "gen2",
+  "family": "shafts",
+  "code_ref": "gen2/shafts/part_0073.scad",
+  "expected_bbox_mm": [
+   20.0,
+   20.0,
+   85.0
+  ]
+ },
+ {
+  "source_id": "gen2_spacers_0076",
+  "corpus": "gen2",
+  "family": "spacers",
+  "code_ref": "gen2/spacers/part_0076.scad",
+  "expected_bbox_mm": [
+   17.5,
+   17.5,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen2_spurgears_0038",
+  "corpus": "gen2",
+  "family": "spurgears",
+  "code_ref": "gen2/spurgears/part_0038.scad",
+  "expected_bbox_mm": [
+   67.5,
+   67.5,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen2_towers_0033",
+  "corpus": "gen2",
+  "family": "towers",
+  "code_ref": "gen2/towers/part_0033.scad",
+  "expected_bbox_mm": [
+   64.4,
+   64.4,
+   248.0
+  ]
+ },
+ {
+  "source_id": "gen2_trusses_0041",
+  "corpus": "gen2",
+  "family": "trusses",
+  "code_ref": "gen2/trusses/part_0041.scad",
+  "expected_bbox_mm": [
+   189.6,
+   9.6,
+   89.6
+  ]
+ },
+ {
+  "source_id": "gen2_ubrackets_0064",
+  "corpus": "gen2",
+  "family": "ubrackets",
+  "code_ref": "gen2/ubrackets/part_0064.scad",
+  "expected_bbox_mm": [
+   40.0,
+   70.0,
+   45.0
+  ]
+ },
+ {
+  "source_id": "gen2_zbrackets_0021",
+  "corpus": "gen2",
+  "family": "zbrackets",
+  "code_ref": "gen2/zbrackets/part_0021.scad",
+  "expected_bbox_mm": [
+   70.0,
+   25.0,
+   35.0
+  ]
+ },
+ {
+  "source_id": "gen3_airducts_0002",
+  "corpus": "gen3",
+  "family": "airducts",
+  "code_ref": "gen3/airducts/part_0002.scad",
+  "expected_bbox_mm": [
+   131.0,
+   68.15,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen3_archtrusses_0027",
+  "corpus": "gen3",
+  "family": "archtrusses",
+  "code_ref": "gen3/archtrusses/part_0027.scad",
+  "expected_bbox_mm": [
+   248.08,
+   12.88,
+   77.56
+  ]
+ },
+ {
+  "source_id": "gen3_bearingblocks_0027",
+  "corpus": "gen3",
+  "family": "bearingblocks",
+  "code_ref": "gen3/bearingblocks/part_0027.scad",
+  "expected_bbox_mm": [
+   80.0,
+   68.0,
+   38.06
+  ]
+ },
+ {
+  "source_id": "gen3_beltrollers_0063",
+  "corpus": "gen3",
+  "family": "beltrollers",
+  "code_ref": "gen3/beltrollers/part_0063.scad",
+  "expected_bbox_mm": [
+   64.0,
+   64.0,
+   22.0
+  ]
+ },
+ {
+  "source_id": "gen3_cams_0078",
+  "corpus": "gen3",
+  "family": "cams",
+  "code_ref": "gen3/cams/part_0078.scad",
+  "expected_bbox_mm": [
+   52.0,
+   67.706,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen3_cardans_0067",
+  "corpus": "gen3",
+  "family": "cardans",
+  "code_ref": "gen3/cardans/part_0067.scad",
+  "expected_bbox_mm": [
+   76.0,
+   76.0,
+   11.43
+  ]
+ },
+ {
+  "source_id": "gen3_chassisframes_0051",
+  "corpus": "gen3",
+  "family": "chassisframes",
+  "code_ref": "gen3/chassisframes/part_0051.scad",
+  "expected_bbox_mm": [
+   203.22,
+   103.22,
+   78.22
+  ]
+ },
+ {
+  "source_id": "gen3_cleats_0043",
+  "corpus": "gen3",
+  "family": "cleats",
+  "code_ref": "gen3/cleats/part_0043.scad",
+  "expected_bbox_mm": [
+   70.0,
+   34.0,
+   45.0
+  ]
+ },
+ {
+  "source_id": "gen3_fairings_0076",
+  "corpus": "gen3",
+  "family": "fairings",
+  "code_ref": "gen3/fairings/part_0076.scad",
+  "expected_bbox_mm": [
+   140.4,
+   46.0,
+   36.0
+  ]
+ },
+ {
+  "source_id": "gen3_heatsinks_0082",
+  "corpus": "gen3",
+  "family": "heatsinks",
+  "code_ref": "gen3/heatsinks/part_0082.scad",
+  "expected_bbox_mm": [
+   40.0,
+   40.0,
+   43.0
+  ]
+ },
+ {
+  "source_id": "gen3_herringbones_0089",
+  "corpus": "gen3",
+  "family": "herringbones",
+  "code_ref": "gen3/herringbones/part_0089.scad",
+  "expected_bbox_mm": [
+   72.0,
+   72.0,
+   36.0
+  ]
+ },
+ {
+  "source_id": "gen3_hexlattices_0028",
+  "corpus": "gen3",
+  "family": "hexlattices",
+  "code_ref": "gen3/hexlattices/part_0028.scad",
+  "expected_bbox_mm": [
+   103.41,
+   61.73,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen3_hooks_0063",
+  "corpus": "gen3",
+  "family": "hooks",
+  "code_ref": "gen3/hooks/part_0063.scad",
+  "expected_bbox_mm": [
+   45.972,
+   78.0,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen3_levers_0060",
+  "corpus": "gen3",
+  "family": "levers",
+  "code_ref": "gen3/levers/part_0060.scad",
+  "expected_bbox_mm": [
+   132.0,
+   30.2,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen3_livinghinges_0021",
+  "corpus": "gen3",
+  "family": "livinghinges",
+  "code_ref": "gen3/livinghinges/part_0021.scad",
+  "expected_bbox_mm": [
+   46.0,
+   36.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen3_pipeclamps_0063",
+  "corpus": "gen3",
+  "family": "pipeclamps",
+  "code_ref": "gen3/pipeclamps/part_0063.scad",
+  "expected_bbox_mm": [
+   32.325,
+   43.3,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen3_ringgears_0043",
+  "corpus": "gen3",
+  "family": "ringgears",
+  "code_ref": "gen3/ringgears/part_0043.scad",
+  "expected_bbox_mm": [
+   54.972,
+   54.972,
+   31.0
+  ]
+ },
+ {
+  "source_id": "gen3_scissorgrids_0033",
+  "corpus": "gen3",
+  "family": "scissorgrids",
+  "code_ref": "gen3/scissorgrids/part_0033.scad",
+  "expected_bbox_mm": [
+   138.48,
+   180.48,
+   12.48
+  ]
+ },
+ {
+  "source_id": "gen3_slottedpanels_0065",
+  "corpus": "gen3",
+  "family": "slottedpanels",
+  "code_ref": "gen3/slottedpanels/part_0065.scad",
+  "expected_bbox_mm": [
+   200.0,
+   90.0,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen3_snapfits_0074",
+  "corpus": "gen3",
+  "family": "snapfits",
+  "code_ref": "gen3/snapfits/part_0074.scad",
+  "expected_bbox_mm": [
+   48.0,
+   48.0,
+   35.0
+  ]
+ },
+ {
+  "source_id": "gen3_springclamps_0064",
+  "corpus": "gen3",
+  "family": "springclamps",
+  "code_ref": "gen3/springclamps/part_0064.scad",
+  "expected_bbox_mm": [
+   55.984,
+   50.936,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen3_steptowers_0004",
+  "corpus": "gen3",
+  "family": "steptowers",
+  "code_ref": "gen3/steptowers/part_0004.scad",
+  "expected_bbox_mm": [
+   75.06,
+   75.06,
+   155.06
+  ]
+ },
+ {
+  "source_id": "gen3_threadcaps_0033",
+  "corpus": "gen3",
+  "family": "threadcaps",
+  "code_ref": "gen3/threadcaps/part_0033.scad",
+  "expected_bbox_mm": [
+   45.0,
+   45.0,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen3_threads_0073",
+  "corpus": "gen3",
+  "family": "threads",
+  "code_ref": "gen3/threads/part_0073.scad",
+  "expected_bbox_mm": [
+   41.11,
+   35.6,
+   74.4
+  ]
+ },
+ {
+  "source_id": "gen3_thumbscrews_0085",
+  "corpus": "gen3",
+  "family": "thumbscrews",
+  "code_ref": "gen3/thumbscrews/part_0085.scad",
+  "expected_bbox_mm": [
+   31.568,
+   31.71,
+   16.0
+  ]
+ },
+ {
+  "source_id": "gen3_wormwheels_0071",
+  "corpus": "gen3",
+  "family": "wormwheels",
+  "code_ref": "gen3/wormwheels/part_0071.scad",
+  "expected_bbox_mm": [
+   52.0,
+   52.0,
+   32.0
+  ]
+ },
+ {
+  "source_id": "gen2_bearings_0003",
+  "corpus": "gen2",
+  "family": "bearings",
+  "code_ref": "gen2/bearings/part_0003.scad",
+  "expected_bbox_mm": [
+   36.25,
+   36.25,
+   13.4
+  ]
+ },
+ {
+  "source_id": "gen2_bezels_0011",
+  "corpus": "gen2",
+  "family": "bezels",
+  "code_ref": "gen2/bezels/part_0011.scad",
+  "expected_bbox_mm": [
+   160.0,
+   120.0,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen2_caps_0048",
+  "corpus": "gen2",
+  "family": "caps",
+  "code_ref": "gen2/caps/part_0048.scad",
+  "expected_bbox_mm": [
+   59.0,
+   59.0,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen2_clips_0008",
+  "corpus": "gen2",
+  "family": "clips",
+  "code_ref": "gen2/clips/part_0008.scad",
+  "expected_bbox_mm": [
+   26.0,
+   16.0,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen2_ducts_0055",
+  "corpus": "gen2",
+  "family": "ducts",
+  "code_ref": "gen2/ducts/part_0055.scad",
+  "expected_bbox_mm": [
+   80.0,
+   43.0,
+   25.0
+  ]
+ },
+ {
+  "source_id": "gen2_enclosures_0040",
+  "corpus": "gen2",
+  "family": "enclosures",
+  "code_ref": "gen2/enclosures/part_0040.scad",
+  "expected_bbox_mm": [
+   100.0,
+   80.0,
+   40.0
+  ]
+ },
+ {
+  "source_id": "gen2_flanges_0063",
+  "corpus": "gen2",
+  "family": "flanges",
+  "code_ref": "gen2/flanges/part_0063.scad",
+  "expected_bbox_mm": [
+   100.0,
+   100.0,
+   25.0
+  ]
+ },
+ {
+  "source_id": "gen2_handles_0063",
+  "corpus": "gen2",
+  "family": "handles",
+  "code_ref": "gen2/handles/part_0063.scad",
+  "expected_bbox_mm": [
+   60.0,
+   27.3,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen2_helicalgears_0038",
+  "corpus": "gen2",
+  "family": "helicalgears",
+  "code_ref": "gen2/helicalgears/part_0038.scad",
+  "expected_bbox_mm": [
+   39.0,
+   39.0,
+   18.0
+  ]
+ },
+ {
+  "source_id": "gen2_hinges_0074",
+  "corpus": "gen2",
+  "family": "hinges",
+  "code_ref": "gen2/hinges/part_0074.scad",
+  "expected_bbox_mm": [
+   100.0,
+   47.0,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen2_ibeams_0064",
+  "corpus": "gen2",
+  "family": "ibeams",
+  "code_ref": "gen2/ibeams/part_0064.scad",
+  "expected_bbox_mm": [
+   92.0,
+   12.0,
+   52.0
+  ]
+ },
+ {
+  "source_id": "gen2_impellers_0061",
+  "corpus": "gen2",
+  "family": "impellers",
+  "code_ref": "gen2/impellers/part_0061.scad",
+  "expected_bbox_mm": [
+   72.0,
+   72.0,
+   43.0
+  ]
+ },
+ {
+  "source_id": "gen2_knobs_0022",
+  "corpus": "gen2",
+  "family": "knobs",
+  "code_ref": "gen2/knobs/part_0022.scad",
+  "expected_bbox_mm": [
+   20.0,
+   20.0,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen2_lbrackets_0014",
+  "corpus": "gen2",
+  "family": "lbrackets",
+  "code_ref": "gen2/lbrackets/part_0014.scad",
+  "expected_bbox_mm": [
+   70.0,
+   32.0,
+   80.0
+  ]
+ },
+ {
+  "source_id": "gen2_lids_0031",
+  "corpus": "gen2",
+  "family": "lids",
+  "code_ref": "gen2/lids/part_0031.scad",
+  "expected_bbox_mm": [
+   80.0,
+   100.0,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen2_motormounts_0026",
+  "corpus": "gen2",
+  "family": "motormounts",
+  "code_ref": "gen2/motormounts/part_0026.scad",
+  "expected_bbox_mm": [
+   67.14,
+   77.14,
+   6.0
+  ]
+ },
+ {
+  "source_id": "gen2_oldhams_0034",
+  "corpus": "gen2",
+  "family": "oldhams",
+  "code_ref": "gen2/oldhams/part_0034.scad",
+  "expected_bbox_mm": [
+   40.0,
+   40.0,
+   25.0
+  ]
+ },
+ {
+  "source_id": "gen2_pipes_0030",
+  "corpus": "gen2",
+  "family": "pipes",
+  "code_ref": "gen2/pipes/part_0030.scad",
+  "expected_bbox_mm": [
+   122.0,
+   122.0,
+   72.0
+  ]
+ },
+ {
+  "source_id": "gen2_pulleys_0066",
+  "corpus": "gen2",
+  "family": "pulleys",
+  "code_ref": "gen2/pulleys/part_0066.scad",
+  "expected_bbox_mm": [
+   24.78,
+   24.78,
+   18.0
+  ]
+ },
+ {
+  "source_id": "gen2_quadframes_0066",
+  "corpus": "gen2",
+  "family": "quadframes",
+  "code_ref": "gen2/quadframes/part_0066.scad",
+  "expected_bbox_mm": [
+   176.29,
+   176.29,
+   6.0
+  ]
+ },
+ {
+  "source_id": "gen2_racks_0080",
+  "corpus": "gen2",
+  "family": "racks",
+  "code_ref": "gen2/racks/part_0080.scad",
+  "expected_bbox_mm": [
+   85.4,
+   12.0,
+   17.5
+  ]
+ },
+ {
+  "source_id": "gen2_shafts_0065",
+  "corpus": "gen2",
+  "family": "shafts",
+  "code_ref": "gen2/shafts/part_0065.scad",
+  "expected_bbox_mm": [
+   50.0,
+   50.0,
+   105.0
+  ]
+ },
+ {
+  "source_id": "gen2_spacers_0013",
+  "corpus": "gen2",
+  "family": "spacers",
+  "code_ref": "gen2/spacers/part_0013.scad",
+  "expected_bbox_mm": [
+   18.2,
+   18.2,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen2_spurgears_0021",
+  "corpus": "gen2",
+  "family": "spurgears",
+  "code_ref": "gen2/spurgears/part_0021.scad",
+  "expected_bbox_mm": [
+   67.5,
+   67.5,
+   28.0
+  ]
+ },
+ {
+  "source_id": "gen2_towers_0048",
+  "corpus": "gen2",
+  "family": "towers",
+  "code_ref": "gen2/towers/part_0048.scad",
+  "expected_bbox_mm": [
+   62.0,
+   62.0,
+   248.0
+  ]
+ },
+ {
+  "source_id": "gen2_trusses_0042",
+  "corpus": "gen2",
+  "family": "trusses",
+  "code_ref": "gen2/trusses/part_0042.scad",
+  "expected_bbox_mm": [
+   152.0,
+   12.0,
+   92.0
+  ]
+ },
+ {
+  "source_id": "gen2_ubrackets_0052",
+  "corpus": "gen2",
+  "family": "ubrackets",
+  "code_ref": "gen2/ubrackets/part_0052.scad",
+  "expected_bbox_mm": [
+   100.0,
+   45.0,
+   55.0
+  ]
+ },
+ {
+  "source_id": "gen2_zbrackets_0075",
+  "corpus": "gen2",
+  "family": "zbrackets",
+  "code_ref": "gen2/zbrackets/part_0075.scad",
+  "expected_bbox_mm": [
+   50.0,
+   20.0,
+   25.0
+  ]
+ },
+ {
+  "source_id": "gen3_airducts_0015",
+  "corpus": "gen3",
+  "family": "airducts",
+  "code_ref": "gen3/airducts/part_0015.scad",
+  "expected_bbox_mm": [
+   77.11,
+   77.11,
+   32.0
+  ]
+ },
+ {
+  "source_id": "gen3_archtrusses_0094",
+  "corpus": "gen3",
+  "family": "archtrusses",
+  "code_ref": "gen3/archtrusses/part_0094.scad",
+  "expected_bbox_mm": [
+   145.48,
+   13.48,
+   74.07
+  ]
+ },
+ {
+  "source_id": "gen3_bearingblocks_0083",
+  "corpus": "gen3",
+  "family": "bearingblocks",
+  "code_ref": "gen3/bearingblocks/part_0083.scad",
+  "expected_bbox_mm": [
+   100.0,
+   60.0,
+   47.22
+  ]
+ },
+ {
+  "source_id": "gen3_beltrollers_0076",
+  "corpus": "gen3",
+  "family": "beltrollers",
+  "code_ref": "gen3/beltrollers/part_0076.scad",
+  "expected_bbox_mm": [
+   64.0,
+   64.0,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen3_cams_0027",
+  "corpus": "gen3",
+  "family": "cams",
+  "code_ref": "gen3/cams/part_0027.scad",
+  "expected_bbox_mm": [
+   48.0,
+   40.117,
+   24.0
+  ]
+ },
+ {
+  "source_id": "gen3_cardans_0035",
+  "corpus": "gen3",
+  "family": "cardans",
+  "code_ref": "gen3/cardans/part_0035.scad",
+  "expected_bbox_mm": [
+   76.0,
+   76.0,
+   11.43
+  ]
+ },
+ {
+  "source_id": "gen3_chassisframes_0049",
+  "corpus": "gen3",
+  "family": "chassisframes",
+  "code_ref": "gen3/chassisframes/part_0049.scad",
+  "expected_bbox_mm": [
+   180.62,
+   80.62,
+   75.62
+  ]
+ },
+ {
+  "source_id": "gen3_cleats_0021",
+  "corpus": "gen3",
+  "family": "cleats",
+  "code_ref": "gen3/cleats/part_0021.scad",
+  "expected_bbox_mm": [
+   80.0,
+   26.0,
+   47.0
+  ]
+ },
+ {
+  "source_id": "gen3_fairings_0047",
+  "corpus": "gen3",
+  "family": "fairings",
+  "code_ref": "gen3/fairings/part_0047.scad",
+  "expected_bbox_mm": [
+   140.4,
+   40.0,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen3_heatsinks_0064",
+  "corpus": "gen3",
+  "family": "heatsinks",
+  "code_ref": "gen3/heatsinks/part_0064.scad",
+  "expected_bbox_mm": [
+   56.0,
+   40.0,
+   28.0
+  ]
+ },
+ {
+  "source_id": "gen3_herringbones_0003",
+  "corpus": "gen3",
+  "family": "herringbones",
+  "code_ref": "gen3/herringbones/part_0003.scad",
+  "expected_bbox_mm": [
+   32.0,
+   32.0,
+   36.0
+  ]
+ },
+ {
+  "source_id": "gen3_hexlattices_0055",
+  "corpus": "gen3",
+  "family": "hexlattices",
+  "code_ref": "gen3/hexlattices/part_0055.scad",
+  "expected_bbox_mm": [
+   110.11,
+   55.0,
+   5.0
+  ]
+ },
+ {
+  "source_id": "gen3_hooks_0091",
+  "corpus": "gen3",
+  "family": "hooks",
+  "code_ref": "gen3/hooks/part_0091.scad",
+  "expected_bbox_mm": [
+   69.904,
+   88.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen3_levers_0055",
+  "corpus": "gen3",
+  "family": "levers",
+  "code_ref": "gen3/levers/part_0055.scad",
+  "expected_bbox_mm": [
+   132.0,
+   20.0,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen3_livinghinges_0083",
+  "corpus": "gen3",
+  "family": "livinghinges",
+  "code_ref": "gen3/livinghinges/part_0083.scad",
+  "expected_bbox_mm": [
+   48.0,
+   36.0,
+   9.0
+  ]
+ },
+ {
+  "source_id": "gen3_pipeclamps_0042",
+  "corpus": "gen3",
+  "family": "pipeclamps",
+  "code_ref": "gen3/pipeclamps/part_0042.scad",
+  "expected_bbox_mm": [
+   33.394,
+   41.51,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen3_ringgears_0011",
+  "corpus": "gen3",
+  "family": "ringgears",
+  "code_ref": "gen3/ringgears/part_0011.scad",
+  "expected_bbox_mm": [
+   69.96,
+   69.96,
+   27.0
+  ]
+ },
+ {
+  "source_id": "gen3_scissorgrids_0024",
+  "corpus": "gen3",
+  "family": "scissorgrids",
+  "code_ref": "gen3/scissorgrids/part_0024.scad",
+  "expected_bbox_mm": [
+   157.22,
+   205.22,
+   13.22
+  ]
+ },
+ {
+  "source_id": "gen3_slottedpanels_0003",
+  "corpus": "gen3",
+  "family": "slottedpanels",
+  "code_ref": "gen3/slottedpanels/part_0003.scad",
+  "expected_bbox_mm": [
+   120.0,
+   100.0,
+   13.0
+  ]
+ },
+ {
+  "source_id": "gen3_snapfits_0021",
+  "corpus": "gen3",
+  "family": "snapfits",
+  "code_ref": "gen3/snapfits/part_0021.scad",
+  "expected_bbox_mm": [
+   52.0,
+   52.0,
+   24.0
+  ]
+ },
+ {
+  "source_id": "gen3_springclamps_0088",
+  "corpus": "gen3",
+  "family": "springclamps",
+  "code_ref": "gen3/springclamps/part_0088.scad",
+  "expected_bbox_mm": [
+   55.976,
+   52.249,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen3_steptowers_0016",
+  "corpus": "gen3",
+  "family": "steptowers",
+  "code_ref": "gen3/steptowers/part_0016.scad",
+  "expected_bbox_mm": [
+   91.88,
+   91.88,
+   221.88
+  ]
+ },
+ {
+  "source_id": "gen3_threadcaps_0017",
+  "corpus": "gen3",
+  "family": "threadcaps",
+  "code_ref": "gen3/threadcaps/part_0017.scad",
+  "expected_bbox_mm": [
+   30.0,
+   30.0,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen3_threads_0078",
+  "corpus": "gen3",
+  "family": "threads",
+  "code_ref": "gen3/threads/part_0078.scad",
+  "expected_bbox_mm": [
+   46.88,
+   40.6,
+   56.5
+  ]
+ },
+ {
+  "source_id": "gen3_thumbscrews_0026",
+  "corpus": "gen3",
+  "family": "thumbscrews",
+  "code_ref": "gen3/thumbscrews/part_0026.scad",
+  "expected_bbox_mm": [
+   42.185,
+   42.804,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen3_wormwheels_0061",
+  "corpus": "gen3",
+  "family": "wormwheels",
+  "code_ref": "gen3/wormwheels/part_0061.scad",
+  "expected_bbox_mm": [
+   52.0,
+   52.0,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen2_bearings_0062",
+  "corpus": "gen2",
+  "family": "bearings",
+  "code_ref": "gen2/bearings/part_0062.scad",
+  "expected_bbox_mm": [
+   38.2,
+   38.2,
+   11.4
+  ]
+ },
+ {
+  "source_id": "gen2_bezels_0010",
+  "corpus": "gen2",
+  "family": "bezels",
+  "code_ref": "gen2/bezels/part_0010.scad",
+  "expected_bbox_mm": [
+   180.0,
+   80.0,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen2_caps_0014",
+  "corpus": "gen2",
+  "family": "caps",
+  "code_ref": "gen2/caps/part_0014.scad",
+  "expected_bbox_mm": [
+   38.0,
+   38.0,
+   13.0
+  ]
+ },
+ {
+  "source_id": "gen2_clips_0029",
+  "corpus": "gen2",
+  "family": "clips",
+  "code_ref": "gen2/clips/part_0029.scad",
+  "expected_bbox_mm": [
+   28.0,
+   22.0,
+   19.0
+  ]
+ },
+ {
+  "source_id": "gen2_ducts_0077",
+  "corpus": "gen2",
+  "family": "ducts",
+  "code_ref": "gen2/ducts/part_0077.scad",
+  "expected_bbox_mm": [
+   180.0,
+   50.0,
+   15.0
+  ]
+ },
+ {
+  "source_id": "gen2_enclosures_0034",
+  "corpus": "gen2",
+  "family": "enclosures",
+  "code_ref": "gen2/enclosures/part_0034.scad",
+  "expected_bbox_mm": [
+   160.0,
+   80.0,
+   50.0
+  ]
+ },
+ {
+  "source_id": "gen2_flanges_0069",
+  "corpus": "gen2",
+  "family": "flanges",
+  "code_ref": "gen2/flanges/part_0069.scad",
+  "expected_bbox_mm": [
+   150.0,
+   150.0,
+   25.0
+  ]
+ },
+ {
+  "source_id": "gen2_handles_0001",
+  "corpus": "gen2",
+  "family": "handles",
+  "code_ref": "gen2/handles/part_0001.scad",
+  "expected_bbox_mm": [
+   180.0,
+   42.0,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen2_helicalgears_0066",
+  "corpus": "gen2",
+  "family": "helicalgears",
+  "code_ref": "gen2/helicalgears/part_0066.scad",
+  "expected_bbox_mm": [
+   50.0,
+   50.0,
+   17.0
+  ]
+ },
+ {
+  "source_id": "gen2_hinges_0007",
+  "corpus": "gen2",
+  "family": "hinges",
+  "code_ref": "gen2/hinges/part_0007.scad",
+  "expected_bbox_mm": [
+   40.0,
+   31.0,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen2_ibeams_0050",
+  "corpus": "gen2",
+  "family": "ibeams",
+  "code_ref": "gen2/ibeams/part_0050.scad",
+  "expected_bbox_mm": [
+   172.0,
+   12.0,
+   42.0
+  ]
+ },
+ {
+  "source_id": "gen2_impellers_0028",
+  "corpus": "gen2",
+  "family": "impellers",
+  "code_ref": "gen2/impellers/part_0028.scad",
+  "expected_bbox_mm": [
+   59.14,
+   59.7,
+   28.0
+  ]
+ },
+ {
+  "source_id": "gen2_knobs_0012",
+  "corpus": "gen2",
+  "family": "knobs",
+  "code_ref": "gen2/knobs/part_0012.scad",
+  "expected_bbox_mm": [
+   50.0,
+   50.0,
+   18.0
+  ]
+ },
+ {
+  "source_id": "gen2_lbrackets_0067",
+  "corpus": "gen2",
+  "family": "lbrackets",
+  "code_ref": "gen2/lbrackets/part_0067.scad",
+  "expected_bbox_mm": [
+   55.0,
+   40.0,
+   25.0
+  ]
+ },
+ {
+  "source_id": "gen2_lids_0033",
+  "corpus": "gen2",
+  "family": "lids",
+  "code_ref": "gen2/lids/part_0033.scad",
+  "expected_bbox_mm": [
+   120.0,
+   50.0,
+   14.0
+  ]
+ },
+ {
+  "source_id": "gen2_motormounts_0034",
+  "corpus": "gen2",
+  "family": "motormounts",
+  "code_ref": "gen2/motormounts/part_0034.scad",
+  "expected_bbox_mm": [
+   45.0,
+   51.0,
+   5.0
+  ]
+ },
+ {
+  "source_id": "gen2_oldhams_0057",
+  "corpus": "gen2",
+  "family": "oldhams",
+  "code_ref": "gen2/oldhams/part_0057.scad",
+  "expected_bbox_mm": [
+   40.0,
+   40.0,
+   24.0
+  ]
+ },
+ {
+  "source_id": "gen2_pipes_0066",
+  "corpus": "gen2",
+  "family": "pipes",
+  "code_ref": "gen2/pipes/part_0066.scad",
+  "expected_bbox_mm": [
+   114.4,
+   104.4,
+   64.4
+  ]
+ },
+ {
+  "source_id": "gen2_pulleys_0041",
+  "corpus": "gen2",
+  "family": "pulleys",
+  "code_ref": "gen2/pulleys/part_0041.scad",
+  "expected_bbox_mm": [
+   31.23,
+   31.23,
+   20.0
+  ]
+ },
+ {
+  "source_id": "gen2_quadframes_0009",
+  "corpus": "gen2",
+  "family": "quadframes",
+  "code_ref": "gen2/quadframes/part_0009.scad",
+  "expected_bbox_mm": [
+   184.98,
+   184.98,
+   5.0
+  ]
+ },
+ {
+  "source_id": "gen2_racks_0007",
+  "corpus": "gen2",
+  "family": "racks",
+  "code_ref": "gen2/racks/part_0007.scad",
+  "expected_bbox_mm": [
+   245.62,
+   15.0,
+   17.0
+  ]
+ },
+ {
+  "source_id": "gen2_shafts_0020",
+  "corpus": "gen2",
+  "family": "shafts",
+  "code_ref": "gen2/shafts/part_0020.scad",
+  "expected_bbox_mm": [
+   50.0,
+   50.0,
+   115.0
+  ]
+ },
+ {
+  "source_id": "gen2_spacers_0079",
+  "corpus": "gen2",
+  "family": "spacers",
+  "code_ref": "gen2/spacers/part_0079.scad",
+  "expected_bbox_mm": [
+   30.5,
+   30.5,
+   6.0
+  ]
+ },
+ {
+  "source_id": "gen2_spurgears_0042",
+  "corpus": "gen2",
+  "family": "spurgears",
+  "code_ref": "gen2/spurgears/part_0042.scad",
+  "expected_bbox_mm": [
+   49.0,
+   49.0,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen2_towers_0010",
+  "corpus": "gen2",
+  "family": "towers",
+  "code_ref": "gen2/towers/part_0010.scad",
+  "expected_bbox_mm": [
+   52.0,
+   52.0,
+   192.0
+  ]
+ },
+ {
+  "source_id": "gen2_trusses_0060",
+  "corpus": "gen2",
+  "family": "trusses",
+  "code_ref": "gen2/trusses/part_0060.scad",
+  "expected_bbox_mm": [
+   222.0,
+   12.0,
+   72.0
+  ]
+ },
+ {
+  "source_id": "gen2_ubrackets_0008",
+  "corpus": "gen2",
+  "family": "ubrackets",
+  "code_ref": "gen2/ubrackets/part_0008.scad",
+  "expected_bbox_mm": [
+   60.0,
+   50.0,
+   35.0
+  ]
+ },
+ {
+  "source_id": "gen2_zbrackets_0011",
+  "corpus": "gen2",
+  "family": "zbrackets",
+  "code_ref": "gen2/zbrackets/part_0011.scad",
+  "expected_bbox_mm": [
+   80.0,
+   40.0,
+   35.0
+  ]
+ },
+ {
+  "source_id": "gen3_airducts_0018",
+  "corpus": "gen3",
+  "family": "airducts",
+  "code_ref": "gen3/airducts/part_0018.scad",
+  "expected_bbox_mm": [
+   118.0,
+   85.4,
+   32.0
+  ]
+ },
+ {
+  "source_id": "gen3_archtrusses_0012",
+  "corpus": "gen3",
+  "family": "archtrusses",
+  "code_ref": "gen3/archtrusses/part_0012.scad",
+  "expected_bbox_mm": [
+   168.16,
+   14.16,
+   71.49
+  ]
+ },
+ {
+  "source_id": "gen3_bearingblocks_0081",
+  "corpus": "gen3",
+  "family": "bearingblocks",
+  "code_ref": "gen3/bearingblocks/part_0081.scad",
+  "expected_bbox_mm": [
+   90.0,
+   68.0,
+   38.06
+  ]
+ },
+ {
+  "source_id": "gen3_beltrollers_0071",
+  "corpus": "gen3",
+  "family": "beltrollers",
+  "code_ref": "gen3/beltrollers/part_0071.scad",
+  "expected_bbox_mm": [
+   40.0,
+   40.0,
+   26.0
+  ]
+ },
+ {
+  "source_id": "gen3_cams_0024",
+  "corpus": "gen3",
+  "family": "cams",
+  "code_ref": "gen3/cams/part_0024.scad",
+  "expected_bbox_mm": [
+   55.946,
+   60.301,
+   22.0
+  ]
+ },
+ {
+  "source_id": "gen3_cardans_0077",
+  "corpus": "gen3",
+  "family": "cardans",
+  "code_ref": "gen3/cardans/part_0077.scad",
+  "expected_bbox_mm": [
+   76.0,
+   76.0,
+   15.24
+  ]
+ },
+ {
+  "source_id": "gen3_chassisframes_0033",
+  "corpus": "gen3",
+  "family": "chassisframes",
+  "code_ref": "gen3/chassisframes/part_0033.scad",
+  "expected_bbox_mm": [
+   201.84,
+   91.84,
+   47.84
+  ]
+ },
+ {
+  "source_id": "gen3_cleats_0098",
+  "corpus": "gen3",
+  "family": "cleats",
+  "code_ref": "gen3/cleats/part_0098.scad",
+  "expected_bbox_mm": [
+   70.0,
+   26.0,
+   55.0
+  ]
+ },
+ {
+  "source_id": "gen3_fairings_0016",
+  "corpus": "gen3",
+  "family": "fairings",
+  "code_ref": "gen3/fairings/part_0016.scad",
+  "expected_bbox_mm": [
+   180.4,
+   40.0,
+   30.0
+  ]
+ },
+ {
+  "source_id": "gen3_heatsinks_0077",
+  "corpus": "gen3",
+  "family": "heatsinks",
+  "code_ref": "gen3/heatsinks/part_0077.scad",
+  "expected_bbox_mm": [
+   50.0,
+   56.0,
+   38.0
+  ]
+ },
+ {
+  "source_id": "gen3_herringbones_0004",
+  "corpus": "gen3",
+  "family": "herringbones",
+  "code_ref": "gen3/herringbones/part_0004.scad",
+  "expected_bbox_mm": [
+   88.0,
+   88.0,
+   40.0
+  ]
+ },
+ {
+  "source_id": "gen3_hexlattices_0027",
+  "corpus": "gen3",
+  "family": "hexlattices",
+  "code_ref": "gen3/hexlattices/part_0027.scad",
+  "expected_bbox_mm": [
+   62.77,
+   63.73,
+   8.0
+  ]
+ },
+ {
+  "source_id": "gen3_hooks_0066",
+  "corpus": "gen3",
+  "family": "hooks",
+  "code_ref": "gen3/hooks/part_0066.scad",
+  "expected_bbox_mm": [
+   65.96,
+   78.0,
+   12.0
+  ]
+ },
+ {
+  "source_id": "gen3_levers_0003",
+  "corpus": "gen3",
+  "family": "levers",
+  "code_ref": "gen3/levers/part_0003.scad",
+  "expected_bbox_mm": [
+   118.0,
+   30.0,
+   10.0
+  ]
+ },
+ {
+  "source_id": "gen3_livinghinges_0040",
+  "corpus": "gen3",
+  "family": "livinghinges",
+  "code_ref": "gen3/livinghinges/part_0040.scad",
+  "expected_bbox_mm": [
+   50.0,
+   36.0,
+   7.0
+  ]
+ },
+ {
+  "source_id": "gen3_pipeclamps_0020",
+  "corpus": "gen3",
+  "family": "pipeclamps",
+  "code_ref": "gen3/pipeclamps/part_0020.scad",
+  "expected_bbox_mm": [
+   36.043,
+   40.43,
+   16.0
+  ]
+ }
+]
