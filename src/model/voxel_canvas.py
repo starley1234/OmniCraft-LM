@@ -60,8 +60,12 @@ class VoxelCanvas(DeviceAwareModule):
         self.blocks = nn.Sequential(*(ResidualBlock3D(channels) for _ in range(3)))
         self.pool = nn.AdaptiveAvgPool3d(1)
         self.project = nn.Linear(channels, canvas_dim)
+        # Occupancy head for the auxiliary loss (ARCHITECTURE.md section 6):
+        # BCEWithLogits over the 16^3 grid against a voxelized STL reference.
+        # Runs only on the training path, never in plain inference.
+        self.occupancy = nn.Conv3d(channels, 1, kernel_size=1)
 
-    def forward(self, latent: torch.Tensor) -> torch.Tensor:
+    def _volume(self, latent: torch.Tensor) -> torch.Tensor:
         if latent.ndim != 2 or latent.shape[-1] != self.canvas_dim:
             raise ValueError(f"VoxelCanvas expects (batch, {self.canvas_dim}), got {tuple(latent.shape)}")
         z = align_tensor(latent, self.expand)
@@ -69,6 +73,16 @@ class VoxelCanvas(DeviceAwareModule):
             z.shape[0], self.channels, self.grid_size, self.grid_size, self.grid_size
         )
         volume = torch.nn.functional.silu(self.coord_conv(volume))
-        volume = self.blocks(volume)
+        return self.blocks(volume)
+
+    def forward(self, latent: torch.Tensor) -> torch.Tensor:
+        """Pooled 512-wide canvas output (unchanged contract for the bridge)."""
+        volume = self._volume(latent)
         pooled = self.pool(volume).flatten(start_dim=1)
         return self.project(pooled)
+
+    def forward_with_grid(self, latent: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+        """Return ``(z_out, occupancy_logits(B,16,16,16))`` for auxiliary supervision."""
+        volume = self._volume(latent)
+        pooled = self.pool(volume).flatten(start_dim=1)
+        return self.project(pooled), self.occupancy(volume).squeeze(1)

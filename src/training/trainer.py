@@ -40,6 +40,8 @@ from src.training.lora import (
 )
 from src.training.spatial_stack import CANVAS_REGISTRY, SpatialStack
 
+GRID_VOXEL = 16
+
 SPATIAL_TOKENS: dict[str, str] = {
     "voxel": "<|spatial_voxel|>",
     "wire": "<|spatial_wire|>",
@@ -64,6 +66,7 @@ class TrainerConfig:
     # the 248320 vocab. 2000 keeps the longest corpus bucket (768) inside the
     # 14 GiB ceiling with headroom; 2700 provably spiked reserved to ~29 GiB.
     max_tokens_per_forward: int = 2000
+    voxel_grids: Path | None = None  # sidecar JSONL from tools/build_voxel_grids.py
     seq_bucket: int = 128  # pad sequences to this quantum: the CUDA allocator keeps per-shape pools,
     # and hundreds of distinct lengths balloon reserved VRAM until WSL2 spills to system RAM
     empty_cache_every: int = 50  # release fragmented allocator pools periodically; 0 disables
@@ -114,7 +117,7 @@ class SpatialTrainer:
         self.control_token_id = int(self.tokenizer.convert_tokens_to_ids(SPATIAL_TOKENS[config.layer]))
         self.backbone, self._frozen_vocab = self._load_backbone(Path(config.backbone_dir))
         self.stack = self._load_verified_stack()
-        self._pending_aux: tuple[torch.Tensor, torch.Tensor] | None = None
+        self._pending_aux: tuple[str, object] | None = None
 
         self.hook = SpatialHookManager(self.control_token_id, layer_index=12)
         self.hook.attach_to_backbone(self.backbone)
@@ -127,6 +130,26 @@ class SpatialTrainer:
         )
         self.history: list[dict[str, float]] = []
         self._oom_skips = 0
+        self._missing_gt = 0
+        self._voxel_grids: dict[str, torch.Tensor] | None = None
+
+    def _load_voxel_grids(self) -> dict[str, torch.Tensor]:
+        """Decode the sidecar JSONL into {id: float32 grid (16,16,16)}."""
+        import base64
+
+        import numpy as np
+
+        if self.config.voxel_grids is None or not Path(self.config.voxel_grids).is_file():
+            return {}
+        grids: dict[str, torch.Tensor] = {}
+        for line in Path(self.config.voxel_grids).read_text(encoding="utf-8").splitlines():
+            if not line.strip():
+                continue
+            row = json.loads(line)
+            packed = np.frombuffer(base64.b64decode(row["grid_b64"]), dtype=np.uint8)
+            grid = np.unpackbits(packed, count=GRID_VOXEL**3).reshape(GRID_VOXEL, GRID_VOXEL, GRID_VOXEL)
+            grids[row["id"]] = torch.from_numpy(grid.astype(np.float32))
+        return grids
 
     # ------------------------------------------------------------------ setup
 
@@ -261,7 +284,13 @@ class SpatialTrainer:
                 scale_embedding = bundle.scale_mlp.forward_log_bbox(log_bbox_device)
                 z_in = bundle.in_projector(h_cls, scale_embedding)
                 z_out, predicted_nodes, edge_logits = bundle.canvas.forward_graph(z_in)
-                self._pending_aux = (predicted_nodes, edge_logits)
+                self._pending_aux = ("wire", (predicted_nodes, edge_logits))
+                return bundle.out_projector(z_out)
+            if layer == "voxel":
+                scale_embedding = bundle.scale_mlp.forward_log_bbox(log_bbox_device)
+                z_in = bundle.in_projector(h_cls, scale_embedding)
+                z_out, occupancy_logits = bundle.canvas.forward_with_grid(z_in)
+                self._pending_aux = ("voxel", occupancy_logits)
                 return bundle.out_projector(z_out)
             return bundle(h_cls, log_bbox_device)
 
@@ -317,14 +346,38 @@ class SpatialTrainer:
             self.hook.clear_context()
         lm_loss = outputs.loss.float()
         aux = torch.zeros((), device=self.device, dtype=torch.float32)
-        if self._pending_aux is not None:
-            predicted_nodes, edge_logits = self._pending_aux
+        if self._pending_aux is not None and self._pending_aux[0] == "wire":
+            predicted_nodes, edge_logits = self._pending_aux[1]
             aux = wire_auxiliary_loss(
                 predicted_nodes.float(),
                 edge_logits.float(),
                 *self._collate_wire_targets(samples),
             )
+        elif self._pending_aux is not None and self._pending_aux[0] == "voxel":
+            occupancy_logits = self._pending_aux[1]
+            aux = self._voxel_aux(occupancy_logits, samples)
         return lm_loss, aux
+
+    def _voxel_aux(self, occupancy_logits: torch.Tensor, samples: list[CADSample]) -> torch.Tensor:
+        """BCEWithLogits of predicted occupancy against the 16^3 STL-derived GT."""
+        import torch.nn.functional as F
+
+        if self._voxel_grids is None:
+            self._voxel_grids = self._load_voxel_grids()
+        targets: list[torch.Tensor] = []
+        valid_rows: list[int] = []
+        for row, sample in enumerate(samples):
+            grid = self._voxel_grids.get(sample.id)
+            if grid is not None:
+                valid_rows.append(row)
+                targets.append(grid)
+        if not valid_rows:
+            return torch.zeros((), device=self.device, dtype=torch.float32)
+        gt = torch.stack(targets).to(device=occupancy_logits.device, dtype=torch.float32)
+        subset = torch.tensor(valid_rows, device=occupancy_logits.device)
+        predicted = occupancy_logits.float().index_select(0, subset)
+        self._missing_gt += len(samples) - len(valid_rows)
+        return F.binary_cross_entropy_with_logits(predicted, gt)
 
     def _collate_wire_targets(
         self, samples: list[CADSample]

@@ -58,6 +58,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--max-code-tokens", type=int, default=768)
     parser.add_argument("--gradient-checkpointing", action="store_true")
     parser.add_argument("--save-every", type=int, default=0)
+    parser.add_argument("--voxel-grids", type=Path, default=None, help="sidecar voxel-grid GT JSONL (voxel layer aux loss)")
     parser.add_argument("--log-every", type=int, default=1)
     parser.add_argument("--rollback-only", action="store_true", help="restore the zero point and exit")
     return parser
@@ -76,6 +77,7 @@ def main() -> int:
         accumulate=args.accumulate,
         microbatch=args.microbatch,
         max_tokens_per_forward=args.max_tokens_per_forward,
+        voxel_grids=args.voxel_grids,
         lr=args.lr,
         lr_warmup_steps=args.warmup_steps,
         lora_dropout=args.lora_dropout,
