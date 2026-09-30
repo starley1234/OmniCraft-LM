@@ -14,6 +14,7 @@ import shutil
 import statistics
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Sequence
 
 TOLERANCE_MARKERS = (
     "зазор",
@@ -81,6 +82,8 @@ def write_report(
     tool_dir: str = "tools/dataset_gen2",
     build_script: str = "build_corpus.py",
     variant_tag: str = "gen2",
+    extra_bullets: Sequence[str] | None = None,
+    schema_fields: str = "`graph`",
 ) -> Path:
     rows = _load_rows(out_dir)
     family_stats = summary.get("family_stats", {})
@@ -154,13 +157,16 @@ def write_report(
                 f"{len(audit.get('stl_bad', []))} not watertight / multi-component / degenerate"
             )
         add(
-            f"- independent re-audit of the files on disk (`{tool_dir}/verify_corpus.py`): "
-            f"{audit.get('rows')} rows / {audit.get('families')} families / "
-            f"{audit.get('wire_rows')} graph rows re-evaluated, worst bbox deviation vs the "
-            f"manifest {audit.get('max_bbox_error', 0):.2%} (the receiver allows 15%), "
-            f"SHA-256 list {'verified' if audit.get('checksums_ok') else 'MISMATCH'}, "
+            f"- independent re-audit of the files on disk (`{tool_dir}/`: the same checks "
+            f"the block ships with): {audit.get('rows')} rows / {audit.get('families')} "
+            f"families / {audit.get('wire_rows', 0) or 0} graph rows re-evaluated, worst bbox "
+            f"deviation vs the manifest {audit.get('max_bbox_error', 0):.2%} (the receiver "
+            f"allows 15%), SHA-256 list "
+            f"{'verified' if audit.get('checksums_ok') else 'MISMATCH'}, "
             f"{len(audit.get('problems', []))} problems"
         )
+    for bullet in extra_bullets or ():
+        add(f"- {bullet}")
     add(
         "- the corpus lives under `optional_data/`, which this repository ignores, so the "
         f"deliverable was committed with `git add -f {corpus_label.rstrip('/')}`"
@@ -172,7 +178,7 @@ def write_report(
     add("| --- | --- | ---: |")
     add(
         f"| `manifest.jsonl` | {len(rows)} rows of metadata: file, family, `prompt_ru`, "
-        f"`prompt_en`, `expected_bbox_mm`, `parameters`, `graph`; sha256 `{manifest_sha}` | "
+        f"`prompt_en`, `expected_bbox_mm`, `parameters`, {schema_fields}; sha256 `{manifest_sha}` | "
         f"{(out_dir / 'manifest.jsonl').stat().st_size / 1024:.1f} KiB |"
     )
     add(
