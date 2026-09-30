@@ -208,6 +208,10 @@ def cmd_generic(name: str, args: list[str], tail: int, as_json: bool) -> int:
 # --------------------------------------------------------------------------- main
 
 def main(argv: list[str]) -> int:
+    # Дочерние скрипты пишут UTF-8; консоль Windows может быть cp1251 — не падаем на печати.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="replace")
     as_json, tail = False, 30
     rest: list[str] = []
     i = 0
