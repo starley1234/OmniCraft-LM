@@ -34,7 +34,8 @@
 | Что | Значение |
 |---|---|
 | Корпус | **combined_v6 = 34 535**: voxel 21 739 / wire 10 796 / sketch 2 000 |
-| Сплит | train 28 308 / val 2 494 / test 3 733 (`data/processed/splits_v6`) |
+| Сплит (на диске) | `splits_v6`: train 28 308 (voxel 17 700 / wire 9 153 / sketch 1 455) / val 2 494 / test 3 733 |
+| Сплит (факт обучения v6 и v7!) | **splits_v4: 22 358 train-строк (voxel 13 205 / wire 9 153, sketch=0)** — `wsl_train.sh` до 2026-09-30 ночи указывал на него |
 | Grid builder | 748 воксельных сеток, дедупликация по content-hash |
 | Чекпойнты (в синхроне WSL↔Windows) | `zero_point` (seed 1234); voxel@1360 (lm=0.0); wire@675 (lm 0.0024, aux 0.084) |
 | Железо | RTX 5060 Ti, sm_120, 15.9 GiB, bf16; OpenSCAD 2025.12.17 + manifold |

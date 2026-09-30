@@ -31,6 +31,10 @@
 ### v6 — 2026-09-30, чейн завершён 14:56 (WSL2, RTX 5060 Ti)
 - **Корпус:** combined_v6 = 34 535 (voxel 21 739 / wire 10 796 / sketch 2 000);
   сплит `data/processed/splits_v6` = 28 308 / 2 494 / 3 733; сетки: 748 → 1257 rows.
+  ⚠️ **Фактические данные прогона:** `splits_v4/train.jsonl` (22 358: voxel 13 205 / wire 9 153;
+  sha256 `F4C6D44A…`) — `wsl_train.sh` тогда указывал на splits_v4; прирост v6
+  (voxel +4 495, sketch 1 455 train) до модели не дошёл. Путь исправлен 2026-09-30
+  (аргумент 5 `SPLIT_DIR`, дефолт `splits_v6`).
 - **Скрипт:** `tools/wsl_train_chain_v6.sh` (voxel 1360×16 budget 1600 → wire 675×16 budget 1200);
   `lr=2e-4`, warmup 30, microbatch 8, `lora_dropout=0.05`, `lambda_geom=0.1`, `$fn=32`.
 - **Финал:** voxel lm=0.0000 aux=0.0000 (уже с ~шага 20 — корпус выучен);

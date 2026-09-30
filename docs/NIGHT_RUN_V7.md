@@ -56,3 +56,11 @@ wsl -d Ubuntu -- bash /mnt/c/github/OmniCraft-LM/tools/wsl_run_detached.sh "~/om
   `data/processed/combined_v6_augmented.jsonl` (192 671 строка, промптовые стили —
   `tools/augment_prompts.py`); ночной v7 гоняется на исходном v6 для чистого
   воспроизводства.
+- **Постскриптум 2026-09-30:** v7 фактически запущен до исправления пути данных —
+  `wsl_train.sh` (старая копия в WSL) тянет `splits_v4/train.jsonl`, как и v6
+  (это сохраняет сравнимость v6↔v7, но прирост корпуса v6 снова не участвует).
+  На Windows-стороне `wsl_train.sh` уже исправлен (5-й аргумент `SPLIT_DIR`,
+  дефолт `splits_v6`); при следующем синке в WSL подтянется. Если утром ещё не
+  поздно/нужен корпус v6 прямо сейчас — перезапуск с
+  `bash tools/wsl_train_chain_v7.sh` после синка `tools/wsl_train.sh` в
+  `~/omnicraft/repo/tools/`.
