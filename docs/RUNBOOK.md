@@ -70,6 +70,18 @@ python tools/validate_dataset.py --input data/processed/external_candidates.json
 
 Правило: обучать можно **только на `*.accepted.jsonl`**. Provisional/mock в обучение не идут никогда.
 
+### 2.1. Промптовое разнообразие (аугментация, без валидации — геометрия не меняется)
+
+```powershell
+# x5.6 корпуса: к каждой строке — до 5 стилей (formal_ru/free_ru/free_en/conv_ru/conv_en);
+# детерминировано по (seed, id, style), схема проверяется на каждой строке:
+python tools/omni.py augment --input data/processed/combined_v6.jsonl `
+  --output data/processed/combined_v6_augmented.jsonl --seed 1234
+```
+Идентичность геометрии сохраняется (`id` базовой строки + суффикс стиля; код/верификация
+копируются), поэтому сплит группирует клонов вместе с оригиналом — утечек train→test нет.
+Готовый артефакт: `data/processed/combined_v6_augmented.jsonl` (192 671 строка из 34 535).
+
 ---
 
 ## 3. Обучение

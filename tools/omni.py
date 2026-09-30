@@ -54,6 +54,8 @@ COMMANDS: dict[str, tuple[list[str], str]] = {
                  "pytest; пример узкого прогона: omni test tests/test_golden.py"),
     "gen":      ([PY, "tools/prepare_dataset.py"],
                  "генерация candidates JSONL: --voxel-count N --wire-count N --seed S --output F"),
+    "augment":  ([PY, "tools/augment_prompts.py"],
+                 "умножение промптовых стилей корпуса (geometry не трогает); --input/--output"),
     "validate": ([PY, "tools/validate_dataset.py"],
                  "валидация JSONL (OpenSCAD/analytic/mock); обязателен --input"),
     "split":    ([PY, "tools/split_dataset.py"],
