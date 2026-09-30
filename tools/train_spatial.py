@@ -55,7 +55,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--max-vram-gb", type=float, default=14.0)
     parser.add_argument("--lambda-geom", type=float, default=0.1)
     parser.add_argument("--max-prompt-tokens", type=int, default=256)
-    parser.add_argument("--max-code-tokens", type=int, default=768)
+    parser.add_argument("--max-code-tokens", type=int, default=2048)
     parser.add_argument("--gradient-checkpointing", action="store_true")
     parser.add_argument("--save-every", type=int, default=0)
     parser.add_argument("--voxel-grids", type=Path, default=None, help="sidecar voxel-grid GT JSONL (voxel layer aux loss)")

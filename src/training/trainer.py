@@ -76,7 +76,7 @@ class TrainerConfig:
     lambda_geom: float = 0.1
     max_prompt_tokens: int = 256   # measured corpus p100: ~22 prompt tokens; cap prevents silent bloat
     cog_specs: bool = True         # prepend the deterministic [SPECS] block (ARCHITECTURE.md 8.1)
-    max_code_tokens: int = 768     # measured corpus p100: 565 code tokens; logits dominate VRAM (3·B·S·V·4B)
+    max_code_tokens: int = 2048    # v6 p99=1915 (place1 multi-feature codes); longer tails hit the OOM guard instead
     gradient_checkpointing: bool = False
     train_spatial_token_embeddings: bool = False  # True adds a ~1 GiB param + ~3 GiB of Adam state/grads
     lr_warmup_steps: int = 30
