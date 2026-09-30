@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Held-out eval of trained layers inside WSL2 (fast path; Windows WDDem MM is ~6x slower).
+# Usage: tools/wsl_eval.sh [layer...]   (default: voxel wire)
+# Reports are written straight to the Windows mirror: /mnt/c/.../data/processed/eval_<layer>.jsonl
+set -euo pipefail
+cd "$HOME/omnicraft/repo"
+source .venv/bin/activate
+export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1
+
+LAYERS=("$@")
+if [ "${#LAYERS[@]}" -eq 0 ]; then LAYERS=(voxel wire); fi
+
+EVAL_SET=optional_data/data/heldout_eval.jsonl
+if [ ! -f "$EVAL_SET" ]; then
+  mkdir -p optional_data/data
+  cp -f /mnt/c/github/OmniCraft-LM/optional_data/data/heldout_eval.jsonl "$EVAL_SET"
+fi
+
+WIN_OUT=/mnt/c/github/OmniCraft-LM/data/processed
+for LAYER in "${LAYERS[@]}"; do
+  echo "===== eval ${LAYER} start $(date -Is) ====="
+  python tools/evaluate_generation.py \
+    --layer "$LAYER" \
+    --checkpoint "checkpoints/${LAYER}" \
+    --eval-set "$EVAL_SET" \
+    --max-new-tokens 384 \
+    --output "${WIN_OUT}/eval_${LAYER}.jsonl"
+  echo "===== eval ${LAYER} done $(date -Is) ====="
+done
+echo "ALL EVAL DONE"

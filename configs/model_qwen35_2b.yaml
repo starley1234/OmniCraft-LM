@@ -1,4 +1,5 @@
 # Backbone and adapter parameters. Keep synchronized with ARCHITECTURE.md sections 3 and 5.
+# Фактические значения завершённых прогонов — checkpoints/<layer>/trainer_state.json.
 # NOTE: declarative specification — code does NOT read this file yet; CLI args
 # of tools/train_spatial.py are authoritative. Every key here must map to a
 # real code path before relying on it (docs/hardware-notes.md §9).
@@ -25,7 +26,7 @@ spatial_trigger_tokens:         # one routing token per canvas
 lora:
   rank: 16
   alpha: 32
-  dropout: 0.0
+  dropout: 0.05             # v6 reality (= CLI default tools/train_spatial.py)
   target_modules: [q_proj, k_proj, v_proj, o_proj]
   adapters:                     # isolated gradient path per canvas; see Multi-LoRA policy
     - lora_voxel

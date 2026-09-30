@@ -121,7 +121,7 @@ def sys_platform_windows() -> bool:
 
 def _running_addresses() -> dict[str, bool]:
     """Which of our long-running jobs are alive (Windows + WSL aware)."""
-    out = {"train_spatial": False, "build_voxel_grids": False, "demo_server": False, "wsl_train_chain": False, "orchestrator": False}
+    out = {"train_spatial": False, "build_voxel_grids": False, "demo_server": False, "wsl_train_chain": False, "evaluate_generation": False, "orchestrator": False}
     if sys_platform_windows():
         probe = subprocess.run(
             ["powershell", "-NoProfile", "-Command",
@@ -133,17 +133,17 @@ def _running_addresses() -> dict[str, bool]:
             out[key] = key in text
         wsl_probe = subprocess.run(
             ["wsl", "-d", "Ubuntu", "--", "bash", "-lc",
-             "pgrep -af 'train_spatial|build_voxel_grids|wsl_train_chain|wsl_retrain' || true"],
+             "pgrep -af '[t]rain_spatial|[b]uild_voxel_grids|[w]sl_train_chain|[w]sl_retrain|[e]valuate_generation' || true"],
             capture_output=True, text=True, timeout=30, check=False,
         )
         wsl_text = wsl_probe.stdout or ""
-        for key in ("train_spatial", "build_voxel_grids", "wsl_train_chain"):
+        for key in ("train_spatial", "build_voxel_grids", "wsl_train_chain", "evaluate_generation"):
             if key in wsl_text:
                 out[key] = True
         if "wsl_retrain_v4" in wsl_text:
             out["orchestrator"] = True
     else:
-        probe = subprocess.run(["bash", "-c", "pgrep -af 'train_spatial|build_voxel_grids|wsl_train_chain|evaluate_generation' || true"],
+        probe = subprocess.run(["bash", "-c", "pgrep -af '[t]rain_spatial|[b]uild_voxel_grids|[w]sl_train_chain|[e]valuate_generation' || true"],
                                capture_output=True, text=True, timeout=15, check=False)
         text = probe.stdout or ""
         for key in out:

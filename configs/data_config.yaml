@@ -27,3 +27,4 @@ generation:
   wire_truss_samples: 10000
   minimum_dimension_mm: 5.0
   maximum_dimension_mm: 200.0
+# Фактический корпус потоков — см. STATUS.md («Зафиксированные факты») и data/processed/splits_v6/.

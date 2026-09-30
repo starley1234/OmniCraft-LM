@@ -14,7 +14,7 @@
 4. Хук слоя 12 срабатывает только на prefill (`seq_len > 1`); на KV-кэш-шагах возвращает тензор без изменений.
 5. Никаких Triton / static KV cache. CUDA = bfloat16, CPU = float32.
 6. Авторитет гиперпараметров — CLI-флаги `tools/train_spatial.py`; `configs/*.yaml` — декларативная справка, код их не читает.
-7. Контракт данных `[SPECS]` — AGENTS_CoG.md (открывать только если задача про схему/промпты/hook).
+7. Контракт данных `[SPECS]` — ARCHITECTURE.md §8.1 (код — `src/runtime/specs_hook.py`; история — `docs/archive/AGENTS_CoG.md`). Открывать только если задача про схему/промпты/hook.
 
 ## Команды — всё через один вход
 `python tools/omni.py [--json] [--tail N] <команда> [аргументы]` — вывод уходит в

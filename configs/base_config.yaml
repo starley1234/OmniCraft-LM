@@ -1,4 +1,5 @@
 # Core architecture invariants. Keep synchronized with ARCHITECTURE.md.
+# Фактические значения завершённых прогонов — checkpoints/<layer>/trainer_state.json.
 # NOTE: declarative specification — code does NOT read this file; values are
 # mirrored as constants in src/ and defaults in tools/ (docs/hardware-notes.md §9).
 model:

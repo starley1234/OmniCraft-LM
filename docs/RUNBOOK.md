@@ -102,7 +102,11 @@ python tools/train_spatial.py --layer voxel --steps 600 --accumulate 16 --save-e
 ## 4. Оценка генерации (после обучения)
 
 ```powershell
-# обученный слой на рукописном held-out наборе (42 промпта)
+# Рекомендуемо: внутри WSL2 — в ~4-6 раз быстрее (тот же WDDM-налог);
+# оба слоя, отчёты сразу в data/processed/eval_<слой>.jsonl на стороне Windows:
+wsl -d Ubuntu -- bash /mnt/c/github/OmniCraft-LM/tools/wsl_eval.sh voxel wire
+
+# Запасной путь на Windows (медленный: ~60 с на промпт, 42 промпта ≈ 40+ мин):
 python tools/evaluate_generation.py --layer voxel --checkpoint checkpoints/voxel `
   --eval-set optional_data/data/heldout_eval.jsonl --max-new-tokens 384
 
@@ -145,6 +149,7 @@ wsl -d Ubuntu -- bash -c "rsync -a ~/omnicraft/repo/checkpoints/voxel/ /mnt/c/gi
 | `openscad: command not found` в WSL | PATH без `~/bin` | запускать через `bash -lc` или `tools/wsl_check.sh` |
 | `bad interpreter`/`$'\r'` ошибка в WSL | CRLF в .sh после чекаутa | в `.gitattributes` есть `*.sh text eol=lf`; `git checkout -- tools/` |
 | Обучение «замерло» надолго без лога | смотреть `it/s` в последнем логе | if 0 → убито внешне; рестарт от последнего снимка или якоря |
+| `[OOM] skipped chunk (max ~N tokens)` в логе | страж аллокатора роняет слишком жирный микробатч, не дав умереть рану | доля скипов ≤5% чанков — ожидаемо (в т.ч. транзиент на старте); больше — снизить `--max-tokens-per-forward` и/или `--microbatch`; в v6 voxel-леге было ~470 скипов на 1360 шагов (~2%) |
 
 Подробности и обоснования: `docs/hardware-notes.md` (полевые замеры на этом железе).
 

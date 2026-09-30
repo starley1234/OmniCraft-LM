@@ -1,6 +1,6 @@
 """Geometric Chain-of-Thought support: compose and parse [SPECS] blocks.
 
-Contract (AGENTS_CoG.md / ARCHITECTURE.md 8.1): before the canvas trigger token
+Contract (docs/archive/AGENTS_CoG.md / ARCHITECTURE.md 8.1): before the canvas trigger token
 the stream carries
 
     [SPECS]
