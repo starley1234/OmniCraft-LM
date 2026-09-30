@@ -1,0 +1,83 @@
+{
+  "seed": 1234,
+  "indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "families": {
+    "voxel": [
+      {
+        "id": "voxel_csg_001234_000000",
+        "sha256": "4fa3703832498a8d0229d5ed5970210a5ccff05e1605e67ced8479d464bd4882"
+      },
+      {
+        "id": "voxel_csg_001234_000001",
+        "sha256": "604b27764e27033f2b5b48d8427d2675e5da011bbb22d8bd0d146077a4be6c28"
+      },
+      {
+        "id": "voxel_csg_001234_000002",
+        "sha256": "a72c568f3c04e1bad5289b8ac54fde92de3a55da12e9167efa4475396b16e8c7"
+      },
+      {
+        "id": "voxel_csg_001234_000003",
+        "sha256": "018ded2f5665bfc15ce2082ebbb252e6509d6430023bb1882e6e3b8ac7e759f7"
+      },
+      {
+        "id": "voxel_csg_001234_000004",
+        "sha256": "0fa24556b4a0f8ccc571b107f5bea25e96eb06e3630469120f6d8ab55c721754"
+      },
+      {
+        "id": "voxel_csg_001234_000005",
+        "sha256": "7351173a20f900d259299d97078e3aa9bd0c57eb638918317327462ce46949d5"
+      },
+      {
+        "id": "voxel_csg_001234_000006",
+        "sha256": "f9206aef31c73f636b86662d480e846014a698454da0aae6dddde72208644f6f"
+      },
+      {
+        "id": "voxel_csg_001234_000007",
+        "sha256": "75bd0d18e3be51bde7753042965166ee848b1910d2f7e0d55d8ba876c9903f0e"
+      }
+    ],
+    "wire": [
+      {
+        "id": "wire_truss_001234_000000",
+        "sha256": "99571fa819d5e27d23b0292b8e7ef795d14476c84d20d5ba30ab82d347690663"
+      },
+      {
+        "id": "wire_truss_001234_000001",
+        "sha256": "b415fe9519cf6efe01b55e9a410372a21cec31499cb8e94ae81214eed8ee12be"
+      },
+      {
+        "id": "wire_truss_001234_000002",
+        "sha256": "95b3e860a70d25e046281275479e918d007f74354bab705697ea9fed799ebe14"
+      },
+      {
+        "id": "wire_truss_001234_000003",
+        "sha256": "5bb681c46a7473713f84550db8f428ba055bc366a3c45b10b0e2cb15b589dcf9"
+      },
+      {
+        "id": "wire_truss_001234_000004",
+        "sha256": "d486ca7ac7a5e5db30a7a72727c5ea98e06e9060311396bf7b4f8f96fd4f62f1"
+      },
+      {
+        "id": "wire_truss_001234_000005",
+        "sha256": "59e0f597dc16aee002cdc2682857f1f90bd05f5b0d5ff057291797eda768ed06"
+      },
+      {
+        "id": "wire_truss_001234_000006",
+        "sha256": "c96c89054752dd4a9b7a873e5e25dd3e2ac6e899608d99dac351d5cfb1e93c1b"
+      },
+      {
+        "id": "wire_truss_001234_000007",
+        "sha256": "0404ad28f52e797751ca97ead67f64d395f17f8a4069b80dc1abb8aa7844bb45"
+      }
+    ]
+  }
+}

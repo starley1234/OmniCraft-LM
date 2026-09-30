@@ -1,105 +1,60 @@
-### Цель этапа
-Сформировать 100% готовую архитектурную, генерационную и тестовую инфраструктуру проекта на чистом CPU и стандартных библиотеках. Когда рабочая станция получит RTX 5060 Ti и OpenSCAD, запуск пайплайна обучения и бенчмаркинга должен произойти **без единой правки архитектурного кода** — простым переключением флага `--device cuda`.
+# OmniCraft-LM — операторская карта для агентов
 
----
+**Что это:** Qwen3.5-2B (веса локально, read-only) учится писать код OpenSCAD по описанию
+детали через пространственные холсты (Canvas), подключённые хуком к слою 12. Данные
+синтетические (seeded-генераторы), валидация — настоящим OpenSCAD (manifold).
+Обучение — в WSL2 (на голом Windows WDDM медленнее в ~5.8 раза).
 
-### Архитектурные границы: что разрешено и что запрещено
+**Сначала прочти STATUS.md** — что сейчас происходит и что делать дальше. И обнови его в конце задачи.
 
-| Разрешено (Делать обязательно) | Запрещено (Приведет к сбою) |
-|---|---|
-| Тензорные вычисления PyTorch на CPU (`torch.float32` / симуляция `bfloat16`) | Вызовы `torch.cuda.*` без проверки `torch.cuda.is_available()` |
-| Строгая типизация (`typing`, `pydantic`, `dataclasses`) | Жёсткая привязка к бинарникам `openscad.exe` без Mock-режима |
-| Синтетические генераторы кода OpenSCAD на Python | Попытки компиляции мешей без проверки наличия рантайма |
-| Unit-тесты на проверку размерностей тензоров ($B, C, D$) | Загрузка полных весов Qwen через сеть (`HF_HUB_OFFLINE=1`) |
-| Создание Mock-компиляторов и фейковых верификаторов | Использование `torch.compile(..., backend="triton")` |
+## Железные инварианты (нарушение = сломать проект)
+1. Каждый `.scad` начинается со строки `$fn = 32;` (сторожат schema.py и test_golden.py).
+2. Mock-валидация ≠ CAD-валидация; в обучение идут только строки `*.accepted.jsonl`.
+3. `checkpoints/baseline_qwen35_2b/` — только чтение. Откат — через zero point (`train_spatial.py --rollback-only`).
+4. Хук слоя 12 срабатывает только на prefill (`seq_len > 1`); на KV-кэш-шагах возвращает тензор без изменений.
+5. Никаких Triton / static KV cache. CUDA = bfloat16, CPU = float32.
+6. Авторитет гиперпараметров — CLI-флаги `tools/train_spatial.py`; `configs/*.yaml` — декларативная справка, код их не читает.
+7. Контракт данных `[SPECS]` — AGENTS_CoG.md (открывать только если задача про схему/промпты/hook).
 
----
+## Команды — всё через один вход
+`python tools/omni.py [--json] [--tail N] <команда> [аргументы]` — вывод уходит в
+`runs/omni/*.log`, назад возвращается только хвост + строка `OMNI_EXIT <код>`.
 
-### План работ (WBS — Work Breakdown Structure)
+| Команда | Что делает | Когда |
+|---|---|---|
+| `help` | список команд | забыл синтаксис |
+| `status` | корпус/чекпойнты/процессы/git | первым делом в сессии |
+| `preflight` | system_check; `+ --with-tests` | перед обучением; НЕ во время чужого рана |
+| `test` | `pytest -q` (можно `omni test tests/test_golden.py`) | после правок кода |
+| `gen` / `validate` / `split` | конвейер данных | по заявкам на корпус |
+| `train` | обучение слоя (со стражами предусловий) | только когда ничего не крутится |
+| `smoke` | 2 шага CPU end-to-end в runs/omni/smoke | регресс после правок trainer'а |
+| `eval` / `bench` | оценка на held-out / бенчмарк холстов | после обучения |
 
-#### Модуль 1. Структура монорепозитория
-Создать стандартизированное дерево каталогов:
-```text
-omnicraft-lm/
-├── configs/
-│   ├── base_config.yaml           # Гиперпараметры, размеры скрытых слоев
-│   ├── model_qwen35_2b.yaml       # Параметры бэкбона и LoRA
-│   └── data_generation.yaml       # Конфиг процедурных генераторов
-├── src/
-│   ├── model/
-│   │   ├── __init__.py
-│   │   ├── latent_bridge.py       # In-Projector, Out-Projector, ScaleMLP
-│   │   ├── voxel_canvas.py        # 3D CoordConv + ResBlocks
-│   │   ├── wire_canvas.py         # Graph Neural Network / EdgeConv
-│   │   ├── sketch_canvas.py       # 2D Plane ResNet
-│   │   ├── brep_canvas.py         # BRep-заглушка протокола
-│   │   ├── assembly_canvas.py     # SE(3) Transform Tree
-│   │   └── hook_manager.py        # Врезка в Layer 12, Pre-fill хуки
-│   ├── env/
-│   │   ├── __init__.py
-│   │   ├── cad_interface.py       # Абстрактный базовый класс верификатора (ABC)
-│   │   ├── mock_runner.py         # Mock-компилятор для тестов без OpenSCAD
-│   │   ├── openscad_runner.py     # Полноценный CLI-раннер с флагом --backend=manifold
-│   │   └── build123d_runner.py    # Скелет раннера для B-Rep/STEP
-│   ├── data/
-│   │   ├── __init__.py
-│   │   ├── schema.py              # Pydantic-схема канонического JSONL
-│   │   ├── dataset.py             # PyTorch Dataset с динамическим маскированием
-│   │   └── generators/
-│   │       ├── __init__.py
-│   │       ├── voxel_csg_gen.py   # Процедурная генерация корпусов, фланцев, полостей
-│   │       └── wire_truss_gen.py  # Процедурная генерация ферм, рам, балок
-│   └── utils/
-│       ├── __init__.py
-│       ├── system_check.py        # Диагностика: наличие GPU, VRAM, OpenSCAD, OS
-│       └── metrics.py             # Топологические метрики и проверка BBox <= 15%
-├── tests/
-│   ├── test_tensors_shape.py      # Проверка прогона через все Canvas на CPU
-│   ├── test_generators.py         # Проверка синтаксиса и инварианта $fn=32;
-│   ├── test_dataset_pipeline.py   # Валидация JSONL и расчёта Scale Embedding
-│   └── test_mock_environment.py   # Тест пайплайна верификации на заглушках
-├── tools/
-│   └── prepare_dataset.py         # CLI-скрипт массовой генерации данных
-├── requirements.txt
-└── requirements-dev.txt
-```
+**Коды выхода:** 0 ок · 2 кривой вызов · 3 preflight провален ([MISSING]) · 4 нет
+предусловий (веса/zero point/файл — читай сообщение) · прочие = код скрипта
+→ таблица симптомов и лечения: `docs/RUNBOOK.md` §7.
 
-#### Модуль 2. Нейросетевое ядро (Все Canvas на PyTorch)
-1. **`latent_bridge.py`**:
-   - `ScaleMLP`: $\log(\text{bbox}) \in \mathbb{R}^3 \to \text{Linear}(3, 64) \to \text{SiLU} \to \text{Linear}(64, 128)$.
-   - `InProjector`: $\mathbb{R}^{D_{\text{llm}} + 128} \to \mathbb{R}^{D_{\text{canvas}}}$ (по умолчанию $2048 + 128 \to 512$).
-   - `OutProjector`: $\mathbb{R}^{D_{\text{canvas}}} \to \mathbb{R}^{D_{\text{llm}}}$ ($512 \to 2048$).
-2. **`voxel_canvas.py`**:
-   - Решейп вектора в сетку $16 \times 16 \times 16$ с 32 признаковыми каналами.
-   - Слой `CoordConv3D`: конкатенация трёх координатных сеток $[-1, 1]$ (итого 35 каналов).
-   - 3x ResBlock3D (`Conv3d` $3 \times 3 \times 3$, `GroupNorm(4, 32)`, `SiLU`).
-   - `AdaptiveAvgPool3d(1)` $\to$ проекция обратно в $D_{\text{canvas}} = 512$.
-3. **`wire_canvas.py`**:
-   - Генерация $K = 32$ вершин в пространстве $\mathbb{R}^3$.
-   - Реализация блока динамического графа (EdgeConv / дифференцируемый $k$-NN).
-   - Вычисление матрицы смежности и пулинг в вектор $D_{\text{canvas}} = 512$.
-4. **`hook_manager.py`**:
-   - PyTorch forward-хук, монтируемый в `model.layers[12]`.
-   - Логика: срабатывание **строго при `seq_len > 1`** (этап prefill). При шагах генерации (`seq_len == 1`, KV-кэш) хук возвращает неизменённый тензор `hidden_states`.
+## Карта репозитория
+- `src/model/` холсты, latent_bridge, hook_manager · `src/training/` trainer, LoRA, чекпойнты, aux-лоссы
+- `src/data/` schema.py (контракт JSONL), dataset.py, generators/ · `src/env/` CAD-раннеры (mock/openscad/build123d)
+- `src/runtime/` specs_hook ([SPECS] → hook) · `src/utils/` system_check, metrics
+- `tools/` CLI (omni.py — вход; остальные — его дети) · `tests/` pytest
+- `docs/RUNBOOK.md` полная инструкция человеку · `docs/archive/` история поставок (не открывать без нужды)
+- `data/`, `checkpoints/`, `optional_data/`, `runs/` — **ДАННЫЕ: не читать, не glob'ить, не grep'ать целиком** (тысячи файлов = смерть контекста)
 
-#### Модуль 3. Абстракция CAD-окружения
-Создать модульную систему исполнения кода:
-- Базовый класс `CADRunnerBase(ABC)` с методами `compile(code) -> VerificationResult`.
-- `MockCADRunner`: парсит регулярными выражениями наличие `$fn = 32;`, извлекает габариты из названий примитивов (`cube([x, y, z])`) и генерирует реалистичный синтетический результат верификации (`is_watertight=True`, `euler_characteristic=2`, `components_count=1`).
-- `OpenSCADRunner`: запускает `openscad.exe --backend=manifold -o temp.stl temp.scad`, валидирует через Trimesh. При отсутствии бинарника в системе выбрасывает понятное исключение `CADExecutableNotFound`, не ломая импорты тестов.
+## Экономия контекста (обязательные приёмы)
+- «Где что лежит» → explore-сабагент; файлы читать с offset/limit, не целиком.
+- Логи — только хвост (`omni` режет сам; иначе `Get-Content -Tail 20`).
+- Одна сессия = одна задача; бриф в первом сообщении: цель + пути + критерий приёмки.
+- Перед `train` всегда: `omni status` (нет ли живого рана) → `omni preflight`.
 
-#### Модуль 4. Процедурные синтезаторы данных
-Реализовать генераторы, выдающие код OpenSCAD без использования CAD:
-- **`voxel_csg_gen.py`**: генерирует параметрические коробки, корпуса приборов, стаканы под подшипники, детали с выборками через `difference()` и `union()`.
-- **`wire_truss_gen.py`**: генерирует пространственные стержневые конструкции, балки переменного сечения и рамы на базе связок `hull() { translate(...) sphere(...); translate(...) sphere(...); }`.
-- **Каждый сгенерированный скрипт обязан начинаться с жесткой строки:**
-  ```openscad
-  $fn = 32;
-  ```
+## Пока идёт обучение (частая ситуация)
+Если `omni status` показывает живой `wsl_train_chain`/`train_spatial`: править файлы
+можно (в WSL синк произойдёт при следующем запуске скриптов), но НЕ запускать
+pytest целиком, smoke, train, eval, bench и любые WSL-скрипты.
 
-#### Модуль 5. Системный инспектор (`system_check.py`)
-Скрипт самодиагностики, который при старте выводит статус окружения:
-- Доступность CUDA, имя видеокарты, объем памяти, соответствие sm_120.
-- Наличие OpenSCAD в `PATH`, тест версии `--backend=manifold`.
-- Проверка офлайн-переменных (`HF_HUB_OFFLINE`).
-
+## Заморозка этапа (Definition of Done)
+1. `python tools/omni.py preflight --with-tests` — зелёный (вне обучения).
+2. `STATUS.md` обновлён (дата, факты, следующий шаг).
+3. `git status` чист; `git tag freeze/<имя>`.
