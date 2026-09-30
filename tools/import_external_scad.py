@@ -81,12 +81,32 @@ def _make_sample(
     source: str,
     origin: str,
     graph: AuxiliaryGroundTruth | None = None,
+    profile: list | None = None,
+    extrude: dict | None = None,
+    assembly: list | None = None,
 ) -> CADSample | None:
     code = _clean_code(code)
     if target_bbox is None:
         # Cannot train scale injection without a target box; skip the record.
         return None
-    layer = "wire" if graph is not None else "voxel"
+    if graph is not None:
+        layer = "wire"
+    elif profile is not None:
+        layer = "sketch"
+    elif assembly is not None:
+        layer = "assembly"
+    else:
+        layer = "voxel"
+    metadata: dict = {
+        "source": source,
+        "origin": origin,
+        "code_sha256": hashlib.sha256(code.encode("utf-8")).hexdigest(),
+    }
+    if profile is not None:
+        metadata["profile_points_mm"] = profile
+        metadata["extrude"] = extrude or {}
+    if assembly is not None:
+        metadata["assembly"] = assembly
     return CADSample(
         id=record_id,
         layer=layer,
@@ -94,11 +114,7 @@ def _make_sample(
         code=code,
         verification=SampleVerification(target_bbox=target_bbox),
         auxiliary_ground_truth=graph or AuxiliaryGroundTruth(),
-        metadata={
-            "source": source,
-            "origin": origin,
-            "code_sha256": hashlib.sha256(code.encode("utf-8")).hexdigest(),
-        },
+        metadata=metadata,
     )
 
 
@@ -184,6 +200,9 @@ def import_parts(
             source="parts_import",
             origin=str(origin),
             graph=_graph_ground_truth(entry.get("graph")),
+            profile=entry.get("profile"),
+            extrude=entry.get("extrude"),
+            assembly=entry.get("assembly"),
         )
         if sample is not None and sample.prompts:
             samples.append(sample)
