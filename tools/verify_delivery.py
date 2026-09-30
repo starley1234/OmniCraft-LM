@@ -59,6 +59,8 @@ def main() -> int:
     with_graph = sum(1 for row in manifest if row.get("graph"))
     seen_codes: set[str] = set()
     for row in manifest:
+        if not row.get("file"):
+            continue  # reference-only corpora (e.g. paraphrase packs) ship no code
         code_path = root / str(row["file"])
         if code_path.is_file():
             seen_codes.add(hashlib.sha256(code_path.read_bytes()).hexdigest())

@@ -1,0 +1,54 @@
+$fn = 32;
+
+// ------------------------------------------------------------------------
+// Bolted plate: 170 x 80 x 8 mm plate, 2 fasteners
+// Every part is its own module, assembly() places them once.
+// ------------------------------------------------------------------------
+
+// --- part 1 ---
+module plate() {
+  difference() {
+    translate([-85, -40, 0]) cube([170, 80, 8]);
+    translate([-47.6, 0, -1]) cylinder(h = 10, d = 10.8);
+    translate([47.6, 0, -1]) cylinder(h = 10, d = 10.8);
+  }
+}
+
+// --- part 2 ---
+module bolt1() {
+  cylinder(h = 7, d = 16);
+  translate([0, 0, -22]) cylinder(h = 22, d = 10);
+}
+
+// --- part 3 ---
+module bolt2() {
+  cylinder(h = 7, d = 16);
+  translate([0, 0, -22]) cylinder(h = 22, d = 10);
+}
+
+// --- part 4 ---
+module nut1() {
+  difference() {
+    linear_extrude(height = 8) polygon(points = [[9.815, 0], [4.907, 8.5], [-4.907, 8.5], [-9.815, 0], [-4.907, -8.5], [4.907, -8.5]]);
+    translate([0, 0, -1]) cylinder(h = 10, d = 10.8);
+  }
+}
+
+// --- part 5 ---
+module nut2() {
+  difference() {
+    linear_extrude(height = 8) polygon(points = [[9.815, 0], [4.907, 8.5], [-4.907, 8.5], [-9.815, 0], [-4.907, -8.5], [4.907, -8.5]]);
+    translate([0, 0, -1]) cylinder(h = 10, d = 10.8);
+  }
+}
+
+// --- assembly ---
+module assembly() {
+  translate([0, 0, 0]) rotate([0, 0, 0]) plate();
+  translate([-47.6, 0, 8.25]) rotate([0, 0, 0]) bolt1();
+  translate([47.6, 0, 8.25]) rotate([0, 0, 0]) bolt2();
+  translate([-47.6, 0, -8.25]) rotate([0, 0, 0]) nut1();
+  translate([47.6, 0, -8.25]) rotate([0, 0, 0]) nut2();
+}
+
+assembly();

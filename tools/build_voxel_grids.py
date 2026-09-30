@@ -98,9 +98,23 @@ def main() -> int:
     samples = [s for s in parse_jsonl(args.input) if s.layer == "voxel"]
     existing = load_existing_ids(args.output)
     todo = [s for s in samples if s.id not in existing]
-    print(f"voxel samples: {len(samples)}, cached: {len(existing)}, to build: {len(todo)}")
-    if not todo:
-        return 0
+
+    # Content-addressed reuse: a paraphrase row shares the code (and the grid)
+    # of its source record; don't recompile identical sources.
+    existing_grid_by_id: dict[str, str] = {}
+    if args.output.is_file():
+        for line in args.output.read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                row = json.loads(line)
+                existing_grid_by_id[row["id"]] = row["grid_b64"]
+    all_known = [s for s in parse_jsonl(args.input) if s.id in existing_grid_by_id]
+    grid_by_code_sha: dict[str, str] = {}
+    for s in all_known:
+        sha = s.metadata.get("code_sha256")
+        if sha:
+            grid_by_code_sha[sha] = existing_grid_by_id[s.id]
+
+    print(f"voxel samples: {len(samples)}, cached: {len(existing)}, to compile: pending…")
     runner = OpenSCADRunner()
 
     def work(sample: CADSample) -> dict | None:
@@ -109,10 +123,21 @@ def main() -> int:
             return None
         return {"id": sample.id, **record}
 
-    written = failed = 0
+    written = reused = failed = skipped_dupes = 0
     with args.output.open("a", encoding="utf-8", newline="\n") as out:
+        todo_now: list[CADSample] = []
+        for sample in todo:
+            sha = sample.metadata.get("code_sha256")
+            if sha and sha in grid_by_code_sha:
+                # row carries only the id->grid join; mesh_bbox belongs to the source record
+                out.write(json.dumps({"id": sample.id, "grid_b64": grid_by_code_sha[sha]}, ensure_ascii=False) + "\n")
+                reused += 1
+            else:
+                todo_now.append(sample)
+        skipped_dupes = reused
+        print(f"reused by code sha: {reused}; compiling: {len(todo_now)}", flush=True)
         with ThreadPoolExecutor(max_workers=args.workers, thread_name_prefix="voxelize") as pool:
-            for record in pool.map(work, todo):
+            for record in pool.map(work, todo_now):
                 if record is None:
                     failed += 1
                     continue
@@ -120,7 +145,7 @@ def main() -> int:
                 written += 1
                 if written % 500 == 0:
                     print(f"  built {written}, failed {failed}", flush=True)
-    print(f"done: {written} written, {failed} failed -> {args.output}")
+    print(f"done: {written} written, {skipped_dupes} reused, {failed} failed -> {args.output}")
     return 0
 
 

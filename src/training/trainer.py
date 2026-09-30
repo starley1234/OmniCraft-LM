@@ -75,7 +75,8 @@ class TrainerConfig:
     grad_clip: float = 1.0
     lambda_geom: float = 0.1
     max_prompt_tokens: int = 256   # measured corpus p100: ~22 prompt tokens; cap prevents silent bloat
-    max_code_tokens: int = 768     # measured corpus p100: 565 code tokens; logits dominate VRAM (3·B·S·V·4B)
+    cog_specs: bool = True         # prepend the deterministic [SPECS] block (ARCHITECTURE.md 8.1)
+    max_code_tokens: int = 2048    # v6 p99=1915 (place1 multi-feature codes); longer tails hit the OOM guard instead
     gradient_checkpointing: bool = False
     train_spatial_token_embeddings: bool = False  # True adds a ~1 GiB param + ~3 GiB of Adam state/grads
     lr_warmup_steps: int = 30
@@ -247,8 +248,18 @@ class SpatialTrainer:
     # ------------------------------------------------------------- sequences
 
     def build_sequence(self, sample: CADSample) -> dict[str, torch.Tensor]:
-        """Compose ``prompt + trigger`` (masked) followed by ``code + EOS`` (labels)."""
+        """Compose ``prompt + [SPECS] + trigger`` (masked) followed by ``code + EOS``."""
         prompt_text = sample.prompts.get("en") or next(iter(sample.prompts.values()))
+        if self.config.cog_specs:
+            from src.runtime.specs_hook import build_prompt_with_specs, compose_specs
+
+            object_class = str(sample.metadata.get("origin", sample.layer))
+            specs = compose_specs(
+                object_class=object_class,
+                bbox=sample.verification.target_bbox,
+                canvas=self.config.layer,
+            )
+            prompt_text = build_prompt_with_specs(prompt_text, specs)
         trigger = SPATIAL_TOKENS[self.config.layer]
         prompt_ids = self.tokenizer(f"{prompt_text}\n{trigger}\n", add_special_tokens=False)[
             "input_ids"
@@ -584,8 +595,17 @@ class SpatialTrainer:
         )
         self.history.clear()
 
+    # Aux heads are training-only; an older checkpoint may predate them.
+    # Keys are relative to the submodule, e.g. canvas.pt holds "occupancy.weight".
+    _COMPAT_MISSING_PREFIXES = ("occupancy.",)
+
     def load_trained_checkpoint(self, layer_dir: Path) -> None:
-        """Load artifacts saved by :meth:`save` for inference or resumption."""
+        """Load artifacts saved by :meth:`save` for inference or resumption.
+
+        Strict by default; an older checkpoint may legally lack training-only
+        aux heads (``_COMPAT_MISSING_PREFIXES``) — those keep zero-point values
+        and are never read on the inference path.
+        """
         layer_dir = Path(layer_dir)
         bundle = self.stack.bundles[self.config.layer]
         for submodule_name in SUBMODULE_NAMES:
@@ -593,7 +613,24 @@ class SpatialTrainer:
             if not target.is_file():
                 raise FileNotFoundError(f"checkpoint file missing: {target}")
             state = torch.load(target, map_location="cpu", weights_only=True)
-            getattr(bundle, submodule_name).load_state_dict(state, strict=True)
+            module = getattr(bundle, submodule_name)
+            try:
+                module.load_state_dict(state, strict=True)
+            except RuntimeError as exc:
+                module_keys = set(module.state_dict())
+                unexpected = sorted(key for key in state if key not in module_keys)
+                missing = sorted(key for key in module_keys if key not in state)
+                tolerated = (
+                    submodule_name == "canvas"
+                    and not unexpected
+                    and all(m.startswith(self._COMPAT_MISSING_PREFIXES) for m in missing)
+                )
+                if not tolerated:
+                    raise RuntimeError(
+                        f"checkpoint {target} is incompatible beyond training-only heads: {exc}"
+                    ) from exc
+                module.load_state_dict(state, strict=False)
+                print(f"[compat] {submodule_name}: aux head keys left at zero point ({missing})")
         self.stack.to(device=self.device, dtype=self.dtype)
         lora_dir = layer_dir / "lora"
         if lora_dir.is_dir():
