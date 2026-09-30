@@ -14,9 +14,15 @@ if [ "$LAYER" = "wire" ] && [ "${4:-}" = "" ]; then
   BUDGET=1200  # wire codes are ~3x longer; the PyTorch DeltaNet fallback is S-sensitive
 fi
 
+VGRID_ARG=()
+if [ "$LAYER" = "voxel" ] && [ -f data/processed/voxel_grids.jsonl ]; then
+  VGRID_ARG=(--voxel-grids data/processed/voxel_grids.jsonl)
+fi
+
 exec python tools/train_spatial.py \
   --layer "$LAYER" \
-  --data data/processed/splits_v2/train.jsonl \
+  --data data/processed/splits_v4/train.jsonl \
   --steps "$STEPS" --accumulate "$ACC" \
   --max-tokens-per-forward "$BUDGET" \
-  --lr 2e-4 --save-every 100 --log-every 20
+  --lr 2e-4 --save-every 100 --log-every 20 \
+  "${VGRID_ARG[@]}"
