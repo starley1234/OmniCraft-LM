@@ -114,6 +114,14 @@ python tools/evaluate_generation.py \
 
 `heldout_eval.jsonl` stays hold-out only — never merge it into training splits.
 
+## Human demo (browser, no extra deps)
+
+```bash
+python tools/demo_server.py --port 8035   # then open http://127.0.0.1:8035
+```
+
+A two-pane page shows the composed `[SPECS]` block + generated code on the left and the live manifold verdict (compile, bbox vs SPECS, watertight) plus a rendered PNG preview on the right. Without a trained checkpoint for a canvas it runs the zero point (expect 0% — that control is intentional). Canvas auto-detect: keywords in the prompt ("ферма"→wire, "шестерня"→sketch, ...) route the layer when `auto` is selected.
+
 ## Canvas benchmark
 
 ```bash

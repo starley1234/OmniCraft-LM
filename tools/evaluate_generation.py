@@ -95,18 +95,25 @@ def main() -> int:
     trigger = SPATIAL_TOKENS[args.layer]
     report_rows: list[dict] = []
     compiled = watertight = bbox_hits = 0
+    from src.runtime.specs_hook import build_prompt_with_specs, compose_specs, extract_specs_from_text
+
     for index, row in enumerate(rows):
         prompt = row["prompt"]
-        text = f"{prompt}\n{trigger}\n"
+        mined = extract_specs_from_text(prompt)
+        expected = row.get("expected_bbox_mm")
+        bbox = (
+            (float(expected[0]), float(expected[1]), float(expected[2]))
+            if expected and len(expected) == 3 and all(float(v) > 0 for v in expected)
+            else mined.bbox
+        )
+        specs = compose_specs(
+            object_class=mined.object_class, bbox=bbox, canvas=args.layer, topology=mined.topology
+        )
+        text = f"{build_prompt_with_specs(prompt, specs)}{trigger}\n"
         inputs = trainer.tokenizer(text, add_special_tokens=False, return_tensors="pt")
         input_ids = inputs["input_ids"].to(trainer.device)
         attention = inputs["attention_mask"].to(trainer.device)
-        log_bbox = None
-        expected = row.get("expected_bbox_mm")
-        if expected and len(expected) == 3 and all(float(v) > 0 for v in expected):
-            log_bbox = torch.log(torch.tensor([[float(v) for v in expected]], dtype=torch.float32))
-        else:
-            log_bbox = torch.log(torch.tensor([[50.0, 50.0, 50.0]], dtype=torch.float32))
+        log_bbox = torch.log(torch.tensor([list(bbox)], dtype=torch.float32))
 
         with torch.inference_mode():
             trainer.hook.set_context(
