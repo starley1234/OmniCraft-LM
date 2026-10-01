@@ -15,6 +15,8 @@ ACC="${3:-16}"
 BUDGET="${4:-2000}"   # token budget per forward; wire defaults to 1200 below
 SPLIT_DIR="${5:-splits_v6}"   # ВНИМАНИЕ: путь к сплиту был захардкожен на splits_v4,
                               # из-за чего чейны v6/v7 обучались на старом корпусе.
+LAMBDA_GEOM="${6:-}"   # опционально: вес aux-лосса (дефолт трейнера 0.1);
+                       # 0 = aux выключен — для абляции живого aux (задача D, NEXT_SESSION_V9)
 
 if [ "$LAYER" = "wire" ] && [ "${4:-}" = "" ]; then
   BUDGET=1200  # wire codes are ~3x longer; the PyTorch DeltaNet fallback is S-sensitive
@@ -32,10 +34,15 @@ if [ "$LAYER" = "voxel" ] && [ -f data/processed/voxel_grids.jsonl ]; then
   VGRID_ARG=(--voxel-grids data/processed/voxel_grids.jsonl)
 fi
 
+LAMBDA_ARG=()
+if [ -n "$LAMBDA_GEOM" ]; then
+  LAMBDA_ARG=(--lambda-geom "$LAMBDA_GEOM")
+fi
+
 exec python tools/train_spatial.py \
   --layer "$LAYER" \
   --data "$DATA" \
   --steps "$STEPS" --accumulate "$ACC" \
   --max-tokens-per-forward "$BUDGET" \
   --lr 2e-4 --save-every 100 --log-every 20 \
-  "${VGRID_ARG[@]}"
+  "${VGRID_ARG[@]}" "${LAMBDA_ARG[@]}"

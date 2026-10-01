@@ -1,15 +1,30 @@
-# Бриф следующей сессии (после v8)
+# Бриф следующей сессии (после v9)
 
 > Порядок чтения: `AGENTS.md` → `STATUS.md` → этот файл. Больше ничего не открывать,
-> пока не понадобится. Контекст прогонов — `docs/TRAINING_LEDGER.md` (запись v8).
+> пока не понадобится. Контекст прогонов — `docs/TRAINING_LEDGER.md` (записи v8, v9).
+
+**Итог v9 (2026-10-02): прогон чистый (rc=0, 0 EMPTY STEP, aux gt 100%), но приёмка
+НЕ пройдена:** voxel 20/42 compile (71% → 48%), bbox ≤15% **0/42** (16/42 → 0);
+wire 12/42 (стагнация), bbox 2/42 (1/42 → 2). Ложный габарит в данных опровергнут
+(0/75 157 строк). Две версии регресса: живой aux vs поставки №5–7 → см. задачу D.
 
 ## Где мы находимся
-v8 — первый прогон, где обучение реально шло (до него леги молча простаивали на OOM).
-Held-out, 42 промпта, 1024 токена: **voxel 30/42 compile (71%), watertight 30/30,
-bbox ≤15% 16/42, медиана ошибки bbox 0.0** · **wire 12/42 (29%), bbox ≤15% 1/42**.
-Честная база v7 — 0/42 у обоих слоёв. Корпус: `combined_v8` (64 669) / `splits_v8`.
+v8/v9 дают воспроизводимую механику: watertight 100% среди скомпилированных,
+размерные классы dom/gen работают. Держит уровень: **voxel 30/42 (v8)**,
+**wire 12/42 (v8 и v9)**. Корпус: `combined_v9` (75 157) / `splits_v9`.
 
-## Три задачи на выбор (каждая — отдельная сессия)
+## Четыре задачи на выбор (каждая — отдельная сессия)
+
+### D. Абляция aux — почему v9 потерял bbox (первый приоритет)
+Симптом: bbox ≤15% 0/42, медиана 1.67 — при нулевом числе ложных промптов в данных.
+Первая в истории версия, где aux реально шёл (gt 100%, lambda_geom 0.1; в v8 был ≈0).
+- Эксперимент: voxel-лег v9 «с нуля» с `--lambda-geom 0` — готовая последовательность
+  команд в разделе «Команды» ниже (шестой аргумент `wsl_train.sh`, добавлен под задачу D).
+- **Артефакты v9 сохранены** (до запуска абляции rollback затрёт `checkpoints/voxel`):
+  веса — `~/omnicraft/v9_backup/{voxel_v9,wire_v9}` в WSL и зеркало в Windows
+  `checkpoints/`; eval-отчёты — `runs/train_v9/eval_{voxel,wire}.jsonl`.
+- Вернулось к v8 → виноват aux: играть с lambda/расписанием (при lm 0.03 vs aux 0.28
+  градиенты сопоставимы). Не вернулось → разбирать поставки №5–7 (код/стили, а не промпты).
 
 ### A. Геометрия wire (наибольший выигрыш, самая большая работа)
 Проблема: в слое всего **30 скелетов кода**, 2 801 обучающий образец. Модель видела
@@ -40,15 +55,20 @@ bbox ≤15% 16/42, медиана ошибки bbox 0.0** · **wire 12/42 (29%),
 ```powershell
 python tools/omni.py status                      # первым делом: нет ли живого рана
 python tools/omni.py preflight --with-tests      # зелёный = можно трогать обучение
-python tools/analyze_corpus.py data/processed/combined_v8.jsonl   # разнообразие корпуса
-python tools/render_samples.py data/processed/combined_v8.jsonl   # глазами, PNG в runs/
+python tools/analyze_corpus.py data/processed/combined_v9.jsonl   # разнообразие корпуса
+python tools/render_samples.py data/processed/combined_v9.jsonl   # глазами, PNG в runs/
 python tools/bench_generate.py --layer voxel --new-tokens 128     # скорость инференса
 ```
 ```powershell
-# обучение с нуля (WSL, ~3.5 ч: voxel 2 ч + wire 1.3 ч + eval 0.5 ч)
+# абляция aux (задача D) — только voxel-лег, с нуля, ~2.5 ч. Шестой аргумент wsl_train.sh
+# = --lambda-geom (добавлен 2026-10-02, без аргумента поведение прежнее):
 wsl -d Ubuntu -- bash /mnt/c/github/OmniCraft-LM/tools/wsl_sync.sh
+wsl -d Ubuntu -- bash -lc "cd ~/omnicraft/repo && source .venv/bin/activate && python tools/train_spatial.py --layer voxel --rollback-only"
+wsl -d Ubuntu -- bash /mnt/c/github/OmniCraft-LM/tools/wsl_train.sh voxel 2900 16 1000 splits_v9 0
+wsl -d Ubuntu -- bash /mnt/c/github/OmniCraft-LM/tools/wsl_eval.sh voxel
+# полный чейн (как v9, только другой TAG — иначе перетрёт логи и runs/train_v9):
 wsl -d Ubuntu -- bash /mnt/c/github/OmniCraft-LM/tools/wsl_run_detached.sh `
-  "~/omnicraft/chain_v9.wrapper.log" "/mnt/c/github/OmniCraft-LM/tools/wsl_train_chain_v8.sh"
+  "~/omnicraft/chain_v10.wrapper.log" "/mnt/c/github/OmniCraft-LM/tools/wsl_train_chain_v9.sh 2900 1600 1000 1000 splits_v9 v10"
 # демо (в WSL инференс в 4 раза быстрее, порт виден из Windows)
 wsl -d Ubuntu -- bash /mnt/c/github/OmniCraft-LM/tools/wsl_demo.sh 8035 voxel,wire
 ```
@@ -68,7 +88,14 @@ wsl -d Ubuntu -- bash /mnt/c/github/OmniCraft-LM/tools/wsl_demo.sh 8035 voxel,wi
    пишется в `metadata.quality` каждой строки (перепроверять корпус не нужно).
 6. **Демо держит VRAM.** Перед обучением — кнопка «выгрузить модель» в UI или
    `POST /api/model {"action":"unload"}`; полностью память отдаёт только выход процесса.
+7. **Чекпойнты не защищены от чужого локального train.** 2026-10-02: внешний
+   `train_spatial --layer voxel` с дефолтным конфигом за ~40 с затёр Windows-копию
+   чекпойнта v9 (step 0, `data\processed\splits\train.jsonl`). Перед любым запуском —
+   `omni status`; восстановление: `rsync -a --checksum` из WSL.
 
 ## Критерий приёмки следующего прогона
-`ALL DONE`, оба лега rc=0, ноль `[EMPTY STEP]`, held-out не ниже v8
-(voxel ≥30/42, wire >12/42), запись в `docs/TRAINING_LEDGER.md`, обновлённый STATUS.md.
+Для абляции (задача D): voxel-лег прошёл rc=0, ноль `[EMPTY STEP]`, aux подавлен до ≈0 —
+и **held-out voxel вернулся к ≥30/42 с bbox заметно лучше 0/42** ⇒ виноват aux, дальше
+играть с lambda; не вернулся ⇒ виноваты поставки №5–7 (разбирать их, задача A/C отменяется).
+Для полного чейна: `ALL DONE`, оба лега rc=0, held-out не ниже v8 (voxel ≥30/42,
+wire >12/42), запись в `docs/TRAINING_LEDGER.md`, обновлённый STATUS.md.
