@@ -1,0 +1,21 @@
+$fn = 32;
+
+// ----------------------------------------------------------------------
+// Arc profile plate: sector, 42 points
+// ----------------------------------------------------------------------
+
+// --- parameters (mm) ---
+sector_angle = 40;        // sector angle, degrees
+sector_r = 70;            // outer radius
+arc_step = 1;             // sampling step of the arc, degrees
+plate_t = 8;              // plate thickness, Z
+fit_tol = 0.02;           // declared fit tolerance (prompt contract)
+free_tol = 0.2;           // declared free tolerance (prompt contract)
+
+bbox_x = 2 * sector_r * sin(sector_angle / 2);  // chord of the sector
+bbox_y = sector_r;  // depth of the sector (apex to arc)
+
+profile = [[65.778, 0], [66.186, 1.151], [66.574, 2.31], [66.941, 3.475], [67.288, 4.646], [67.615, 5.824], [67.921, 7.006], [68.206, 8.194], [68.47, 9.387], [68.714, 10.584], [68.937, 11.786], [69.138, 12.991], [69.319, 14.199], [69.478, 15.41], [69.617, 16.624], [69.734, 17.84], [69.829, 19.058], [69.904, 20.277], [69.957, 21.498], [69.989, 22.719], [70, 23.941], [69.989, 25.163], [69.957, 26.384], [69.904, 27.605], [69.829, 28.824], [69.734, 30.042], [69.617, 31.258], [69.478, 32.472], [69.319, 33.683], [69.138, 34.891], [68.937, 36.096], [68.714, 37.298], [68.47, 38.495], [68.206, 39.688], [67.921, 40.876], [67.615, 42.058], [67.288, 43.236], [66.941, 44.407], [66.574, 45.572], [66.186, 46.731], [65.778, 47.882], [0, 23.941]];  // primary outline, 42 points, counter clockwise
+
+// --- the one profile operation ---
+linear_extrude(height = plate_t) polygon(points = profile);
