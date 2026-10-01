@@ -1,0 +1,22 @@
+$fn = 32;
+
+// ----------------------------------------------------------------------
+// Arc profile plate: lens, 48 points
+// ----------------------------------------------------------------------
+
+// --- parameters (mm) ---
+lens_chord = 100;         // chord length of the lens, X
+arc_r = 240.49;           // radius of both arcs
+arc_angle = 24;           // angle of each arc, degrees
+sagitta = 5.26;           // bulge of each arc (half the lens height)
+arc_step = 1;             // sampling step of the arcs, degrees
+plate_t = 6;              // plate thickness, Z
+fit_tol = 0.05;           // declared fit tolerance (prompt contract)
+free_tol = 0.2;           // declared free tolerance (prompt contract)
+
+bbox_y = 2 * sagitta;  // full lens height
+
+profile = [[100, 5.26], [95.888, 6.102], [91.761, 6.866], [87.621, 7.559], [83.47, 8.18], [79.308, 8.727], [75.138, 9.203], [70.96, 9.605], [66.776, 9.934], [62.586, 10.19], [58.393, 10.373], [54.197, 10.483], [50, 10.52], [45.803, 10.483], [41.607, 10.373], [37.414, 10.19], [33.224, 9.934], [29.04, 9.605], [24.862, 9.203], [20.692, 8.727], [16.53, 8.18], [12.379, 7.559], [8.239, 6.866], [4.112, 6.102], [0, 5.26], [4.112, 4.418], [8.239, 3.654], [12.379, 2.961], [16.53, 2.34], [20.692, 1.793], [24.862, 1.317], [29.04, 0.915], [33.224, 0.586], [37.414, 0.33], [41.607, 0.147], [45.803, 0.037], [50, 0], [54.197, 0.037], [58.393, 0.147], [62.586, 0.33], [66.776, 0.586], [70.96, 0.915], [75.138, 1.317], [79.308, 1.793], [83.47, 2.34], [87.621, 2.961], [91.761, 3.654], [95.888, 4.418]];  // primary outline, 48 points, counter clockwise
+
+// --- the one profile operation ---
+linear_extrude(height = plate_t) polygon(points = profile);

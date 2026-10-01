@@ -695,6 +695,10 @@ class Evaluator:
             # Keeping that boundary is what makes difference() { module(); cut; }
             # subtract the cutter instead of subtracting the module's own solids.
             return [union_shapes(self.eval_statement(("block", body), module_scope))]
+        if name == "color":
+            # Rendering-only hint (the asm2 corpus colours every part, request 5
+            # block A2); colour carries no geometry, children pass through.
+            return children
         if name in ("union", "difference", "intersection", "hull"):
             if call[2] or call[3]:
                 children = children + [self.eval_expression(argument, scope) for argument in call[2]]
