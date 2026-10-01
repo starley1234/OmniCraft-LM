@@ -41,3 +41,12 @@
 хэши манифестов в отчётах обновлены. Дефолты генераторов поставки №7 приведены
 к фактическим размерам поставки: 200 строк на семейство для sketch/wire/solid и
 130 сцен на семейство для asm4.
+
+## Подключение к обучению
+
+Девять однокомпонентных accepted-файлов объединены с `combined_v8.jsonl` скриптом
+`tools/build_corpus_v9.py`. Результат: `data/processed/combined_v9.jsonl`, 75 157
+строк (voxel 55 439 / wire 7 658 / sketch 12 060). Детерминированный grouped split
+`data/processed/splits_v9/`: train 60 859 / validation 9 928 / test 4 370.
+Чейн `tools/wsl_train_chain_v9.sh` и сборщик grid-sidecar по умолчанию используют
+`splits_v9`. Многокомпонентные asm2–asm4 в этот корпус не входят.
