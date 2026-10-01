@@ -297,8 +297,19 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--port", type=int, default=8035)
     parser.add_argument("--max-tokens", type=int, default=512)
+    parser.add_argument("--preload", default="",
+                        help="холсты через запятую, загрузить при старте (иначе первый "
+                             "запрос ждёт ~30-60 с на ленивой инициализации бэкбона)")
     args = parser.parse_args()
     state = DemoState(args)
+
+    for canvas in [c.strip() for c in args.preload.split(",") if c.strip()]:
+        if canvas not in CANVASES:
+            print(f"[preload] неизвестный холст: {canvas}")
+            continue
+        started = time.time()
+        state.shell(canvas)
+        print(f"[preload] {canvas} готов за {time.time() - started:.1f} с")
 
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, *a):  # quiet
