@@ -92,6 +92,88 @@ def _strip_comments(source: str) -> tuple[str, list[str]]:
     return "".join(output), errors
 
 
+def _blank_strings(source: str) -> str:
+    """Blank string contents so OpenSCAD-looking text cannot satisfy source checks."""
+    output = list(source)
+    in_string = False
+    escaped = False
+    for index, character in enumerate(source):
+        if in_string:
+            if character != "\n":
+                output[index] = " "
+            if escaped:
+                escaped = False
+            elif character == "\\":
+                escaped = True
+            elif character == '"':
+                in_string = False
+        elif character == '"':
+            output[index] = " "
+            in_string = True
+    return "".join(output)
+
+
+def _matching_delimiter(source: str, start: int, opening: str, closing: str) -> int | None:
+    depth = 0
+    for index in range(start, len(source)):
+        character = source[index]
+        if character == opening:
+            depth += 1
+        elif character == closing:
+            depth -= 1
+            if depth == 0:
+                return index
+    return None
+
+
+def _without_declarations(source: str) -> tuple[str, set[str]]:
+    """Blank module/function declarations, preserving offsets and executable source."""
+    declaration = re.compile(r"\b(module|function)\s+([A-Za-z_]\w*)\s*\(")
+    output = list(source)
+    module_names: set[str] = set()
+    position = 0
+    while match := declaration.search(source, position):
+        kind, name = match.group(1), match.group(2)
+        if kind == "module":
+            module_names.add(name)
+        parameters_end = _matching_delimiter(source, match.end() - 1, "(", ")")
+        if parameters_end is None:
+            end = len(source)
+        else:
+            body_start = parameters_end + 1
+            while body_start < len(source) and source[body_start].isspace():
+                body_start += 1
+            if kind == "module" and body_start < len(source) and source[body_start] == "{":
+                body_end = _matching_delimiter(source, body_start, "{", "}")
+                end = len(source) if body_end is None else body_end + 1
+            else:
+                semicolon = source.find(";", body_start)
+                end = len(source) if semicolon == -1 else semicolon + 1
+        for index in range(match.start(), end):
+            if output[index] != "\n":
+                output[index] = " "
+        position = max(end, match.end())
+    return "".join(output), module_names
+
+
+def has_top_level_object_statement(source: str) -> bool:
+    """Return whether executable source remains outside module/function declarations.
+
+    This is intentionally a conservative lint, not a replacement for compiling with
+    OpenSCAD. It recognizes built-in geometry and calls to modules declared by the
+    program, including calls nested in top-level transforms or control statements.
+    """
+    uncommented, _ = _strip_comments(source)
+    lexical_source = _blank_strings(uncommented)
+    executable_source, module_names = _without_declarations(lexical_source)
+    if _GEOMETRY.search(executable_source):
+        return True
+    return any(
+        re.search(rf"\b{re.escape(name)}\s*\(", executable_source)
+        for name in module_names
+    )
+
+
 @dataclass(frozen=True, slots=True)
 class ValidationPolicy:
     max_bbox_relative_error: float = 0.15
@@ -140,7 +222,7 @@ class DatasetValidator:
             backend = "static-analytic-v1"
         else:
             backend = f"{type(self.runner).__module__}.{type(self.runner).__qualname__}"
-        return f"validator-v1|{backend}|{self.policy!r}|{asdict(self.policy)}"
+        return f"validator-v2|{backend}|{self.policy!r}|{asdict(self.policy)}"
 
     def validate(self, sample: CADSample) -> SampleValidationReport:
         static_errors = self._static_errors(sample)
@@ -279,8 +361,10 @@ class DatasetValidator:
         errors.extend(lexical_errors)
         if _NONFINITE.search(cleaned_code):
             errors.append("source contains a non-finite or undefined numeric token")
-        if not _GEOMETRY.search(cleaned_code):
+        if not _GEOMETRY.search(_blank_strings(cleaned_code)):
             errors.append("source contains no recognized OpenSCAD geometry operation")
+        elif not has_top_level_object_statement(code):
+            errors.append("source contains no top-level object-producing statement")
 
         stack: list[tuple[str, int]] = []
         opening = {"(": ")", "[": "]", "{": "}"}

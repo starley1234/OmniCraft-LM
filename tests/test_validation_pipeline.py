@@ -9,7 +9,7 @@ import pytest
 from src.data.generators.voxel_csg_gen import VoxelCSGGenerator
 from src.data.generators.wire_truss_gen import WireTrussGenerator
 from src.data.schema import CADSample, SampleVerification
-from src.data.validation import DatasetValidator, ValidationPolicy
+from src.data.validation import DatasetValidator, ValidationPolicy, has_top_level_object_statement
 from src.data.validation_cache import ValidationCache
 from src.env.cad_interface import VerificationResult
 from src.env.mock_runner import MockRunner
@@ -26,8 +26,7 @@ class FixedMeshRunner(OpenSCADRunner):
         return self.result
 
 
-def _simple_sample() -> CADSample:
-    code = "$fn = 32;\n// target_bbox: 10, 20, 30\ncube([10, 20, 30]);\n"
+def _sample_with_code(code: str) -> CADSample:
     return CADSample(
         id="fixed-cube",
         layer="voxel",
@@ -35,6 +34,43 @@ def _simple_sample() -> CADSample:
         code=code,
         verification=SampleVerification(target_bbox=(10.0, 20.0, 30.0)),
         metadata={"code_sha256": hashlib.sha256(code.encode("utf-8")).hexdigest()},
+    )
+
+
+def _simple_sample() -> CADSample:
+    return _sample_with_code("$fn = 32;\n// target_bbox: 10, 20, 30\ncube([10, 20, 30]);\n")
+
+
+def test_declaration_without_top_level_call_is_rejected_before_backend() -> None:
+    code = "$fn = 32;\nmodule part(size = 10) { cube(size); }\n"
+    report = DatasetValidator().validate(_sample_with_code(code))
+
+    assert report.status == "rejected"
+    assert any("no top-level object-producing statement" in error for error in report.errors)
+
+
+def test_declared_module_call_is_a_top_level_object_statement() -> None:
+    code = "$fn = 32;\nmodule part(size = 10) { cube(size); }\ntranslate([1, 2, 3]) part();\n"
+    report = DatasetValidator().validate(_sample_with_code(code))
+
+    assert report.status == "static"
+    assert not report.errors
+
+
+def test_geometry_words_in_comments_and_strings_do_not_count() -> None:
+    code = '$fn = 32;\n// cube(10);\nmessage = "sphere(4)";\n'
+    report = DatasetValidator().validate(_sample_with_code(code))
+
+    assert report.status == "rejected"
+    assert any("no recognized OpenSCAD geometry" in error for error in report.errors)
+
+
+def test_top_level_lint_handles_wrappers_and_function_declarations() -> None:
+    assert has_top_level_object_statement(
+        "$fn = 32;\nfunction twice(x) = x * 2;\nmodule part() { cube(twice(5)); }\nif (true) part();\n"
+    )
+    assert not has_top_level_object_statement(
+        "$fn = 32;\nfunction shape_name() = \"cube(10)\";\nmodule part() { sphere(5); }\n"
     )
 
 

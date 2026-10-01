@@ -31,6 +31,7 @@ os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
 
 import torch
 
+from src.data.validation import has_top_level_object_statement
 from src.env.openscad_runner import CADExecutableNotFound, OpenSCADRunner
 from src.training.trainer import SPATIAL_TOKENS, SpatialTrainer, TrainerConfig
 
@@ -141,6 +142,8 @@ def main() -> int:
         }
         if not code.startswith("$fn = 32;"):
             record.update(compiled=False, error="missing canonical $fn header")
+        elif not has_top_level_object_statement(code):
+            record.update(compiled=False, error="no top-level object-producing statement")
         elif runner is not None:
             result = runner.compile(code)
             record["compiled"] = result.error is None
