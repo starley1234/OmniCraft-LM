@@ -136,6 +136,7 @@ class SpatialTrainer:
         self._oom_skips = 0
         self._empty_steps = 0  # подряд идущие шаги, где OOM съел все чанки
         self._missing_gt = 0
+        self._seen_gt = 0  # строк, для которых сетка нашлась: покрытие aux-GT
         self._voxel_grids: dict[str, torch.Tensor] | None = None
 
     def _load_voxel_grids(self) -> dict[str, torch.Tensor]:
@@ -407,12 +408,44 @@ class SpatialTrainer:
                 valid_rows.append(row)
                 targets.append(grid)
         if not valid_rows:
+            self._missing_gt += len(samples)
             return torch.zeros((), device=self.device, dtype=torch.float32)
         gt = torch.stack(targets).to(device=occupancy_logits.device, dtype=torch.float32)
         subset = torch.tensor(valid_rows, device=occupancy_logits.device)
         predicted = occupancy_logits.float().index_select(0, subset)
         self._missing_gt += len(samples) - len(valid_rows)
+        self._seen_gt += len(valid_rows)
         return F.binary_cross_entropy_with_logits(predicted, gt)
+
+    def _gt_coverage(self) -> float | None:
+        """Доля воксельных строк, для которых нашлась сетка-GT (None = aux не считался)."""
+        total = self._seen_gt + self._missing_gt
+        if total == 0:
+            return None
+        return self._seen_gt / total
+
+    def _gt_coverage_suffix(self) -> str:
+        coverage = self._gt_coverage()
+        return "" if coverage is None else f" (gt {coverage:.0%})"
+
+    def _assert_live_aux(self, step: int) -> None:
+        """Мёртвый aux — это не «ноль лосса», а отсутствие сеток: падать сразу.
+
+        В v8 сайдкар покрывал 0.4% корпуса, aux тихо равнялся нулю весь прогон.
+        Проверяем после прогрева: если сетки есть на диске, но не находятся по id.
+        """
+        if self.config.voxel_grids is None or self.config.layer != "voxel":
+            return
+        if step < 20:
+            return
+        coverage = self._gt_coverage()
+        if coverage is None or coverage >= 0.5:
+            return
+        raise RuntimeError(
+            f"aux-GT покрывает лишь {coverage:.1%} воксельных строк на шаге {step}: "
+            f"сетки {self.config.voxel_grids} не джойнятся с корпусом. "
+            "Соберите сетки на весь корпус (tools/wsl_build_grids.sh) и перезапустите."
+        )
 
     def _collate_wire_targets(
         self, samples: list[CADSample]
@@ -607,6 +640,7 @@ class SpatialTrainer:
                 "skipped_chunks": float(len(chunk_index_groups) - done_groups),
             }
             self.history.append(metrics)
+            self._assert_live_aux(step)
             if step % self.config.log_every == 0 or step == self.config.max_steps:
                 vram_now, vram_peak, vram_reserved = 0.0, 0.0, 0.0
                 if self.device.type == "cuda":
@@ -623,7 +657,8 @@ class SpatialTrainer:
                 last_log_time = now
                 print(
                     f"step {step:4d}/{self.config.max_steps} | "
-                    f"lm {metrics['lm_loss']:.4f} | aux {metrics['aux_loss']:.4f} | "
+                    f"lm {metrics['lm_loss']:.4f} | aux {metrics['aux_loss']:.4f}"
+                    f"{self._gt_coverage_suffix()} | "
                     f"{steps_per_sec:.2f} it/s | vram {vram_now:.1f}/{vram_peak:.1f} GiB, "
                     f"reserved {vram_reserved:.1f} GiB{breach}",
                     flush=True,
@@ -633,6 +668,12 @@ class SpatialTrainer:
         self.save(step=self.config.max_steps)
         if self._oom_skips:
             print(f"[warning] training finished with {self._oom_skips} OOM-skipped chunks")
+        coverage = self._gt_coverage()
+        if coverage is not None:
+            print(
+                f"[aux] voxel GT coverage {coverage:.1%} "
+                f"({self._seen_gt} with grid / {self._missing_gt} without)"
+            )
         return self.history
 
     # ------------------------------------------------------------ checkpoints

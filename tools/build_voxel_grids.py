@@ -1,26 +1,35 @@
 """Build 16^3 occupancy ground truth for voxel-layer samples (aux loss GT).
 
-For every accepted voxel sample: compile the OpenSCAD code with the manifold
-backend (the same runner as the dataset validator), then probe centrers of a
-16x16x16 grid spanning the mesh bbox with ``mesh.contains``. Occupancies are
-packed as bits (4096 bits = 512 B) and base64-encoded into a sidecar JSONL
-joined to the training set by record id. Already-present ids are skipped, so
-the tool is incremental.
+Для каждой воксельной строки корпуса: компиляция OpenSCAD с backend=manifold
+(тот же раннер, что у валидатора) -> STL -> вокселизация 16x16x16 через
+``mesh.contains``. Занятость пакуется в биты (4096 бит = 512 Б), кодируется
+base64 и пишется сайдкаром JSONL, который трейнер джойнит по id записи.
+
+Ключевой приём — **дедупликация по `metadata.code_sha256`**: корпус v8 содержит
+42 637 воксельных строк, но только ~6.7 тыс. уникальных программ (перефразировки
+и стили делят один и тот же код). Компилируется каждая программа ровно один раз,
+а строка сайдкара пишется для *каждого* id с этим кодом — иначе aux-лосс молча
+обнуляется на 97% батчей (разбор v8, STATUS.md).
 
     python tools/build_voxel_grids.py \
-        --input data/processed/combined_v4.jsonl \
-        --output data/processed/voxel_grids.jsonl --workers 12
+        --input data/processed/splits_v8/train.jsonl \
+                data/processed/splits_v8/validation.jsonl \
+        --output data/processed/voxel_grids.jsonl --workers 14
 
-Requires ``rtree`` (pip install rtree) for trimesh.spatial contains queries.
+Инструмент инкрементальный: уже покрытые id пропускаются, сетки известных sha
+переиспользуются. ``--coverage-only`` считает покрытие без компиляции.
+
+Требуется ``rtree`` (pip install rtree) для trimesh.contains.
 """
 
 from __future__ import annotations
 
 import argparse
 import base64
+import hashlib
 import json
 import sys
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
@@ -29,7 +38,6 @@ if str(REPOSITORY_ROOT) not in sys.path:
 
 import numpy as np
 
-from src.data.schema import CADSample, parse_jsonl
 from src.env.openscad_runner import OpenSCADRunner
 
 GRID = 16
@@ -78,74 +86,148 @@ def sample_grid(code: str, runner: OpenSCADRunner) -> dict | None:
     }
 
 
-def load_existing_ids(path: Path) -> set[str]:
-    if not path.is_file():
-        return set()
-    return {
-        json.loads(line)["id"]
-        for line in path.read_text(encoding="utf-8").splitlines()
-        if line.strip()
-    }
+_RUNNER: OpenSCADRunner | None = None
+
+
+def _worker(task: tuple[str, str]) -> tuple[str, dict | None]:
+    """Процессный воркер: trimesh/rtree держат GIL, поэтому не потоки.
+
+    На потоках 16-ядерная машина выдавала ~25 программ/мин при load average 8;
+    процессы грузят все ядра.
+    """
+    global _RUNNER
+    if _RUNNER is None:
+        _RUNNER = OpenSCADRunner()
+    key, code = task
+    try:
+        return key, sample_grid(code, _RUNNER)
+    except Exception:
+        return key, None
+
+
+def code_key(record: dict) -> str:
+    """Стабильный ключ программы: code_sha256 из метаданных либо хэш самого кода."""
+    metadata = record.get("metadata") or {}
+    sha = metadata.get("code_sha256")
+    if isinstance(sha, str) and sha:
+        return sha
+    return hashlib.sha256(record["code"].encode("utf-8")).hexdigest()
+
+
+def scan_inputs(paths: list[Path]) -> tuple[dict[str, str], dict[str, str]]:
+    """Стрим JSONL без pydantic (train.jsonl ~150 МБ).
+
+    Возвращает (id -> ключ кода, ключ кода -> код).
+    """
+    key_by_id: dict[str, str] = {}
+    code_by_key: dict[str, str] = {}
+    for path in paths:
+        with Path(path).open("r", encoding="utf-8") as stream:
+            for line in stream:
+                if not line.strip():
+                    continue
+                record = json.loads(line)
+                if record.get("layer") != "voxel":
+                    continue
+                key = code_key(record)
+                key_by_id[record["id"]] = key
+                code_by_key.setdefault(key, record["code"])
+    return key_by_id, code_by_key
+
+
+def load_existing(path: Path) -> dict[str, str]:
+    """id -> grid_b64 уже построенных строк сайдкара."""
+    if not Path(path).is_file():
+        return {}
+    existing: dict[str, str] = {}
+    with Path(path).open("r", encoding="utf-8") as stream:
+        for line in stream:
+            if line.strip():
+                row = json.loads(line)
+                existing[row["id"]] = row["grid_b64"]
+    return existing
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--input", type=Path, required=True)
+    parser.add_argument("--input", type=Path, nargs="+", required=True)
     parser.add_argument("--output", type=Path, default=Path("data/processed/voxel_grids.jsonl"))
     parser.add_argument("--workers", type=int, default=12)
+    parser.add_argument("--limit", type=int, default=0, help="компилировать не более N новых программ (смоук)")
+    parser.add_argument("--coverage-only", action="store_true", help="только отчёт о покрытии, без компиляции")
     args = parser.parse_args()
 
-    samples = [s for s in parse_jsonl(args.input) if s.layer == "voxel"]
-    existing = load_existing_ids(args.output)
-    todo = [s for s in samples if s.id not in existing]
+    key_by_id, code_by_key = scan_inputs(list(args.input))
+    existing = load_existing(args.output)
 
-    # Content-addressed reuse: a paraphrase row shares the code (and the grid)
-    # of its source record; don't recompile identical sources.
-    existing_grid_by_id: dict[str, str] = {}
-    if args.output.is_file():
-        for line in args.output.read_text(encoding="utf-8").splitlines():
-            if line.strip():
-                row = json.loads(line)
-                existing_grid_by_id[row["id"]] = row["grid_b64"]
-    all_known = [s for s in parse_jsonl(args.input) if s.id in existing_grid_by_id]
-    grid_by_code_sha: dict[str, str] = {}
-    for s in all_known:
-        sha = s.metadata.get("code_sha256")
-        if sha:
-            grid_by_code_sha[sha] = existing_grid_by_id[s.id]
+    # Сетка известна для ключа, если она есть хотя бы у одного id с этим кодом.
+    grid_by_key: dict[str, str] = {}
+    for identifier, grid in existing.items():
+        key = key_by_id.get(identifier)
+        if key is not None:
+            grid_by_key.setdefault(key, grid)
 
-    print(f"voxel samples: {len(samples)}, cached: {len(existing)}, to compile: pending…")
-    runner = OpenSCADRunner()
+    missing_ids = [i for i in key_by_id if i not in existing]
+    missing_keys = sorted({key_by_id[i] for i in missing_ids} - set(grid_by_key))
+    covered = len(key_by_id) - len(missing_ids)
+    print(
+        f"voxel rows: {len(key_by_id)} | unique programs: {len(code_by_key)} | "
+        f"covered rows: {covered} ({covered / max(len(key_by_id), 1):.1%}) | "
+        f"to compile: {len(missing_keys)}",
+        flush=True,
+    )
+    if args.coverage_only:
+        return 0
+    if args.limit:
+        missing_keys = missing_keys[: args.limit]
 
-    def work(sample: CADSample) -> dict | None:
-        record = sample_grid(sample.code, runner)
-        if record is None:
-            return None
-        return {"id": sample.id, **record}
+    # id, ждущие строку сайдкара, сгруппированы по программе.
+    ids_by_key: dict[str, list[str]] = {}
+    for identifier in missing_ids:
+        ids_by_key.setdefault(key_by_id[identifier], []).append(identifier)
 
-    written = reused = failed = skipped_dupes = 0
-    with args.output.open("a", encoding="utf-8", newline="\n") as out:
-        todo_now: list[CADSample] = []
-        for sample in todo:
-            sha = sample.metadata.get("code_sha256")
-            if sha and sha in grid_by_code_sha:
-                # row carries only the id->grid join; mesh_bbox belongs to the source record
-                out.write(json.dumps({"id": sample.id, "grid_b64": grid_by_code_sha[sha]}, ensure_ascii=False) + "\n")
-                reused += 1
-            else:
-                todo_now.append(sample)
-        skipped_dupes = reused
-        print(f"reused by code sha: {reused}; compiling: {len(todo_now)}", flush=True)
-        with ThreadPoolExecutor(max_workers=args.workers, thread_name_prefix="voxelize") as pool:
-            for record in pool.map(work, todo_now):
-                if record is None:
-                    failed += 1
-                    continue
-                out.write(json.dumps(record, ensure_ascii=False) + "\n")
-                written += 1
-                if written % 500 == 0:
-                    print(f"  built {written}, failed {failed}", flush=True)
-    print(f"done: {written} written, {skipped_dupes} reused, {failed} failed -> {args.output}")
+    built = failed = written = 0
+    with Path(args.output).open("a", encoding="utf-8", newline="\n") as out:
+
+        def emit(key: str, grid: str, bbox: list[float] | None = None) -> int:
+            count = 0
+            for identifier in ids_by_key.get(key, ()):
+                row: dict = {"id": identifier, "grid_b64": grid}
+                if bbox is not None:
+                    row["mesh_bbox"] = bbox
+                out.write(json.dumps(row, ensure_ascii=False) + "\n")
+                count += 1
+            return count
+
+        # Сетки, уже известные по другому id той же программы, — без компиляции.
+        for key in sorted(set(ids_by_key) & set(grid_by_key)):
+            written += emit(key, grid_by_key[key])
+        out.flush()
+
+        if missing_keys:
+            tasks = [(key, code_by_key[key]) for key in missing_keys]
+            with ProcessPoolExecutor(max_workers=args.workers) as pool:
+                for key, record in pool.map(_worker, tasks, chunksize=4):
+                    if record is None:
+                        failed += 1
+                        continue
+                    built += 1
+                    written += emit(key, record["grid_b64"], record["mesh_bbox"])
+                    # Инкрементальная запись: обрыв не теряет часы компиляции,
+                    # повторный запуск доберёт остаток.
+                    if (built + failed) % 100 == 0:
+                        out.flush()
+                        print(
+                            f"  compiled {built + failed}/{len(missing_keys)} "
+                            f"(failed {failed}, rows {written})",
+                            flush=True,
+                        )
+
+    total_covered = covered + written
+    print(
+        f"done: programs built {built}, failed {failed}; rows written {written}; "
+        f"coverage {total_covered}/{len(key_by_id)} ({total_covered / max(len(key_by_id), 1):.1%}) -> {args.output}"
+    )
     return 0
 
 
