@@ -14,11 +14,12 @@ cd "$HOME/omnicraft/repo"
 
 V_STEP="${1:-2900}"            # voxel optimizer steps (x16 samples)
 W_STEP="${2:-1200}"            # wire optimizer steps (x16 samples)
-# Бюджет токенов на forward. 600 — эмпирический потолок этой машины
-# (tools/wsl_budget_probe.sh): при 900 и 1600 CE-логиты словаря 248k съедают
-# 14 GiB и ВСЕ чанки уходят в OOM — так леги v6/v7 и «сходились» к lm=0.0000.
-V_BUDGET="${3:-600}"
-W_BUDGET="${4:-600}"
+# Бюджет токенов на forward = 1000 (tools/wsl_budget_probe.sh). Он же — порог отсева:
+# образцы длиннее бюджета исключаются трейнером (voxel 7 628 из 42 637, wire 475 из 3 276),
+# потому что неделимый длинный образец гарантированно уходил в OOM и лег умирал.
+# Выше 1200 начинается стена: при 1600 падают даже чанки 8x96, при 15.3 ГиБ — драйвер.
+V_BUDGET="${3:-1000}"
+W_BUDGET="${4:-1000}"
 SPLIT_DIR="${5:-splits_v8}"
 TAG="${6:-v8}"
 LOG="$HOME/omnicraft/chain_${TAG}.log"
@@ -47,13 +48,26 @@ if [ ! -s data/processed/voxel_grids.jsonl ]; then
 fi
 echo "[$(date +%T)] grids ready: $(wc -l < data/processed/voxel_grids.jsonl) rows" >>"$LOG"
 
+# ВНИМАНИЕ: rc надо снимать в переменную ДО любой другой команды. Запись вида
+# echo "$(date) rc=$?" всегда печатала 0 (подстановка $(date) затирает $?), из-за
+# чего чейны v6-v8 рапортовали успех при упавшем леге.
 echo "[$(date +%T)] voxel: ${V_STEP}x16 on ${SPLIT_DIR}" >>"$LOG"
 bash tools/wsl_train.sh voxel "$V_STEP" 16 "$V_BUDGET" "$SPLIT_DIR" >>"$LOG" 2>&1
-echo "[$(date +%T)] voxel done rc=$?" >>"$LOG"
+RC_VOXEL=$?
+echo "[$(date +%T)] voxel done rc=${RC_VOXEL}" >>"$LOG"
+if [ "$RC_VOXEL" -ne 0 ]; then
+  echo "[$(date +%T)] VOXEL LEG FAILED (rc=${RC_VOXEL}) - abort chain" | tee -a "$LOG"
+  exit "$RC_VOXEL"
+fi
 
 echo "[$(date +%T)] wire: ${W_STEP}x16 on ${SPLIT_DIR}" >>"$LOG"
 bash tools/wsl_train.sh wire "$W_STEP" 16 "$W_BUDGET" "$SPLIT_DIR" >>"$LOG" 2>&1
-echo "[$(date +%T)] wire done rc=$?" >>"$LOG"
+RC_WIRE=$?
+echo "[$(date +%T)] wire done rc=${RC_WIRE}" >>"$LOG"
+if [ "$RC_WIRE" -ne 0 ]; then
+  echo "[$(date +%T)] WIRE LEG FAILED (rc=${RC_WIRE}) - abort chain" | tee -a "$LOG"
+  exit "$RC_WIRE"
+fi
 
 rsync -a checkpoints/voxel/ "$WIN/checkpoints/voxel/"
 rsync -a checkpoints/wire/  "$WIN/checkpoints/wire/"

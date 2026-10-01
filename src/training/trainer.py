@@ -489,6 +489,27 @@ class SpatialTrainer:
                 f"no accepted samples for layer {self.config.layer!r} in {self.config.data}"
             )
         lengths = self._sample_lengths(samples)
+        # Образец длиннее бюджета не делится: упаковщик всё равно отдаёт его одним
+        # чанком, и тот гарантированно уходит в OOM. Отсеиваем заранее и честно
+        # сообщаем сколько — молчаливый OOM-пропуск выглядел как обучение (v6-v8).
+        budget = self.config.max_tokens_per_forward
+        keep = [i for i, length in enumerate(lengths) if length <= budget]
+        if len(keep) < len(samples):
+            dropped = len(samples) - len(keep)
+            longest = max(lengths)
+            print(
+                f"[data] {dropped} из {len(samples)} образцов длиннее бюджета {budget} "
+                f"токенов (самый длинный {longest}) — исключены из обучения; "
+                f"осталось {len(keep)}",
+                flush=True,
+            )
+            samples = [samples[i] for i in keep]
+            lengths = [lengths[i] for i in keep]
+        if not samples:
+            raise ValueError(
+                f"все образцы слоя {self.config.layer!r} длиннее бюджета {budget} токенов: "
+                "поднимите --max-tokens-per-forward или укоротите корпус"
+            )
         cursor = 0
         import time as _time
 

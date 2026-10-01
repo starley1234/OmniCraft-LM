@@ -4,6 +4,10 @@ set -euo pipefail
 cd "$HOME/omnicraft/repo"
 source .venv/bin/activate
 export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1
+# Фрагментация аллокатора — главный источник OOM на длинных ранах: reserved дорастает
+# до потолка, и дальше падают даже чанки по ~100 токенов (v8: лег умер на шаге 242).
+# expandable_segments отдаёт память обратно вместо накопления пулов на каждую длину.
+export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"
 
 LAYER="${1:-voxel}"
 STEPS="${2:-600}"
