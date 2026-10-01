@@ -1,0 +1,28 @@
+$fn = 32;
+
+// ----------------------------------------------------------------------
+// Hopper: funnel with square flange
+// ----------------------------------------------------------------------
+
+// --- parameters (mm) ---
+fl = 90;                  // flange side, X and Y
+fl_t = 8;                 // flange thickness
+cone_h = 60;              // cone height above the flange
+top_d = 50;               // cone mouth diameter
+bot_d = 28;               // cone spout diameter
+wall = 3;                 // cone wall thickness
+fit_tol = 0.1;            // tolerance for press fits, mm
+free_tol = 0.3;           // tolerance for clearance fits, mm
+
+bore_d = bot_d - 2 * wall;  // spout bore diameter
+total_h = fl_t + cone_h - 1;  // overall height
+
+difference() {
+  union() {
+    cube([fl, fl, fl_t]);
+    translate([fl / 2, fl / 2, fl_t - 1])
+      cylinder(h = cone_h, d1 = bot_d, d2 = top_d);
+  }
+  translate([fl / 2, fl / 2, fl_t - 2])
+    cylinder(h = cone_h + 1, d1 = bore_d, d2 = top_d - 2 * wall);
+}
