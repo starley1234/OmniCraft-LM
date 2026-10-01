@@ -99,6 +99,36 @@ class DemoState:
             self.shells[canvas] = build_trainer_shell(shell_args)
         return self.shells[canvas]
 
+    def unload(self) -> dict:
+        """Снести все холсты из VRAM: демо часто держит 10+ ГиБ и мешает обучению."""
+        import gc
+
+        freed = list(self.shells)
+        for trainer in self.shells.values():
+            hook = getattr(trainer, "hook", None)
+            if hook is not None:
+                try:
+                    hook.clear_context()
+                    hook.remove()
+                except Exception:
+                    pass
+        self.shells.clear()
+        gc.collect()
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+            torch.cuda.ipc_collect()
+        print(f"[unload] canvases={freed or 'none'}")
+        return self.model_info(unloaded=freed)
+
+    def model_info(self, **extra) -> dict:
+        vram = None
+        if torch.cuda.is_available():
+            vram = {
+                "allocated_gib": round(torch.cuda.memory_allocated() / 2**30, 2),
+                "reserved_gib": round(torch.cuda.memory_reserved() / 2**30, 2),
+            }
+        return {"loaded": sorted(self.shells), "vram": vram, **extra}
+
 
 # --------------------------------------------------------------------------- генерация
 
@@ -311,6 +341,8 @@ def main() -> int:
                 })
             if path == "/api/status":
                 return self._send_json(gather_status(state))
+            if path == "/api/model":
+                return self._send_json(state.model_info())
             if path == "/api/history":
                 return self._send_json({"items": state.history})
             if path.startswith("/static/"):
@@ -330,13 +362,30 @@ def main() -> int:
             self.send_error(404)
 
         def do_POST(self) -> None:
-            if urlparse(self.path).path != "/api/generate":
+            route = urlparse(self.path).path
+            if route not in ("/api/generate", "/api/model"):
                 return self.send_error(404)
             try:
                 length = int(self.headers.get("Content-Length", "0"))
                 payload = json.loads(self.rfile.read(length).decode("utf-8") or "{}")
             except json.JSONDecodeError:
                 return self._send_json({"error": "невалидный JSON"})
+
+            if route == "/api/model":
+                action = str(payload.get("action", "unload"))
+                try:
+                    if action == "unload":
+                        return self._send_json(state.unload())
+                    if action == "load":
+                        canvas = str(payload.get("canvas", "voxel"))
+                        if canvas not in CANVASES:
+                            return self._send_json({"error": f"неизвестный холст: {canvas}"})
+                        state.shell(canvas)
+                        return self._send_json(state.model_info())
+                    return self._send_json({"error": f"неизвестное действие: {action}"})
+                except Exception as exc:
+                    return self._send_json({"error": f"{type(exc).__name__}: {exc}"})
+
             prompt = str(payload.get("prompt", "")).strip()
             canvas = str(payload.get("canvas", "auto"))
             if not prompt:

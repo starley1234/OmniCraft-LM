@@ -132,7 +132,7 @@ async function generate() {
     if (r.stl) showStl("/model/" + r.stl);
     else if (r.png) showPng("/preview/" + r.png);
     else { $("viewerHint").style.display = "flex"; $("viewerHint").textContent = "меш не собран — смотрите код и вердикт"; }
-    loadHistory();
+    loadHistory(); refreshModel();
   } finally {
     $("genBtn").disabled = false; $("spinner").classList.add("hidden"); $("spinner").classList.remove("inline-flex");
   }
@@ -157,4 +157,29 @@ async function loadHistory() {
 }
 function restore(prompt, canvas) { $("prompt").value = prompt; if (canvas) $("canvas").value = canvas; $("prompt").focus(); }
 
-loadExamples(); loadHistory();
+// ---------- выгрузка/загрузка модели (VRAM) ----------
+function renderModel(info) {
+  const loaded = info.loaded || [];
+  const vram = info.vram ? ` · ${info.vram.reserved_gib} ГиБ` : "";
+  $("vramNote").textContent = loaded.length ? `в памяти: ${loaded.join(", ")}${vram}` : "модель выгружена";
+  const btn = $("modelBtn");
+  btn.textContent = loaded.length ? "выгрузить модель" : "загрузить модель";
+  btn.dataset.action = loaded.length ? "unload" : "load";
+  btn.disabled = false;
+}
+async function modelAction() {
+  const btn = $("modelBtn");
+  const action = btn.dataset.action || "unload";
+  btn.disabled = true;
+  btn.textContent = action === "unload" ? "выгружаю…" : "загружаю…";
+  const body = { action, canvas: $("canvas").value === "auto" ? "voxel" : $("canvas").value };
+  const info = await (await fetch("/api/model", {
+    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
+  })).json();
+  if (info.error) { $("vramNote").textContent = info.error; btn.disabled = false; return; }
+  renderModel(info);
+}
+$("modelBtn").onclick = modelAction;
+async function refreshModel() { renderModel(await (await fetch("/api/model")).json()); }
+
+loadExamples(); loadHistory(); refreshModel();

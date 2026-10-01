@@ -26,6 +26,11 @@ class CADJsonlDataset(Dataset[dict[str, Any]]):
     a deterministic UTF-8 byte tokenizer is provided for smoke tests and tooling.
     By default only records explicitly marked ``verification.accepted`` are loaded;
     provisional candidates require ``require_accepted=False`` as an opt-in.
+
+    ``prompt_style`` управляет выбором формулировки:
+    ``"rotate"`` (по умолчанию) — детерминированная ротация по всем стилям записи
+    (en/ru/free_*/conv_*), чтобы слой видел не только формальный английский;
+    ``"en"`` — поведение v6/v7 (только ``prompts['en']``), оставлено для воспроизведения.
     """
 
     def __init__(
@@ -35,6 +40,7 @@ class CADJsonlDataset(Dataset[dict[str, Any]]):
         max_prompt_tokens: int | None = 2048,
         max_code_tokens: int | None = 4096,
         require_accepted: bool = True,
+        prompt_style: str = "rotate",
     ) -> None:
         self.path = Path(path)
         self.samples: list[CADSample] = parse_jsonl(self.path)
@@ -50,11 +56,28 @@ class CADJsonlDataset(Dataset[dict[str, Any]]):
         self.max_prompt_tokens = max_prompt_tokens
         self.max_code_tokens = max_code_tokens
         self.pad_token_id = int(getattr(tokenizer, "pad_token_id", 0) or 0)
+        eos = getattr(tokenizer, "eos_token_id", None)
+        self.eos_token_id = int(eos) if isinstance(eos, int) else None
+        self.prompt_style = prompt_style
+        self.prompt_epoch = 0
+
+    def set_epoch(self, epoch: int) -> None:
+        """Сменить раунд ротации формулировок (вызывать из трейнера на каждой эпохе)."""
+        self.prompt_epoch = int(epoch)
+
+    def _pick_prompt(self, sample: CADSample, index: int) -> str:
+        prompts = {k: v for k, v in sample.prompts.items() if isinstance(v, str) and v.strip()}
+        if not prompts:
+            return ""
+        if self.prompt_style == "en":  # прежнее поведение (v6/v7): только английская формальная
+            return prompts.get("en") or prompts.get("ru") or next(iter(prompts.values()))
+        keys = sorted(prompts)  # детерминированно: ротация зависит только от index и эпохи
+        return prompts[keys[(index + self.prompt_epoch) % len(keys)]]
 
     def __len__(self) -> int:
         return len(self.samples)
 
-    def _encode(self, text: str, maximum: int | None) -> torch.Tensor:
+    def _encode(self, text: str, maximum: int | None, append_eos: bool = False) -> torch.Tensor:
         if self.tokenizer is None:
             token_ids = [byte + 1 for byte in text.encode("utf-8")]
         else:
@@ -68,11 +91,18 @@ class CADJsonlDataset(Dataset[dict[str, Any]]):
             token_ids = token_ids[:maximum]
         if not token_ids:
             token_ids = [self.pad_token_id]
+        if append_eos and self.eos_token_id is not None and token_ids[-1] != self.eos_token_id:
+            # Без EOS в метках модель не учится останавливаться: на инференсе greedy
+            # уходит в повтор («profile = [b/2, t, ...» до конца бюджета) и код не
+            # компилируется. Регрессия v6/v7 — вся генерация без признака конца.
+            if maximum is not None and len(token_ids) >= maximum:
+                token_ids = token_ids[: maximum - 1]
+            token_ids = token_ids + [self.eos_token_id]
         return torch.tensor(token_ids, dtype=torch.long)
 
     def __getitem__(self, index: int) -> dict[str, Any]:
         sample = self.samples[index]
-        prompt = sample.prompts.get("en") or sample.prompts.get("ru") or next(iter(sample.prompts.values()), "")
+        prompt = self._pick_prompt(sample, index)
         target_bbox = torch.tensor(sample.verification.target_bbox, dtype=torch.float32)
         log_bbox = torch.log(target_bbox)
         nodes = torch.tensor(sample.auxiliary_ground_truth.nodes, dtype=torch.float32).reshape(-1, 3)
@@ -87,7 +117,7 @@ class CADJsonlDataset(Dataset[dict[str, Any]]):
             "id": sample.id,
             "layer": sample.layer,
             "input_ids": self._encode(prompt, self.max_prompt_tokens),
-            "labels": self._encode(sample.code, self.max_code_tokens),
+            "labels": self._encode(sample.code, self.max_code_tokens, append_eos=True),
             "scale_embedding": log_bbox,
             "target_bbox": target_bbox,
             "auxiliary_targets": {"nodes": nodes, "edges": adjacency},

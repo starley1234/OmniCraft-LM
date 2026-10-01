@@ -71,11 +71,32 @@ def test_every_style_renders_for_known_kinds() -> None:
 
 
 def test_import_like_rows_get_only_import_styles() -> None:
-    row = _row(None)
+    """Без `kind` выпускаются только стили того языка, на котором есть исходная фраза."""
+    row = _row(None)  # в фикстуре только prompts['en']
     variants = augment_sample(row, seed=1234)
-    assert {v["metadata"]["prompt_style"] for v in variants} == set(IMPORT_STYLES)
+    styles = {v["metadata"]["prompt_style"] for v in variants}
+    assert styles == {s for s in IMPORT_STYLES if s.endswith("_en")}
     for variant in variants:
         CADSample.model_validate(variant)
+
+    bilingual = _row(None)
+    bilingual["prompts"]["ru"] = "Открытый короб 54 на 30 на 12 мм, стенка 3 мм"
+    ru_styles = {v["metadata"]["prompt_style"] for v in augment_sample(bilingual, seed=1234)}
+    assert ru_styles == set(IMPORT_STYLES)
+
+
+def test_import_like_wrapping_keeps_the_description() -> None:
+    """Главный инвариант: стиль меняет обрамление, но не стирает описание детали.
+
+    Регрессия v7: безликие промпты «нужна деталь NxNxN мм» отвечали сотням разных
+    геометрий и учили модель игнорировать текст запроса.
+    """
+    row = _row(None)
+    row["prompts"]["en"] = "GT2 pulley 16T for 6 mm belt"
+    for style in ("free_en", "conv_en"):
+        text = render_prompt(row, style, seed=1234, import_like=True)
+        assert "GT2 pulley 16T for 6 mm belt" in text, text
+        assert text != row["prompts"]["en"]
 
 
 def test_dims_appear_in_formal_and_free_ru() -> None:

@@ -76,6 +76,9 @@ class TrainerConfig:
     lambda_geom: float = 0.1
     max_prompt_tokens: int = 256   # measured corpus p100: ~22 prompt tokens; cap prevents silent bloat
     cog_specs: bool = True         # prepend the deterministic [SPECS] block (ARCHITECTURE.md 8.1)
+    prompt_style: str = "rotate"   # "rotate" — детерминированный выбор среди всех стилей строки
+                                   # (en/ru/free_*/conv_*); "en" — поведение v6/v7, когда обучение
+                                   # видело только формальный английский и проваливало conv-промпты
     max_code_tokens: int = 2048    # v6 p99=1915 (place1 multi-feature codes); longer tails hit the OOM guard instead
     gradient_checkpointing: bool = False
     train_spatial_token_embeddings: bool = False  # True adds a ~1 GiB param + ~3 GiB of Adam state/grads
@@ -131,6 +134,7 @@ class SpatialTrainer:
         )
         self.history: list[dict[str, float]] = []
         self._oom_skips = 0
+        self._empty_steps = 0  # подряд идущие шаги, где OOM съел все чанки
         self._missing_gt = 0
         self._voxel_grids: dict[str, torch.Tensor] | None = None
 
@@ -247,9 +251,24 @@ class SpatialTrainer:
 
     # ------------------------------------------------------------- sequences
 
+    def prompt_text_for(self, sample: CADSample) -> str:
+        """Формулировка для обучения: ротация по стилям вместо жёсткого ``prompts['en']``.
+
+        Выбор детерминирован (хэш id), поэтому ран воспроизводим и длины, посчитанные
+        в ``_sample_lengths``, совпадают с реально собранной последовательностью.
+        """
+        prompts = {k: v for k, v in sample.prompts.items() if isinstance(v, str) and v.strip()}
+        if not prompts:
+            return ""
+        if self.config.prompt_style == "en":
+            return prompts.get("en") or next(iter(prompts.values()))
+        keys = sorted(prompts)
+        digest = hashlib.sha1(str(sample.id).encode("utf-8")).digest()
+        return prompts[keys[digest[0] % len(keys)]]
+
     def build_sequence(self, sample: CADSample) -> dict[str, torch.Tensor]:
         """Compose ``prompt + [SPECS] + trigger`` (masked) followed by ``code + EOS``."""
-        prompt_text = sample.prompts.get("en") or next(iter(sample.prompts.values()))
+        prompt_text = self.prompt_text_for(sample)
         if self.config.cog_specs:
             from src.runtime.specs_hook import build_prompt_with_specs, compose_specs
 
@@ -378,7 +397,12 @@ class SpatialTrainer:
         targets: list[torch.Tensor] = []
         valid_rows: list[int] = []
         for row, sample in enumerate(samples):
+            # Аугментированные строки носят id вида "{parent}__{style}", а сайдкар сеток
+            # ключуется родительским id: без нормализации aux-лосс молча обнуляется.
             grid = self._voxel_grids.get(sample.id)
+            if grid is None:
+                parent = str(sample.metadata.get("augmented_from") or sample.id.split("__")[0])
+                grid = self._voxel_grids.get(parent)
             if grid is not None:
                 valid_rows.append(row)
                 targets.append(grid)
@@ -441,7 +465,7 @@ class SpatialTrainer:
         start = _time.monotonic()
         lengths: list[int] = []
         for sample in samples:
-            prompt_text = sample.prompts.get("en") or next(iter(sample.prompts.values()))
+            prompt_text = self.prompt_text_for(sample)
             prompt_len = len(
                 self.tokenizer(f"{prompt_text}\nX\n", add_special_tokens=False)["input_ids"]
             )
@@ -474,6 +498,7 @@ class SpatialTrainer:
             # log steps — each float() here is a WDDM host sync (~ms on Windows).
             step_lm = torch.zeros((), device=self.device)
             step_aux = torch.zeros((), device=self.device)
+            done_groups = 0  # сколько чанков реально дошло до backward на этом шаге
             indices = [(cursor + offset) % len(samples) for offset in range(self.config.accumulate)]
             cursor += self.config.accumulate
             chunk_index_groups = self._pack_chunks(
@@ -489,17 +514,36 @@ class SpatialTrainer:
                     total.backward()
                     step_lm += lm_loss.detach()
                     step_aux += aux.detach()
+                    done_groups += 1
                 except torch.cuda.OutOfMemoryError:
-                    # A pathological batch must not sink a multi-hour run: drop it,
-                    # contract the pools, and keep an honest count for the report.
-                    self._oom_skips += 1
-                    self.optimizer.zero_grad(set_to_none=True)
+                    # Патологический чанк не должен топить многочасовой ран. ВАЖНО: здесь
+                    # нельзя звать optimizer.zero_grad() — это стирало бы градиенты, уже
+                    # накопленные успешными чанками того же шага (баг v6/v7: 4136 скипов
+                    # = тысячи шагов, ушедших в оптимизатор с обнулённым накоплением).
                     torch.cuda.empty_cache()
-                    print(
-                        f"  [OOM] skipped chunk of {len(chunk)} samples "
-                        f"(max ~{max(lengths[indices[i]] for i in group)} tokens); total skips: {self._oom_skips}",
-                        flush=True,
-                    )
+                    recovered = 0
+                    for one in chunk:  # вторая попытка по одному образцу
+                        try:
+                            lm_loss, aux = self.forward_loss([one])
+                            total = (lm_loss + self.config.lambda_geom * aux) / (
+                                len(chunk_index_groups) * len(chunk)
+                            )
+                            total.backward()
+                            step_lm += lm_loss.detach()
+                            step_aux += aux.detach()
+                            recovered += 1
+                            done_groups += 1
+                        except torch.cuda.OutOfMemoryError:
+                            torch.cuda.empty_cache()
+                    self._oom_skips += len(chunk) - recovered
+                    if recovered < len(chunk):
+                        print(
+                            f"  [OOM] chunk of {len(chunk)} samples "
+                            f"(max ~{max(lengths[indices[i]] for i in group)} tokens): "
+                            f"восстановлено {recovered}, пропущено {len(chunk) - recovered}; "
+                            f"всего пропусков: {self._oom_skips}",
+                            flush=True,
+                        )
             torch.nn.utils.clip_grad_norm_(
                 [p for p in self._trainable_parameters() if p.grad is not None],
                 self.config.grad_clip,
@@ -516,10 +560,30 @@ class SpatialTrainer:
                 # pools regrow from a handful of bucketed shapes instead of
                 # accumulating one pool per observed sequence length.
                 torch.cuda.empty_cache()
+            if done_groups == 0:
+                # Шаг, где все чанки съел OOM, печатал lm 0.0000 и выглядел как
+                # идеальная сходимость — именно так «обучались» леги v6/v7.
+                # Теперь это громкая ошибка, а не тихий ноль.
+                self._empty_steps += 1
+                print(
+                    f"  [EMPTY STEP {step}] все чанки пропущены по OOM — обучения не было; "
+                    f"снизьте --max-tokens-per-forward (сейчас {self.config.max_tokens_per_forward}). "
+                    f"Пустых шагов подряд: {self._empty_steps}",
+                    flush=True,
+                )
+                if self._empty_steps >= 20:
+                    raise RuntimeError(
+                        f"20 шагов подряд без единого успешного чанка при бюджете "
+                        f"{self.config.max_tokens_per_forward}: ран бессмысленен, остановлен"
+                    )
+            else:
+                self._empty_steps = 0
+            denominator = max(done_groups, 1)
             metrics = {
                 "step": float(step),
-                "lm_loss": float(step_lm) / len(chunk_index_groups),
-                "aux_loss": float(step_aux) / len(chunk_index_groups),
+                "lm_loss": float(step_lm) / denominator,
+                "aux_loss": float(step_aux) / denominator,
+                "skipped_chunks": float(len(chunk_index_groups) - done_groups),
             }
             self.history.append(metrics)
             if step % self.config.log_every == 0 or step == self.config.max_steps:

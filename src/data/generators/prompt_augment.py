@@ -317,6 +317,43 @@ WIRE_GENERIC: dict[str, list[str]] = {
     ],
 }
 
+# Обёртки для строк без `kind`: у них уже есть содержательный исходный промпт
+# («GT2 pulley 16T / 6 mm belt»), и подменять его на «нужна деталь NxNxN мм» нельзя —
+# разбор v7 показал, что такие безликие фразы отвечают сотням разных геометрий и учат
+# модель игнорировать текст. Поэтому стиль меняем вокруг описания, сохраняя его целиком.
+WRAP_BANK: dict[str, list[str]] = {
+    "free_ru": [
+        "Нужна деталь: {orig}",
+        "Сделай, пожалуйста: {orig}",
+        "{orig} — смоделируй такую деталь.",
+        "Мне нужно вот это: {orig}",
+    ],
+    "conv_ru": [
+        "Слушай, тут такая задача. {orig} Сможешь собрать?",
+        "Привет! Нужна деталька: {orig} Сделаешь?",
+        "{orig} Вот примерно это и нужно, остальное на твоё усмотрение.",
+        "Подскажи по детали: {orig} Как бы ты это смоделировал?",
+    ],
+    "free_en": [
+        "I need a part: {orig}",
+        "Please model this: {orig}",
+        "{orig} — model that for me.",
+        "Here is what I need: {orig}",
+    ],
+    "conv_en": [
+        "Hey, quick one. {orig} Can you build it?",
+        "I'm working on an assembly and need this: {orig} Doable?",
+        "{orig} That's roughly it — the rest is up to you.",
+        "Question about a part: {orig} How would you model it?",
+    ],
+}
+
+# Язык обёртки обязан совпадать с языком исходной фразы, иначе выйдет суржик:
+# нет исходника на нужном языке — стиль просто не выпускаем.
+WRAP_SOURCE_LANG: dict[str, str] = {
+    "free_ru": "ru", "conv_ru": "ru", "free_en": "en", "conv_en": "en",
+}
+
 LAYER_GENERIC: dict[str, dict[str, list[str]]] = {
     "sketch": SKETCH_GENERIC,
     "wire": WIRE_GENERIC,
@@ -339,9 +376,27 @@ def _bank_for(sample: dict[str, Any], style: str, import_like: bool) -> list[str
     return bank.get(style) or GENERIC_BANK[style]
 
 
+def wrap_source(sample: dict[str, Any], style: str) -> str:
+    """Исходная фраза нужного языка для обёрточных стилей ('' — стиль невозможен)."""
+    lang = WRAP_SOURCE_LANG.get(style)
+    if lang is None:
+        return ""
+    text = (sample.get("prompts") or {}).get(lang)
+    return text.strip() if isinstance(text, str) else ""
+
+
 def render_prompt(sample: dict[str, Any], style: str, seed: int, *, import_like: bool = False) -> str:
-    """Render one deterministic prompt of the requested style for a sample."""
+    """Render one deterministic prompt of the requested style for a sample.
+
+    Для строк без ``kind`` описание детали живёт только в исходном промпте, поэтому
+    стиль накладывается обёрткой поверх него; пустая строка = стиль не применим.
+    """
     rng = _rng(seed, str(sample["id"]), style)
+    if import_like and style in WRAP_BANK:
+        source = wrap_source(sample, style)
+        if not source:
+            return ""
+        return rng.choice(WRAP_BANK[style]).format(orig=source)
     template = rng.choice(_bank_for(sample, style, import_like))
     return template.format(**_slots(sample))
 
@@ -367,9 +422,12 @@ def augment_sample(
     for style in styles:
         if import_like and style not in IMPORT_STYLES:
             continue
+        text = render_prompt(sample, style, seed, import_like=import_like)
+        if not text:  # нет исходной фразы нужного языка — стиль пропускаем
+            continue
         row = copy.deepcopy(sample)
         row["id"] = f"{sample_id}__{style}"
-        row["prompts"] = {style: render_prompt(sample, style, seed, import_like=import_like)}
+        row["prompts"] = {style: text}
         meta = row.setdefault("metadata", {})
         meta["augmented_from"] = sample_id
         meta["prompt_style"] = style
