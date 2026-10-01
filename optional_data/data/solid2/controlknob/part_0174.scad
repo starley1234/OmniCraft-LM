@@ -1,0 +1,28 @@
+$fn = 32;
+
+// ----------------------------------------------------------------------
+// Control knob: dimpled knob
+// ----------------------------------------------------------------------
+
+// --- parameters (mm) ---
+dimp_d = 5;               // finger dimple diameter
+n_dimp = 8;               // number of dimples
+dimp_r = 15.5;            // dimple ring radius
+knob_d = 40;              // knob body diameter
+knob_h = 20;              // knob body height
+bore_d = 4;               // shaft bore diameter
+set_d = 3.5;              // set screw bore diameter
+fit_tol = 0.1;            // tolerance for press fits, mm
+free_tol = 0.5;           // tolerance for clearance fits, mm
+
+dimp_step = 360 / n_dimp;  // dimple angular step
+
+difference() {
+  cylinder(h = knob_h, d = knob_d);
+  translate([0, 0, -1]) cylinder(h = knob_h + 2, d = bore_d);
+  translate([-1, 0, knob_h / 2]) rotate([0, 90, 0])
+    cylinder(h = knob_d / 2 + bore_d / 2 + 2, d = set_d);  for (i = [0 : n_dimp - 1])
+    rotate([0, 0, i * dimp_step])
+      translate([dimp_r, 0, knob_h - 1])
+        cylinder(h = 2, d = dimp_d);
+}

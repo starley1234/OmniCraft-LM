@@ -1,0 +1,22 @@
+$fn = 32;
+
+// ----------------------------------------------------------------------
+// Gear rack: 12 teeth, pitch 10 mm
+// ----------------------------------------------------------------------
+
+// --- parameters (mm) ---
+teeth = 12;               // number of teeth
+pitch = 10;               // tooth pitch, X
+root_w = 7;               // tooth width at the root
+tip_w = 3.5;              // tooth width at the tip
+base_h = 10;              // rack body height, Y
+tooth_h = 3;              // tooth height above the body
+plate_t = 8;              // rack width, Z (extrusion height)
+
+rack_l = teeth * pitch;  // overall length
+total_h = base_h + tooth_h;  // overall height
+
+profile = [[0, 0], [120, 0], [120, 10], [118.5, 10], [116.75, 13], [113.25, 13], [111.5, 10], [108.5, 10], [106.75, 13], [103.25, 13], [101.5, 10], [98.5, 10], [96.75, 13], [93.25, 13], [91.5, 10], [88.5, 10], [86.75, 13], [83.25, 13], [81.5, 10], [78.5, 10], [76.75, 13], [73.25, 13], [71.5, 10], [68.5, 10], [66.75, 13], [63.25, 13], [61.5, 10], [58.5, 10], [56.75, 13], [53.25, 13], [51.5, 10], [48.5, 10], [46.75, 13], [43.25, 13], [41.5, 10], [38.5, 10], [36.75, 13], [33.25, 13], [31.5, 10], [28.5, 10], [26.75, 13], [23.25, 13], [21.5, 10], [18.5, 10], [16.75, 13], [13.25, 13], [11.5, 10], [8.5, 10], [6.75, 13], [3.25, 13], [1.5, 10], [0, 10]];  // primary outline, 52 points, counter clockwise
+
+// --- the one profile operation ---
+linear_extrude(height = plate_t) polygon(points = profile);

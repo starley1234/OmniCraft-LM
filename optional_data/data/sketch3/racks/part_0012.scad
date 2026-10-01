@@ -1,0 +1,24 @@
+$fn = 32;
+
+// ----------------------------------------------------------------------
+// Gear rack: 6 teeth, pitch 6 mm
+// ----------------------------------------------------------------------
+
+// --- parameters (mm) ---
+teeth = 6;                // number of teeth
+pitch = 6;                // tooth pitch, X
+root_w = 4.2;             // tooth width at the root
+tip_w = 2.1;              // tooth width at the tip
+base_h = 10;              // rack body height, Y
+tooth_h = 4;              // tooth height above the body
+plate_t = 8;              // rack width, Z (extrusion height)
+fit_tol = 0.02;           // declared fit tolerance (prompt contract)
+free_tol = 0.2;           // declared free tolerance (prompt contract)
+
+rack_l = teeth * pitch;  // overall length
+total_h = base_h + tooth_h;  // overall height
+
+profile = [[0, 0], [36, 0], [36, 10], [35.1, 10], [34.05, 14], [31.95, 14], [30.9, 10], [29.1, 10], [28.05, 14], [25.95, 14], [24.9, 10], [23.1, 10], [22.05, 14], [19.95, 14], [18.9, 10], [17.1, 10], [16.05, 14], [13.95, 14], [12.9, 10], [11.1, 10], [10.05, 14], [7.95, 14], [6.9, 10], [5.1, 10], [4.05, 14], [1.95, 14], [0.9, 10], [0, 10]];  // primary outline, 28 points, counter clockwise
+
+// --- the one profile operation ---
+linear_extrude(height = plate_t) polygon(points = profile);
