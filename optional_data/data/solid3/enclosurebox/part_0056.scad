@@ -18,9 +18,13 @@ inner_h = box_h - wall_t;  // cavity depth
 boss_h = inner_h - 2;  // corner boss height
 
 difference() {
-  cube([box_l, box_w, box_h]);
-  translate([wall_t, wall_t, wall_t])
-    cube([box_l - 2 * wall_t, box_w - 2 * wall_t, box_h]);
+  union() {
+    difference() {
+      cube([box_l, box_w, box_h]);
+      translate([wall_t, wall_t, wall_t])
+        cube([box_l - 2 * wall_t, box_w - 2 * wall_t, box_h]);
+    }
+  }
   translate([box_l / 2 - notch_w / 2, -1, box_h - notch_h])
     cube([notch_w, wall_t + 2, notch_h + 1]);
 }

@@ -25,7 +25,7 @@
 | `optional_data/data/wire2` | 1560 | 6 × 260 | `d1603ce1932026ea02f78b1c0d4f38a74b6f541bbd4458f004544d7c1954530f` |
 | `optional_data/data/sketch2` | 1380 | 6 × 230 | `67207b875d531d75bd3c3b6d54cb26719251f2b3c701a00a8f1b87fc5381e160` |
 | `optional_data/data/asm2` | 1020 | 6 × 170 | `5ae1b62f0d42075b6a622b2e1d8276af34d4149f31a226f9ca4522349d4c22c9` |
-| `optional_data/data/scale1` | 800 | 4 × 200 | `f7fe7c6f5a013c0e8e21820ca973710edc05e5906e254e803ae97523fce89ff1` |
+| `optional_data/data/scale1` | 800 | 4 × 200 | `0f980522e577866f4728fb653b13f2ac2a22e69c7a70369462fa996f1587fc75` |
 
 В каждом каталоге: `manifest.jsonl`, `<family>/{scene,part}_NNNN.scad`,
 `SHA256SUMS.txt`, `VALIDATION_REQUIRED.md`, `GENERATION_REPORT.md`

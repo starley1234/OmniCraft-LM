@@ -1,29 +1,21 @@
 $fn = 32;
 
 // ----------------------------------------------------------------------
-// Boss field: plate with bosses at given coordinates
+// Hole field: plate with holes at given coordinates
 // ----------------------------------------------------------------------
 
 // --- parameters (mm) ---
-plate_l = 90;             // plate length, X
-plate_w = 50;             // plate width, Y
-plate_t = 4;              // plate thickness, Z
-boss_d = 10;              // boss diameter
-boss_h = 8;               // boss height above the plate
-bore_d = 3;               // boss bore
-
-total_h = plate_t + boss_h;  // overall height
+plate_l = 120;            // plate length, X
+plate_w = 70;             // plate width, Y
+plate_t = 5;              // plate thickness, Z
+hole_d = 5;               // hole diameter
+fit_tol = 0.05;           // tolerance for press fits, mm
+free_tol = 0.2;           // tolerance for clearance fits, mm
 
 difference() {
-  union() {
-    cube([plate_l, plate_w, plate_t]);
-    translate([15, 15, plate_t]) cylinder(h = boss_h, d = boss_d);
-    translate([35, 15, plate_t]) cylinder(h = boss_h, d = boss_d);
-    translate([45, 35, plate_t]) cylinder(h = boss_h, d = boss_d);
-    translate([65, 35, plate_t]) cylinder(h = boss_h, d = boss_d);
-  }
-  translate([15, 15, -1]) cylinder(h = total_h + 2, d = bore_d);
-  translate([35, 15, -1]) cylinder(h = total_h + 2, d = bore_d);
-  translate([45, 35, -1]) cylinder(h = total_h + 2, d = bore_d);
-  translate([65, 35, -1]) cylinder(h = total_h + 2, d = bore_d);
+  cube([plate_l, plate_w, plate_t]);
+  translate([15, 15, -1]) cylinder(h = plate_t + 2, d = hole_d);
+  translate([25, 55, -1]) cylinder(h = plate_t + 2, d = hole_d);
+  translate([65, 55, -1]) cylinder(h = plate_t + 2, d = hole_d);
+  translate([105, 15, -1]) cylinder(h = plate_t + 2, d = hole_d);
 }

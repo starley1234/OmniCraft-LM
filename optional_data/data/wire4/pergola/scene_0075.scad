@@ -17,10 +17,10 @@ free_tol = 0.2;           // declared free tolerance (prompt contract)
 
 bbox_x = 95.8;  // overall X, joints included
 bbox_y = 45.8;  // overall Y, joints included
-bbox_z = 134.67;  // overall Z, joints included
+bbox_z = 89.67;  // overall Z, joints included
 chord_d = 2 * chord_r;  // arch stock diameter
 brace_d = 2 * brace_r;  // purlin stock diameter
-nodes = [[0.0, 0.0, 0.0], [90.0, 0.0, 0.0], [0.0, 0.0, 40.0], [90.0, 0.0, 40.0], [0.0, 0.0, 85.0], [4.4564, 0.0, 104.5248], [16.943, 0.0, 120.1824], [34.9866, 0.0, 128.8718], [55.0134, 0.0, 128.8718], [73.057, 0.0, 120.1824], [85.5436, 0.0, 104.5248], [90.0, 0.0, 85.0], [0.0, 40.0, 0.0], [90.0, 40.0, 0.0], [0.0, 40.0, 40.0], [90.0, 40.0, 40.0], [0.0, 40.0, 85.0], [4.4564, 40.0, 104.5248], [16.943, 40.0, 120.1824], [34.9866, 40.0, 128.8718], [55.0134, 40.0, 128.8718], [73.057, 40.0, 120.1824], [85.5436, 40.0, 104.5248], [90.0, 40.0, 85.0]];
+nodes = [[0.0, 0.0, 0.0], [90.0, 0.0, 0.0], [0.0, 0.0, 40.0], [4.4564, 0.0, 59.5248], [16.943, 0.0, 75.1824], [34.9866, 0.0, 83.8718], [55.0134, 0.0, 83.8718], [73.057, 0.0, 75.1824], [85.5436, 0.0, 59.5248], [90.0, 0.0, 40.0], [0.0, 40.0, 0.0], [90.0, 40.0, 0.0], [0.0, 40.0, 40.0], [4.4564, 40.0, 59.5248], [16.943, 40.0, 75.1824], [34.9866, 40.0, 83.8718], [55.0134, 40.0, 83.8718], [73.057, 40.0, 75.1824], [85.5436, 40.0, 59.5248], [90.0, 40.0, 40.0]];
 
 module member(a, b, r) {
   /* round stock from joint a to joint b, ends buried in the joint balls */
@@ -36,38 +36,34 @@ module joint(p, r) {
 }
 
 /* members - each call is one graph edge */
-member(nodes[0], nodes[4], chord_r);
-member(nodes[1], nodes[11], chord_r);
+member(nodes[0], nodes[2], chord_r);
+member(nodes[1], nodes[9], chord_r);
 member(nodes[0], nodes[1], chord_r);
+member(nodes[2], nodes[3], chord_r);
+member(nodes[3], nodes[4], chord_r);
 member(nodes[4], nodes[5], chord_r);
 member(nodes[5], nodes[6], chord_r);
 member(nodes[6], nodes[7], chord_r);
 member(nodes[7], nodes[8], chord_r);
 member(nodes[8], nodes[9], chord_r);
-member(nodes[9], nodes[10], chord_r);
+member(nodes[10], nodes[12], chord_r);
+member(nodes[11], nodes[19], chord_r);
 member(nodes[10], nodes[11], chord_r);
-member(nodes[2], nodes[4], brace_r);
-member(nodes[3], nodes[11], brace_r);
-member(nodes[12], nodes[16], chord_r);
-member(nodes[13], nodes[23], chord_r);
 member(nodes[12], nodes[13], chord_r);
+member(nodes[13], nodes[14], chord_r);
+member(nodes[14], nodes[15], chord_r);
+member(nodes[15], nodes[16], chord_r);
 member(nodes[16], nodes[17], chord_r);
 member(nodes[17], nodes[18], chord_r);
 member(nodes[18], nodes[19], chord_r);
-member(nodes[19], nodes[20], chord_r);
-member(nodes[20], nodes[21], chord_r);
-member(nodes[21], nodes[22], chord_r);
-member(nodes[22], nodes[23], chord_r);
-member(nodes[14], nodes[16], brace_r);
-member(nodes[15], nodes[23], brace_r);
-member(nodes[4], nodes[16], brace_r);
-member(nodes[5], nodes[17], brace_r);
-member(nodes[6], nodes[18], brace_r);
-member(nodes[7], nodes[19], brace_r);
-member(nodes[8], nodes[20], brace_r);
-member(nodes[9], nodes[21], brace_r);
-member(nodes[10], nodes[22], brace_r);
-member(nodes[11], nodes[23], brace_r);
+member(nodes[2], nodes[12], brace_r);
+member(nodes[3], nodes[13], brace_r);
+member(nodes[4], nodes[14], brace_r);
+member(nodes[5], nodes[15], brace_r);
+member(nodes[6], nodes[16], brace_r);
+member(nodes[7], nodes[17], brace_r);
+member(nodes[8], nodes[18], brace_r);
+member(nodes[9], nodes[19], brace_r);
 
 /* joint balls */
 for (p = nodes) joint(p, joint_r);

@@ -75,33 +75,30 @@ def build_pergola(index: int) -> Part:
     # two frames at y = 0 and y = depth; each: 2 posts + arch polyline
     nodes: list[tuple[float, float, float]] = []
     edges: list[tuple[int, int, str]] = []
+    arch_starts: list[int] = []
     for side, y in ((0, 0.0), (1, depth)):
         base = len(nodes)
         nodes.append((0.0, y, 0.0))                       # post foot A
         nodes.append((_r4(span), y, 0.0))                 # post foot B
-        nodes.append((0.0, y, _r4(post_h)))               # post top A
-        nodes.append((_r4(span), y, _r4(post_h)))         # post top B
         arch_pts = []
         for k in range(n_arch + 1):
             angle = math.radians(180.0 - 180.0 * k / n_arch)
             arch_pts.append((_r4(span / 2 + arch_r * math.cos(angle)),
                              y,
-                             _r4(post_h + arch_r + arch_r * math.sin(angle))))
+                             _r4(post_h + arch_r * math.sin(angle))))
         arch_start = len(nodes)
+        arch_starts.append(arch_start)
         nodes.extend(arch_pts)
-        # posts: foot -> the arch end above it
+        # posts: foot -> arch endpoint at the declared post height
         edges.append((base + 0, arch_start, "chord_r"))
         edges.append((base + 1, arch_start + n_arch, "chord_r"))
-        # feet tied to the arch ends (base chord)
+        # feet tied by the base chord
         edges.append((base + 0, base + 1, "chord_r"))
-        # arch polyline; the ends coincide with the post tops, tie them too
+        # arch polyline
         for k in range(n_arch):
             edges.append((arch_start + k, arch_start + k + 1, "chord_r"))
-        edges.append((base + 2, arch_start, "brace_r"))
-        edges.append((base + 3, arch_start + n_arch, "brace_r"))
     # purlins between the two arches at every polyline vertex
-    a0 = 4
-    a1 = 9 + n_arch  # side 0: 4 posts + (n_arch + 1) arch nodes, then 4 posts
+    a0, a1 = arch_starts
     for k in range(n_arch + 1):
         edges.append((a0 + k, a1 + k, "brace_r"))
     sc.nodes = nodes

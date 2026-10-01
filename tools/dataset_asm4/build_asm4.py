@@ -1,4 +1,4 @@
-"""Build the asm4 corpus (delivery no. 6): one .scad scene per sample.
+"""Build the asm4 corpus (delivery no. 7): one .scad scene per sample.
 
 Local gate per scene (``core2b.check_scene2``): source rules, argument-less
 modules defined exactly once, ordered ``translate/rotate`` calls matching the
@@ -8,7 +8,7 @@ predicted world bounds, pairwise clearance >= 0.2 mm and the STL round trip.
 
 Usage
 -----
-    python tools/dataset_asm4/build_asm4.py --count 170
+    python tools/dataset_asm4/build_asm4.py --count 130
     python tools/dataset_asm4/build_asm4.py --count 4 --out /tmp/asm4_smoke
 """
 
@@ -51,7 +51,7 @@ def audit(scene: Scene) -> list[str]:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--count", type=int, default=170, help="scenes per family")
+    parser.add_argument("--count", type=int, default=130, help="scenes per family")
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT)
     parser.add_argument("--quiet", action="store_true")
     args = parser.parse_args(argv)

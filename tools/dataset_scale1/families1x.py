@@ -396,6 +396,12 @@ def build_hardlayouts(index: int) -> Part:
         if any(x - boss_d / 2 < 3 or x + boss_d / 2 > plate_l - 3
                or y - boss_d / 2 < 3 or y + boss_d / 2 > plate_w - 3 for x, y in picks):
             raise ValueError("boss off the plate")
+        if any(
+            (ax - bx) ** 2 + (ay - by) ** 2 <= boss_d ** 2
+            for i, (ax, ay) in enumerate(picks)
+            for bx, by in picks[i + 1:]
+        ):
+            raise ValueError("bosses touch or overlap")
         builder = ScadBuilder("Boss field", "plate with bosses at given coordinates")
         for name, value, comment in (
             ("plate_l", plate_l, "plate length, X"),
@@ -455,6 +461,12 @@ def build_hardlayouts(index: int) -> Part:
         if any(x - boss_d / 2 < 3 or x + boss_d / 2 > plate_l - 3
                or y - boss_d / 2 < 3 or y + boss_d / 2 > plate_w - 3 for x, y in bosses):
             raise ValueError("boss off the plate")
+        if any(
+            (ax - bx) ** 2 + (ay - by) ** 2 <= boss_d ** 2
+            for i, (ax, ay) in enumerate(bosses)
+            for bx, by in bosses[i + 1:]
+        ):
+            raise ValueError("bosses touch or overlap")
         keep_out = boss_d / 2 + hole_d / 2 + 3.0
         rest = [
             (x, y)

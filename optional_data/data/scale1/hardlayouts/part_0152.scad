@@ -5,17 +5,15 @@ $fn = 32;
 // ----------------------------------------------------------------------
 
 // --- parameters (mm) ---
-plate_l = 110;            // plate length, X
+plate_l = 120;            // plate length, X
 plate_w = 80;             // plate width, Y
 plate_t = 5;              // plate thickness, Z
-hole_d = 5;               // hole diameter
+hole_d = 8;               // hole diameter
 
 difference() {
   cube([plate_l, plate_w, plate_t]);
-  translate([35, 25, -1]) cylinder(h = plate_t + 2, d = hole_d);
-  translate([35, 55, -1]) cylinder(h = plate_t + 2, d = hole_d);
-  translate([55, 45, -1]) cylinder(h = plate_t + 2, d = hole_d);
-  translate([65, 55, -1]) cylinder(h = plate_t + 2, d = hole_d);
-  translate([65, 65, -1]) cylinder(h = plate_t + 2, d = hole_d);
-  translate([95, 15, -1]) cylinder(h = plate_t + 2, d = hole_d);
+  translate([45, 65, -1]) cylinder(h = plate_t + 2, d = hole_d);
+  translate([55, 55, -1]) cylinder(h = plate_t + 2, d = hole_d);
+  translate([65, 35, -1]) cylinder(h = plate_t + 2, d = hole_d);
+  translate([95, 35, -1]) cylinder(h = plate_t + 2, d = hole_d);
 }

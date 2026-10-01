@@ -156,9 +156,12 @@ def build_enclosurebox(index: int) -> Part:
 
     shell = [
         "difference() {",
-        "  cube([box_l, box_w, box_h]);",
-        "  translate([wall_t, wall_t, wall_t])",
-        "    cube([box_l - 2 * wall_t, box_w - 2 * wall_t, box_h]);",
+        "  union() {",
+        "    difference() {",
+        "      cube([box_l, box_w, box_h]);",
+        "      translate([wall_t, wall_t, wall_t])",
+        "        cube([box_l - 2 * wall_t, box_w - 2 * wall_t, box_h]);",
+        "    }",
     ]
     feats_ru = [f"корпус {fmt(box_l)} x {fmt(box_w)} x {fmt(box_h)} мм со стенкой {fmt(wall_t)} мм"]
     feats_en = [f"enclosure {fmt(box_l)} x {fmt(box_w)} x {fmt(box_h)} mm, walls {fmt(wall_t)} mm"]
@@ -174,13 +177,14 @@ def build_enclosurebox(index: int) -> Part:
         if boss_in + boss_r > box_l / 2 - 1 or boss_r - hole_r < 1.5:
             raise ValueError("boss geometry too tight")
         shell.append(
-            "  for (sx = [0, 1], sy = [0, 1])\n"
-            "    translate([sx ? box_l - boss_in : boss_in,\n"
-            "               sy ? box_w - boss_in : boss_in, wall_t - 1]) {\n"
-            "      cylinder(r = boss_r, h = boss_h);\n"
-            "      translate([0, 0, boss_h - 4])\n"
-            "        cylinder(r = hole_r, h = 5);\n"
-            "    }"
+            "    for (sx = [0, 1], sy = [0, 1])\n"
+            "      translate([sx ? box_l - boss_in : boss_in,\n"
+            "                 sy ? box_w - boss_in : boss_in, wall_t - 1])\n"
+            "        difference() {\n"
+            "          cylinder(r = boss_r, h = boss_h);\n"
+            "          translate([0, 0, boss_h - 4])\n"
+            "            cylinder(r = hole_r, h = 5);\n"
+            "        }"
         )
         feats_ru.append(
             f"четыре бобышки радиусом {fmt(boss_r)} мм с отверстиями радиусом {fmt(hole_r)} мм"
@@ -188,6 +192,7 @@ def build_enclosurebox(index: int) -> Part:
         feats_en.append(
             f"four bosses, {fmt(boss_r)} mm radius, holes {fmt(hole_r)} mm radius"
         )
+    shell.append("  }")
     if variant in ("notch", "both"):
         notch_w = rng.grid([8.0, 10.0, 12.0])
         notch_h = rng.grid([10.0, 12.0, 15.0])

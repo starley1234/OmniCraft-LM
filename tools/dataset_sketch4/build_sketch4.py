@@ -6,7 +6,7 @@ count + the place1 law on both prompts) and sketch2's disk verifier
 
 Usage
 -----
-    python tools/dataset_sketch4/build_sketch4.py --count 250
+    python tools/dataset_sketch4/build_sketch4.py --count 200
     python tools/dataset_sketch4/build_sketch4.py --count 4 --out /tmp/sketch4_smoke
 """
 
@@ -30,7 +30,7 @@ CORPUS_DIR = "optional_data/data/sketch4"
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--count", type=int, default=250, help="samples per family")
+    parser.add_argument("--count", type=int, default=200, help="samples per family")
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT)
     parser.add_argument("--quiet", action="store_true")
     args = parser.parse_args(argv)

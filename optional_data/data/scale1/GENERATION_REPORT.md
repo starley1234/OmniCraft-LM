@@ -5,7 +5,7 @@ Audit sheet for `optional_data/data/scale1` (leftover of request no. 6: real-sca
 - generated: 2026-10-01, seed `Rng(family, index)` with fixed seed 20261001
 - samples: **800** across **4** families (200 each)
 - corpus size: 1342.9 KiB of text (manifest + 800 sources)
-- `manifest.jsonl` sha256: `f7fe7c6f5a013c0e8e21820ca973710edc05e5906e254e803ae97523fce89ff1`
+- `manifest.jsonl` sha256: `0f980522e577866f4728fb653b13f2ac2a22e69c7a70369462fa996f1587fc75`
 - generator: `tools/dataset_scale1/` (`families1x.py`, `build_scale1.py`, `verify_scale1.py`)
 - **OpenSCAD CLI on the generation machine: absent.** Every check below ran on the manifold3d + trimesh stack (the kernel OpenSCAD uses with `--backend=manifold`). Final acceptance requires a real `openscad --backend=manifold` run on the receiving side.
 - local gate per sample: gen2 `check_part` (header, forbidden constructs, ≤ 12 KiB, manifold evaluation to a single solid, declared-vs-measured bbox ≤ 3 %) + family axis rules + the place1 consistency law on both prompts

@@ -5,7 +5,7 @@ Audit sheet for `optional_data/data/wire4` (delivery no. 7). Not part of the tra
 - generated: 2026-10-01, seed `Rng(family, index)` with fixed seed 20261001
 - samples: **1000** scenes across **5** families (200 each)
 - corpus size: ~5.7 MiB of text (manifest + 1000 sources)
-- `manifest.jsonl` sha256: `ac314f794d20b32f801b1178a6a9d187127c7e175dd55f10b81196820217ff6e`
+- `manifest.jsonl` sha256: `bc62bbac50b36aa4b36d19d7654970bb8e5f29ea3fb5a339f8f2314badd22e63`
 - generator: `tools/dataset_wire4/` (`families4w.py`, `build_wire4.py`), shared scene core `tools/dataset_wire2/families2w.py` (`WireScene`), kit `tools/dataset_v5/kit.py`
 - **OpenSCAD CLI on the generation machine: absent.** Every check ran on the manifold3d + trimesh stack (the kernel OpenSCAD uses with `--backend=manifold`). Final acceptance requires a real `openscad --backend=manifold` run on the receiving side.
 - local gate per scene: `$fn = 32;` header, forbidden-construct scan, ≤ 12 KiB, manifold evaluation (members + joint balls fuse into one solid), graph replay against the manifest (node coordinates literal in code, rounded to 4 decimals), connectivity, no isolated nodes, every edge longer than 2r + 2 mm, place1 consistency law on both prompts

@@ -8,7 +8,7 @@
 | корпус | строк | семейств | sha256 манифеста | верификатор |
 | --- | ---: | ---: | --- | --- |
 | `optional_data/data/sketch4` | 1000 | 5×200 | `89306d946ee47c9f712833a96446787944662a3cbfe154bbb280f1e276e567bb` | `verify_sketch2.py --parts-dir optional_data/data/sketch4` → **0 failed** |
-| `optional_data/data/wire4` | 1000 | 5×200 | `ac314f794d20b32f801b1178a6a9d187127c7e175dd55f10b81196820217ff6e` | `verify_wire2.py --parts-dir optional_data/data/wire4` → **0 failed** |
+| `optional_data/data/wire4` | 1000 | 5×200 | `bc62bbac50b36aa4b36d19d7654970bb8e5f29ea3fb5a339f8f2314badd22e63` | `verify_wire2.py --parts-dir optional_data/data/wire4` → **0 failed** |
 | `optional_data/data/solid3` | 1000 | 5×200 | `473d2e6c05a081ee3de37bae598d99eb8fbbb8dcc10b501d1caf38f536afb139` | `verify_scale1.py --parts-dir optional_data/data/solid3` → **0 failed** |
 | `optional_data/data/asm4` | 650 сцен / 6110 деталей | 5×130 | `b0a9db60fda18680b6198f47dc0de4c047541e7d840270ba772d7c36b7fbd76b` | `verify_asm2.py --parts-dir optional_data/data/asm4` → **problems: none** |
 
