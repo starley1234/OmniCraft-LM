@@ -56,6 +56,19 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--lambda-geom", type=float, default=0.1)
     parser.add_argument("--max-prompt-tokens", type=int, default=256)
     parser.add_argument("--max-code-tokens", type=int, default=2048)
+    parser.add_argument(
+        "--specs-noise",
+        type=float,
+        default=0.0,
+        help="E3: probability the [SPECS] block is replaced by the runtime miner's block on the same prompt",
+    )
+    parser.add_argument(
+        "--specs-degrade",
+        type=float,
+        default=0.0,
+        help="E3: probability the [SPECS] block is degraded (class=layer, bbox=100^3); "
+        "--specs-noise + --specs-degrade must be <= 1",
+    )
     parser.add_argument("--gradient-checkpointing", action="store_true")
     parser.add_argument("--save-every", type=int, default=0)
     parser.add_argument("--voxel-grids", type=Path, default=None, help="sidecar voxel-grid GT JSONL (voxel layer aux loss)")
@@ -65,30 +78,37 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> int:
-    args = build_parser().parse_args()
-    config = TrainerConfig(
-        layer=args.layer,
-        data=args.data,
-        backbone_dir=args.backbone_dir,
-        zero_point_dir=args.zero_point_dir,
-        output_dir=args.output_dir,
-        device=args.device,
-        max_steps=args.steps,
-        accumulate=args.accumulate,
-        microbatch=args.microbatch,
-        max_tokens_per_forward=args.max_tokens_per_forward,
-        voxel_grids=args.voxel_grids,
-        lr=args.lr,
-        lr_warmup_steps=args.warmup_steps,
-        lora_dropout=args.lora_dropout,
-        max_vram_gb=args.max_vram_gb,
-        lambda_geom=args.lambda_geom,
-        max_prompt_tokens=args.max_prompt_tokens,
-        max_code_tokens=args.max_code_tokens,
-        gradient_checkpointing=args.gradient_checkpointing,
-        save_every=args.save_every,
-        log_every=args.log_every,
-    )
+    parser = build_parser()
+    args = parser.parse_args()
+    try:
+        config = TrainerConfig(
+            layer=args.layer,
+            data=args.data,
+            backbone_dir=args.backbone_dir,
+            zero_point_dir=args.zero_point_dir,
+            output_dir=args.output_dir,
+            device=args.device,
+            max_steps=args.steps,
+            accumulate=args.accumulate,
+            microbatch=args.microbatch,
+            max_tokens_per_forward=args.max_tokens_per_forward,
+            voxel_grids=args.voxel_grids,
+            lr=args.lr,
+            lr_warmup_steps=args.warmup_steps,
+            lora_dropout=args.lora_dropout,
+            max_vram_gb=args.max_vram_gb,
+            lambda_geom=args.lambda_geom,
+            max_prompt_tokens=args.max_prompt_tokens,
+            max_code_tokens=args.max_code_tokens,
+            specs_noise=args.specs_noise,
+            specs_degrade=args.specs_degrade,
+            gradient_checkpointing=args.gradient_checkpointing,
+            save_every=args.save_every,
+            log_every=args.log_every,
+        )
+    except ValueError as exc:
+        parser.error(str(exc))
+        raise  # parser.error never returns; keeps type checkers happy
     trainer = SpatialTrainer(config)
     if args.rollback_only:
         trainer.rollback()

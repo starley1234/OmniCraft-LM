@@ -20,10 +20,13 @@ import hashlib
 import json
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
 from torch import nn
+
+if TYPE_CHECKING:  # pragma: no cover - typing only, avoids importing the runtime hook eagerly
+    from src.runtime.specs_hook import Specs
 
 from src.data.dataset import CADJsonlDataset
 from src.data.schema import CADSample
@@ -51,6 +54,17 @@ SPATIAL_TOKENS: dict[str, str] = {
 }
 
 
+def validate_specs_noise(specs_noise: float, specs_degrade: float) -> None:
+    """Guard the E3 [SPECS] augmentation probabilities (authority: train_spatial CLI)."""
+    for name, value in (("specs_noise", specs_noise), ("specs_degrade", specs_degrade)):
+        if not 0.0 <= value <= 1.0:
+            raise ValueError(f"{name} must be in [0, 1], got {value!r}")
+    if specs_noise + specs_degrade > 1.0:
+        raise ValueError(
+            f"specs_noise + specs_degrade must be <= 1, got {specs_noise + specs_degrade}"
+        )
+
+
 @dataclass(slots=True)
 class TrainerConfig:
     layer: str
@@ -76,6 +90,10 @@ class TrainerConfig:
     lambda_geom: float = 0.1
     max_prompt_tokens: int = 256   # measured corpus p100: ~22 prompt tokens; cap prevents silent bloat
     cog_specs: bool = True         # prepend the deterministic [SPECS] block (ARCHITECTURE.md 8.1)
+    # E3 augmentation: make the model robust to an imperfect [SPECS] block. Both default to
+    # 0.0, which keeps the true dataset-composed block byte-for-byte (pre-E3 behavior).
+    specs_noise: float = 0.0       # prob: block = extract_specs_from_text(same prompt text)
+    specs_degrade: float = 0.0     # prob: block = degraded-valid (class=layer, bbox=100³)
     prompt_style: str = "rotate"   # "rotate" — детерминированный выбор среди всех стилей строки
                                    # (en/ru/free_*/conv_*); "en" — поведение v6/v7, когда обучение
                                    # видело только формальный английский и проваливало conv-промпты
@@ -87,6 +105,9 @@ class TrainerConfig:
     max_vram_gb: float = 14.0  # hard ceiling; log lines flag every breach (Windows spills instead of OOM)
     save_every: int = 0  # 0 = save only at the end
     log_every: int = 1
+
+    def __post_init__(self) -> None:
+        validate_specs_noise(self.specs_noise, self.specs_degrade)
 
 
 class SpatialTrainer:
@@ -267,19 +288,67 @@ class SpatialTrainer:
         digest = hashlib.sha1(str(sample.id).encode("utf-8")).digest()
         return prompts[keys[digest[0] % len(keys)]]
 
+    def _specs_roll(self, sample: CADSample) -> float:
+        """Deterministic per-sample draw in [0, 1) from ``sha1(id + ':specsnoise')``.
+
+        Sampling from the id — never from a global RNG or the training step — keeps a
+        sample's block treatment stable across epochs *and* identical between
+        ``build_sequence`` and ``_sample_lengths``.
+        """
+        digest = hashlib.sha1(f"{sample.id}:specsnoise".encode("utf-8")).digest()
+        return int.from_bytes(digest[:8], "big") / float(1 << 64)
+
+    def specs_for_sample(self, sample: CADSample) -> "Specs":
+        """Select the ``[SPECS]`` block for one sample (E3 augmentation).
+
+        The draw decides, in order:
+        - ``specs_noise``: a self-consistent block = the runtime miner's output on the
+          *same* prompt text (class/bbox/topology/canvas recomputed by
+          ``extract_specs_from_text``, i.e. exactly what inference renders);
+        - ``specs_degrade``: a degraded-but-valid block — class = the layer name,
+          bbox = documented default 100³, canonical topology, canvas = the layer;
+        - otherwise: the true dataset-composed block. With both probabilities 0 this
+          path is byte-for-byte the pre-E3 behavior.
+
+        Ground-truth code is never touched by any branch.
+        """
+        from src.runtime.specs_hook import DEFAULT_BBOX, compose_specs, extract_specs_from_text
+
+        object_class = str(sample.metadata.get("origin", sample.layer))
+        roll = self._specs_roll(sample)
+        if roll < self.config.specs_noise:
+            return extract_specs_from_text(
+                self.prompt_text_for(sample), canvas_hint=self.config.layer
+            )
+        if roll < self.config.specs_noise + self.config.specs_degrade:
+            return compose_specs(
+                object_class=sample.layer,
+                bbox=DEFAULT_BBOX,
+                canvas=self.config.layer,
+                provenance="specs-degrade",
+            )
+        return compose_specs(
+            object_class=object_class,
+            bbox=sample.verification.target_bbox,
+            canvas=self.config.layer,
+        )
+
+    def prompt_with_specs_for(self, sample: CADSample) -> str:
+        """Training prompt body = rotated formulation + the selected ``[SPECS]`` block.
+
+        Single source of truth for the block: both ``build_sequence`` and
+        ``_sample_lengths`` go through here so their token counts cannot diverge.
+        """
+        prompt_text = self.prompt_text_for(sample)
+        if not self.config.cog_specs:
+            return prompt_text
+        from src.runtime.specs_hook import build_prompt_with_specs
+
+        return build_prompt_with_specs(prompt_text, self.specs_for_sample(sample))
+
     def build_sequence(self, sample: CADSample) -> dict[str, torch.Tensor]:
         """Compose ``prompt + [SPECS] + trigger`` (masked) followed by ``code + EOS``."""
-        prompt_text = self.prompt_text_for(sample)
-        if self.config.cog_specs:
-            from src.runtime.specs_hook import build_prompt_with_specs, compose_specs
-
-            object_class = str(sample.metadata.get("origin", sample.layer))
-            specs = compose_specs(
-                object_class=object_class,
-                bbox=sample.verification.target_bbox,
-                canvas=self.config.layer,
-            )
-            prompt_text = build_prompt_with_specs(prompt_text, specs)
+        prompt_text = self.prompt_with_specs_for(sample)
         trigger = SPATIAL_TOKENS[self.config.layer]
         prompt_ids = self.tokenizer(f"{prompt_text}\n{trigger}\n", add_special_tokens=False)[
             "input_ids"
@@ -498,7 +567,9 @@ class SpatialTrainer:
         start = _time.monotonic()
         lengths: list[int] = []
         for sample in samples:
-            prompt_text = self.prompt_text_for(sample)
+            # Same helper as build_sequence: the augmentation roll and mined/degraded
+            # block must not differ, or the packed lengths would slice real sequences.
+            prompt_text = self.prompt_with_specs_for(sample)
             prompt_len = len(
                 self.tokenizer(f"{prompt_text}\nX\n", add_special_tokens=False)["input_ids"]
             )

@@ -17,6 +17,8 @@ SPLIT_DIR="${5:-splits_v6}"   # ВНИМАНИЕ: путь к сплиту бы�
                               # из-за чего чейны v6/v7 обучались на старом корпусе.
 LAMBDA_GEOM="${6:-}"   # опционально: вес aux-лосса (дефолт трейнера 0.1);
                        # 0 = aux выключен — для абляции живого aux (задача D, NEXT_SESSION_V9)
+SPECS_NOISE="${7:-}"   # E3: вероятность заменить [SPECS] блок на рантайм-минер того же промпта
+SPECS_DEGRADE="${8:-}" # E3: вероятность деградировать блок (class=слой, bbox=100^3)
 
 if [ "$LAYER" = "wire" ] && [ "${4:-}" = "" ]; then
   BUDGET=1200  # wire codes are ~3x longer; the PyTorch DeltaNet fallback is S-sensitive
@@ -39,10 +41,15 @@ if [ -n "$LAMBDA_GEOM" ]; then
   LAMBDA_ARG=(--lambda-geom "$LAMBDA_GEOM")
 fi
 
+SPECS_ARG=()
+if [ -n "$SPECS_NOISE" ] || [ -n "$SPECS_DEGRADE" ]; then
+  SPECS_ARG=(--specs-noise "${SPECS_NOISE:-0}" --specs-degrade "${SPECS_DEGRADE:-0}")
+fi
+
 exec python tools/train_spatial.py \
   --layer "$LAYER" \
   --data "$DATA" \
   --steps "$STEPS" --accumulate "$ACC" \
   --max-tokens-per-forward "$BUDGET" \
   --lr 2e-4 --save-every 100 --log-every 20 \
-  "${VGRID_ARG[@]}" "${LAMBDA_ARG[@]}"
+  "${VGRID_ARG[@]}" "${LAMBDA_ARG[@]}" "${SPECS_ARG[@]}"
