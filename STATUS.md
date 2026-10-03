@@ -3,9 +3,27 @@
 > Обновлять при каждом изменении контура (поставка, обучение, правка пайплайна).
 > Читать первым в новой сессии. История — в git и docs/archive/.
 
-**Обновлено:** 2026-10-03 · **Ветка:** `arena/01a0ec28-omnicraft-lm`
+**Обновлено:** 2026-10-04 · **Ветка:** `arena/01a10346-omnicraft-lm`
 
 ## Сейчас происходит
+- **E2/E3 (2026-10-04): чистая база voxel снята, запущен v12 (E3-аугментация [SPECS]).**
+  - **E0** `omni preflight --with-tests` — зелёный, **93 passed**.
+  - **E1** `specs_probe_v2`: минер даёт корректные блоки (`flange_mined` → `flanges / [96,96,10] /
+    csg / voxel`), но модель их не исполняет (`[144,148,15]`; ручной oracle `[96,143,21]`) →
+    диагноз «это поведение модели» подтверждён. Evidence: `optional_data/specs_probe_v2/`.
+  - **E2** чистый eval voxel (прежние цифры были заражены `class=freeform`): **compile 40/42 (95 %)**,
+    watertight 38/42, **bbox ≤15 % 13/42**. Прежний «0/42» — артефакт окружения: в WSL snap
+    называется `openscad-nightly`, а враппер звал `openscad-nightny`; плюс snap-изоляция делает
+    `/tmp` приватным. Враппер починен, `TMPDIR` уведён в `$HOME`. База сохранена
+    `data/processed/eval_voxel_v9_clean.jsonl`; веса v9 → `checkpoints/voxel_v9`.
+  - **E3** реализована аугментация блока: `specs-noise=0.30` / `specs-degrade=0.10`,
+    детерминированный сид `sha1(id:specsnoise)`, дефолт 0.0 = побайтово прежнее
+    (`tests/test_specs_noise.py`, 9 тестов). Коммит `bd672fbc`.
+  - **v12 запущен** (WSL pid 1143, `~/omnicraft/chain_v12.log`): voxel-only, 2900×16@1000,
+    `splits_v9_fixed`, wire не трогается; grids 100 %. Приёмка: bbox ≤15 % заметно > 13/42.
+  - **E4** ре-аудит корпуса: 16 436/75 157 строк с расхождением >15 % (доминируют
+    `lbrackets` 7476, `threads` 6088); `runs/reaudit_specs/{candidates.csv,summary.json}`;
+    требует vision-аудита. (Инструмент падает в конце на печати `→` в cp1251-консоли — файлы уже записаны.)
 - **[SPECS]-расследование закрыто внешней сессией (2026-10-03): диагноз подтверждён, минер починен.**
   Отчёт: `docs/SPECS_INVESTIGATION_REPORT.md`. Патч `src/runtime/specs_hook.py` (рефакторинг минера:
   Ø/«на»/by-форматы, class из словаря `metadata.origin` (30 keyword-правил + fallback слоя вместо
