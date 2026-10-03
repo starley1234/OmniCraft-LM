@@ -14,6 +14,8 @@
 | ![07](contact_sheet_07.png) | |
 
 Листы 1248×1088, плитка 240 px — без даунскейла при просмотре. Полные кадры:
-`png/<family>.png` (320×320), исходники — `scad/<family>.scad`.
+`png/<family>.png` (320×320). Исходники `scad/` в git не коммитятся — при нужде
+перегенерировать:
+`python tools/render_family_previews.py --input data/processed/combined_v9_fixed.jsonl --out data/previews/families_v9`.
 
 Слои: voxel 80 / wire 25 / sketch 35.
