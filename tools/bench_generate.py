@@ -51,7 +51,7 @@ def main() -> int:
     load_s = time.time() - started
     print(f"загрузка холста {args.layer}: {load_s:.1f} с (device={device})")
 
-    mined = extract_specs_from_text(args.prompt)
+    mined = extract_specs_from_text(args.prompt, canvas_hint=args.layer)
     specs = compose_specs(object_class=mined.object_class, bbox=mined.bbox,
                           canvas=args.layer, topology=mined.topology)
     text = f"{build_prompt_with_specs(args.prompt, specs)}{SPATIAL_TOKENS[args.layer]}\n"

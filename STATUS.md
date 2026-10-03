@@ -6,6 +6,20 @@
 **Обновлено:** 2026-10-03 · **Ветка:** `arena/01a0ec28-omnicraft-lm`
 
 ## Сейчас происходит
+- **[SPECS]-расследование закрыто внешней сессией (2026-10-03): диагноз подтверждён, минер починен.**
+  Отчёт: `docs/SPECS_INVESTIGATION_REPORT.md`. Патч `src/runtime/specs_hook.py` (рефакторинг минера:
+  Ø/«на»/by-форматы, class из словаря `metadata.origin` (30 keyword-правил + fallback слоя вместо
+  OOD `freeform`), канонический topology через `canvas_hint`, поле `provenance`); стыки
+  demo/eval/probe/bench переведены на hint; двойная `[/SPECS]` в demo-ответе устранена. Метрики
+  минера на реальных промптах: held-out bbox≤15% **5→29/36**, манифест-срез **89→130/140**. Тесты:
+  +13 в `test_specs_hook.py` (16/16 зелёные; не-torch набор 43 passed/3 skipped; полный
+  `preflight --with-tests` — на машине владельца, в песочнице нет torch/OpenSCAD). Визуальный
+  аудит 140 семейств (`data/previews/families_v9/verdict_template.csv`): **9 bad** — 3 строки para1
+  (текст от чужой детали) + 6 импортов `parts_import` (заявленные фичи не отрендерены). Важно:
+  eval v8–v11 страдал тем же багом (class=freeform в 42/42) — базы переснять после фикса.
+  Следующий шаг: **E1** `specs_probe.py --out optional_data/specs_probe_v2` (критерии — §5 отчёта),
+  затем **E2** `wsl_eval.sh voxel`, параллельно **E4** чистка корпуса фильтром вердиктов;
+  **E3** (дообучение v12 на зашумлённых блоках) — по результатам E1/E2.
 - **[SPECS] подозревается в порче генерации — собрана доказательная база (2026-10-03).**
   Пробник `tools/specs_probe.py` прогнал один промпт (фланец Ø96×10, Bore Ø32, 5×Ø6 на Ø70)
   в 8 условиях на `checkpoints/voxel`: результат в `optional_data/specs_probe/` (`cases.jsonl`,

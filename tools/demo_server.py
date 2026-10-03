@@ -41,7 +41,6 @@ import torch
 
 from src.runtime.specs_hook import (
     CANVASES,
-    STOP_TOKEN,
     build_prompt_with_specs,
     compose_specs,
     extract_specs_from_text,
@@ -133,10 +132,14 @@ class DemoState:
 # --------------------------------------------------------------------------- генерация
 
 def _generate(state: DemoState, prompt: str, canvas_override: str) -> dict:
-    mined = extract_specs_from_text(prompt)
-    canvas = canvas_override if canvas_override in CANVASES else mined.canvas
+    # The UI choice pins the canvas; the miner then derives topology/class for that
+    # canvas (training never showed a block contradicting the executed layer).
+    hint = canvas_override if canvas_override in CANVASES else None
+    mined = extract_specs_from_text(prompt, canvas_hint=hint)
+    canvas = mined.canvas
     specs = compose_specs(
-        object_class=mined.object_class, bbox=mined.bbox, canvas=canvas, topology=mined.topology
+        object_class=mined.object_class, bbox=mined.bbox, canvas=canvas,
+        topology=mined.topology, provenance=mined.provenance,
     )
     trainer = state.shell(canvas)
     trigger = SPATIAL_TOKENS[canvas]
@@ -169,7 +172,8 @@ def _generate(state: DemoState, prompt: str, canvas_override: str) -> dict:
     scad_path.write_text(code, encoding="utf-8")
 
     result = {
-        "canvas": canvas, "elapsed_s": elapsed, "specs_text": specs.render() + STOP_TOKEN,
+        "canvas": canvas, "elapsed_s": elapsed, "specs_text": specs.render(),
+        "specs_provenance": specs.provenance,
         "code": code, "code_chars": len(code), "bbox_target": list(specs.bbox),
         "compiled": None, "watertight": None, "components_count": None,
         "bbox": None, "bbox_rel_err": None, "compile_log": "", "stl": None, "png": None,

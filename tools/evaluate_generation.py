@@ -100,7 +100,7 @@ def main() -> int:
 
     for index, row in enumerate(rows):
         prompt = row["prompt"]
-        mined = extract_specs_from_text(prompt)
+        mined = extract_specs_from_text(prompt, canvas_hint=args.layer)
         expected = row.get("expected_bbox_mm")
         bbox = (
             (float(expected[0]), float(expected[1]), float(expected[2]))

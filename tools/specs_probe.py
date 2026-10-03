@@ -110,15 +110,17 @@ def specs_for_case(case: dict, canvas: str) -> "Specs | None":
     if mode == "nospecs":
         return None
     if mode == "mined":
-        mined = extract_specs_from_text(case["prompt"])
+        mined = extract_specs_from_text(case["prompt"], canvas_hint=canvas)
         return compose_specs(object_class=mined.object_class, bbox=mined.bbox,
-                             canvas=canvas, topology=mined.topology)
+                             canvas=canvas, topology=mined.topology,
+                             provenance=mined.provenance)
     if mode == "specs":
         return Specs(
             object_class=case.get("object_class", "unknown"),
             bbox=tuple(float(v) for v in case["bbox"]),
             topology=case.get("topology") or "csg union/difference",
             canvas=canvas,
+            provenance="block",
         )
     raise ValueError(f"unknown mode {mode!r}")
 
