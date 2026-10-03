@@ -3,9 +3,19 @@
 > Обновлять при каждом изменении контура (поставка, обучение, правка пайплайна).
 > Читать первым в новой сессии. История — в git и docs/archive/.
 
-**Обновлено:** 2026-10-02 · **Ветка:** `arena/01a0ec28-omnicraft-lm`
+**Обновлено:** 2026-10-03 · **Ветка:** `arena/01a0ec28-omnicraft-lm`
 
 ## Сейчас происходит
+- **[SPECS] подозревается в порче генерации — собрана доказательная база (2026-10-03).**
+  Пробник `tools/specs_probe.py` прогнал один промпт (фланец Ø96×10, Bore Ø32, 5×Ø6 на Ø70)
+  в 8 условиях на `checkpoints/voxel`: результат в `runs/specs_probe/` (`cases.jsonl`,
+  `overview.png`, `report.md`). Корень: инференс-минер `extract_specs_from_text` даёт блок,
+  которого модель не видела при обучении — `class: freeform` (в 75 157 строках корпуса такого
+  класса нет; там `class = metadata.origin`), `bbox [100,100,100]` (диаметр/толщина не
+  парсятся), `topology` от sketch при `canvas: voxel`. Модель обучена брать масштаб из
+  `[SPECS]` (conv-промпты без размеров) и слепо доверяет блоку: `flange_wrongspec`
+  ([200,200,20]) → факт `[209,300,10]`. Постановка внешнему агенту:
+  `docs/SPECS_INVESTIGATION_TASK.md` (копия `runs/specs_probe/TASK.md`).
 - **Прогон v11 (исправленные данные) ЗАПУЩЕН 2026-10-02, WSL, детач pid 1521.**
   voxel-лег на исправленном корпусе `combined_v9_fixed` (75 157 строк, сплит `splits_v9_fixed`
   train 60 561). Рецепт как v9: 2900×16@1000, lambda_geom 0.1. Лог: `~/omnicraft/train_v11_voxel.log`.
@@ -174,6 +184,17 @@
   (иначе паттерн матчил собственную обёртку bash и вечно рисовал живые train_spatial/wsl_train_chain);
   добавлен ключ `evaluate_generation` (WSL-eval теперь виден в статусе).
 - `tests/test_golden.py` сторожит детерминизм генераторов; намеренное изменение → `python tools/update_golden.py`.
+- `tools/render_family_previews.py` — изометрические превью корпуса **по семействам**
+  (`metadata.origin`): PNG 320×320 + `manifest.jsonl`/`manifest.md` (id, промпт, bbox),
+  контактные листы (`--per-sheet`, без даунскейла) и `verdict_template.csv` для
+  проверяющего vision-агента; `--list-families` показывает раскладку. Срез v9 (140 семейств,
+  1 образец): `data/previews/families_v9/` — 140/140 ok (voxel 80 / wire 25 / sketch 35).
+  Назначение: дать агенту визуальный анализ выборки без запуска OpenSCAD.
+- `tools/filter_corpus_by_verdict.py` — применяет вердикты (`verdict_template.csv`):
+  выкидывает строки `bad` по `id` из корпуса, пишет отчёт (`*.report.json`/`.md`).
+  Цикл «проверил → почистил» замкнут.
+- `tools/specs_probe.py` — контролируемый прогон обученной модели для аудита `[SPECS]`
+  (`nospecs` / `mined` / ручной блок): код + изометрия + метрики bbox/compile в `runs/`.
 - Eval/обучение — в WSL2 (`tools/wsl_eval.sh`, `tools/wsl_train*.sh`); Windows-путь остаётся запасным.
 
 ## Следующие шаги (по приоритету)
