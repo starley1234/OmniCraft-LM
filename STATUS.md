@@ -8,14 +8,14 @@
 ## Сейчас происходит
 - **[SPECS] подозревается в порче генерации — собрана доказательная база (2026-10-03).**
   Пробник `tools/specs_probe.py` прогнал один промпт (фланец Ø96×10, Bore Ø32, 5×Ø6 на Ø70)
-  в 8 условиях на `checkpoints/voxel`: результат в `runs/specs_probe/` (`cases.jsonl`,
+  в 8 условиях на `checkpoints/voxel`: результат в `optional_data/specs_probe/` (`cases.jsonl`,
   `overview.png`, `report.md`). Корень: инференс-минер `extract_specs_from_text` даёт блок,
   которого модель не видела при обучении — `class: freeform` (в 75 157 строках корпуса такого
   класса нет; там `class = metadata.origin`), `bbox [100,100,100]` (диаметр/толщина не
   парсятся), `topology` от sketch при `canvas: voxel`. Модель обучена брать масштаб из
   `[SPECS]` (conv-промпты без размеров) и слепо доверяет блоку: `flange_wrongspec`
   ([200,200,20]) → факт `[209,300,10]`. Постановка внешнему агенту:
-  `docs/SPECS_INVESTIGATION_TASK.md` (копия `runs/specs_probe/TASK.md`).
+  `docs/SPECS_INVESTIGATION_TASK.md` (копия `optional_data/specs_probe/TASK.md`).
 - **Прогон v11 (исправленные данные) ЗАПУЩЕН 2026-10-02, WSL, детач pid 1521.**
   voxel-лег на исправленном корпусе `combined_v9_fixed` (75 157 строк, сплит `splits_v9_fixed`
   train 60 561). Рецепт как v9: 2900×16@1000, lambda_geom 0.1. Лог: `~/omnicraft/train_v11_voxel.log`.

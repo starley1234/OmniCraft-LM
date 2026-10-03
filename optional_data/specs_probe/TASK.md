@@ -73,12 +73,12 @@ base_len = 100; base_w = 100; base_h = 100;
 
 ¹ `tools/demo_server.py:172` формирует `specs_text = specs.render() + STOP_TOKEN`, а
 `render()` уже заканчивается `[/SPECS]` — отсюда дубль в UI. Косметика, но показывает
-небрежность стыка. Артефакт кода: `runs/specs_probe/flange_mined.scad` (идентичен вашему).
+небрежность стыка. Артефакт кода: `optional_data/specs_probe/flange_mined.scad` (идентичен вашему).
 
 ### Доказательная база: 8 прогонов одной модели (voxel, greedy, ≤1024 токена)
 
-Файлы: `runs/specs_probe/` — `cases.jsonl` (полные записи), `report.md`, `overview.png`,
-`<case>.scad`, `png/<case>.png`. Обзор всех восьми — `runs/specs_probe/overview.png`.
+Файлы: `optional_data/specs_probe/` — `cases.jsonl` (полные записи), `report.md`, `overview.png`,
+`<case>.scad`, `png/<case>.png`. Обзор всех восьми — `optional_data/specs_probe/overview.png`.
 
 | случай | режим | class в блоке | bbox в блоке | ожид. | факт. bbox | max отн. ошибка | compile |
 |---|---|---|---|---|---|---|---|
@@ -216,7 +216,7 @@ canvas: {sketch|voxel|wire|brep|assembly}
   `freeform` отсутствует**.
 - Промпт-аугментация без размеров: `src/data/generators/prompt_augment.py` (docstring,
   стр. 1–9).
-- Прогоны пробника: `runs/specs_probe/` (`cases.jsonl`, `report.md`, `overview.png`,
+- Прогоны пробника: `optional_data/specs_probe/` (`cases.jsonl`, `report.md`, `overview.png`,
   `<case>.scad`, `png/`).
 - Инструменты визуального аудита семейств:
   - `tools/render_family_previews.py` — превью 320×320 по семействам (`metadata.origin`),
@@ -229,7 +229,7 @@ python tools/specs_probe.py `
   --checkpoint  C:/github/OmniCraft-LM/checkpoints/voxel `
   --backbone-dir C:/github/OmniCraft-LM/checkpoints/baseline_qwen35_2b `
   --zero-point-dir C:/github/OmniCraft-LM/checkpoints/zero_point `
-  --out runs/specs_probe --max-new-tokens 1024
+  --out optional_data/specs_probe --max-new-tokens 1024
 # свои кейсы: --cases-file cases.json  (см. CASES внутри tools/specs_probe.py)
 ```
 
