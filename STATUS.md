@@ -33,6 +33,11 @@
   55 979 / 8 359 / 3 799 (train: voxel 48 345 / wire 7 634), 0 пересечений id,
   20/20 проб компиляции после стрипа. Отчёты:
   `runs/reaudit_specs/v14/{V14_DELETION_REPORT,V14_CORPUS_REPORT,clean_filter_report.md}`.
+- **Прогон v14 ЗАПУЩЕН (2026-10-04 20:02, WSL, detached).** «С нуля» (rollback обоих
+  слоёв к zero point seed 1234), voxel 2900×16@1000 + wire 1600×16@1000 на `splits_v14`,
+  E3-флаги 0.0, R1-shuffle. Бюджет-фильтр: 6 827/48 345 voxel длиннее 1000 токенов
+  (осталось 41 518). Первые шаги: lm 0.90→0.47, aux 0.66 (gt 100 %), OOM/[EMPTY STEP] = 0.
+  Лог `~/omnicraft/chain_v14.log` → `runs/train_v14/`; приёмка — против свежей базы v9.
 - **v14-подготовка (2026-10-04, без-GPU сессия): чистка-2 политика, структура, бриф.**
   `tools/clean_corpus_v10.py` доработан по уроку E5: `--keep-origin`/`--cap-origin-frac`
   (семейства с долей кандидатов > капа спасаются целиком — threads/lbrackets больше не режем),
