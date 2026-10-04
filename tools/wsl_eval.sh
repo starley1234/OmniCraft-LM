@@ -8,6 +8,19 @@ set -euo pipefail
 cd "$HOME/omnicraft/repo"
 source .venv/bin/activate
 export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1
+export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
+# snap/AppImage OpenSCAD пишет STL в приватный /tmp, если TMPDIR не под $HOME.
+export TMPDIR="${TMPDIR:-$HOME/omnicraft/tmp}"
+mkdir -p "$TMPDIR"
+
+# Страж окружения: реальная пробная компиляция простой детали тем же раннером,
+# что и eval. Поломка CAD-рантайма обязана читаться как [MISSING] здесь, а не как
+# «модель ничего не умеет».
+if ! python -m src.utils.system_check --openscad-only; then
+  echo "[wsl_eval] ENV GUARD FAILED: OpenSCAD не отдал STL — eval был бы невалиден." >&2
+  echo "[wsl_eval] Это поломка CAD-окружения, НЕ показатель качества модели." >&2
+  exit 3
+fi
 
 LAYERS=("$@")
 if [ "${#LAYERS[@]}" -eq 0 ]; then LAYERS=(voxel wire); fi
