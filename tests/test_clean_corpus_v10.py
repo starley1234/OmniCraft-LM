@@ -5,6 +5,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -69,7 +70,7 @@ def _setup(tmp_path: Path) -> dict:
     subprocess.run(
         [sys.executable, str(SPLITTER), "--input", str(corpus), "--output-dir", str(old_splits),
          "--seed", "7", "--train-ratio", "1.0", "--validation-ratio", "0.0", "--test-ratio", "0.0"],
-        check=True, capture_output=True, text=True, cwd=REPO,
+        check=True, capture_output=True, text=True, encoding="utf-8", errors="replace", cwd=REPO,
     )
     # 5 bad ids in-corpus, one duplicate line (must dedup), one ghost id (must not crash)
     bad = rows[0], rows[3], rows[7], rows[11], rows[14]
@@ -99,7 +100,8 @@ def _run(env: dict, tmp_path: Path, extra: list[str] = ()) -> subprocess.Complet
          "--report", str(tmp_path / "DELETION_REPORT.md"),
          "--seed", "7", "--train-ratio", "1.0", "--validation-ratio", "0.0", "--test-ratio", "0.0",
          *extra],
-        capture_output=True, text=True, cwd=REPO,
+        capture_output=True, text=True, encoding="utf-8", errors="replace",
+        env={**os.environ, "PYTHONIOENCODING": "utf-8"}, cwd=REPO,
     )
 
 
