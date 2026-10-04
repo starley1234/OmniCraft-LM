@@ -28,6 +28,54 @@
 
 ## Записи
 
+### v14 — 2026-10-04 20:02 → 2026-10-05 01:11 (корпус v14: лёгкая чистка + dim-free conv-пары; voxel-приёмка пройдена, wire-compile — нет)
+- **Цель:** честный прогон «с нуля» на «хороших данных» (бриф `docs/TRAIN_BRIEF_v14.md`
+  §1–§4): лёгкая чистка вместо −22 %, conv-пары «текст без размеров», sketch вне обучения,
+  компактность, seeded per-epoch shuffle (R1), без E3-шума.
+- **Данные:** `data/processed/splits_v14` — train 55 979 / val 8 359 / test 3 799
+  (train: voxel 48 345 / wire 7 634; sketch/brep/assembly выведены). Корпус
+  `combined_v14` = 79 879: лёгкая чистка −1 278 из 75 157 (`clean_corpus_v10.py
+  --cap-origin-frac 0.25`; threads/lbrackets спасены целиком), +6 000 conv-пар
+  (1 500 прототипов × 4 формулировки, 0 цифр в тексте), стрип-комментариев
+  (p50 кода 1 418→745 симв.). Сетки-GT 48 345/48 345 (100 %), 9 101 уникальная
+  программа. Бюджет-фильтр 1000: voxel 6 827/48 345 длиннее (осталось 41 518),
+  wire 2 142/7 634 (осталось 5 492).
+- **Рецепт:** voxel 2900×16@1000, wire 1600×16@1000; lambda_geom 0.1, lr 2e-4,
+  warmup 30, accum 16, microbatch 8, lora_dropout 0.05, `shuffle=True seed=1234`,
+  `specs-noise=specs-degrade=0`, zero point seed 1234. Чейн
+  `tools/wsl_train_chain_v14.sh 2900 1600 1000 1000 splits_v14 v14`, лог
+  `runs/train_v14/chain_v14.log`. Механика чистая: оба лега rc=0, `[EMPTY STEP]`=0,
+  OOM=0, `gt 100 %` на всех шагах.
+- **Held-out (42, WSL2, greedy, 1024 токена):**
+  - voxel: **39/42 compile**, watertight 39/42, **bbox ≤15 % 28/42**, медиана
+    bbox-ошибки **0.0**. По категориям (compile/bbox/всего): gen 8/8/8, dom 8/6/8,
+    free_ru 11/9/12, free_en 6/5/8, conv 6/—/6.
+  - wire: **16/42 compile**, watertight 16/42, **bbox ≤15 % 6/42**, медиана
+    bbox-ошибки **0.818**. По категориям: gen 2/0/8, dom 4/0/8, free_ru 6/3/12,
+    free_en 4/3/8, conv 0/—/6.
+- **Сравнение (одна методика, свежие базы):**
+  | прогон | данные | compile | bbox ≤15 % | медиана |
+  |---|---:|---:|---:|---:|
+  | voxel v9, свежая база | v9 | 39/42 | 5/42 | 1.083 |
+  | **voxel v14** | **v14** | **39/42** | **28/42** | **0.0** |
+  | wire v9, свежая база | v9 | 18/42 | 1/42 | 1.388 |
+  | **wire v14** | **v14** | **16/42** | **6/42** | **0.818** |
+- **Приёмка §4:** voxel — **ПРОЙДЕНА** (compile 39=39 не потерян; bbox 28 ≥ 20;
+  медиана 0.0 < 0.5). `conv bbox` — **не измеряется**: в held-out у `conversational`-строк
+  нет `expected_bbox_mm` (scored 0/6), поэтому «≥3/6» проверить нельзя; v14 при этом честно
+  прокидывает масштаб из `[SPECS]` (ровно `[100,100,100]`, т.к. в тексте нет размеров →
+  минер даёт DEFAULT_BBOX), тогда как v9 давал хаотичные габариты. wire — compile 16 < 30
+  (свежая база 18 тоже ниже порога), bbox 6 > 2 — ПРОЙДЕН. **Формально приёмка не пройдена
+  по wire-compile; тег НЕ ставится.**
+- **SHA-256 артефактов (trainer_state.json):** voxel scale_mlp `a6d1edcd…`,
+  in_projector `df60b4d9…`, canvas `a774719d…`, out_projector `786d2daa…`;
+  wire scale_mlp `0013f988…`, in_projector `bce15cfd…`, canvas `b2aff5aa…`,
+  out_projector `c159617c…`.
+- **Веса:** активные `checkpoints/{voxel,wire}` = v14. Эталонные v9 — в
+  `~/omnicraft/v9_backup/{voxel_v9,wire_v9}` и `checkpoints/voxel_v9_keep`.
+- **Eval-файлы:** `eval_voxel_v14.jsonl`, `eval_wire_v14.jsonl`; свежие базы
+  `eval_voxel_v9_current.jsonl`, `eval_wire_v9_current.jsonl`.
+
 ### v13 — 2026-10-04 11:56 → 14:33 (корпус, очищенный от кандидатов ре-аудита; приёмка НЕ пройдена, compile-регресс)
 - **Цель:** чистая проверка «помогает ли *только* удаление кандидатов ре-аудита»: тот же
   рецепт, что v12, но `--specs-noise 0 --specs-degrade 0` (E3-шум выключен).
