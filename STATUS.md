@@ -18,10 +18,12 @@
 - **Репак OSS-scad в кандидатов: `tools/repak_scad_scrape.py` (2026-10-04, без-GPU сессия).**
   Сырой скрейп `optional_data/raw_datasets/github_scad_top70` (2 123 scad, манифест+лицензии) →
   JSONL-кандидаты схемы с машинными промптами из Customizer/заголовков; гейты: заголовок
-  `$fn = 32;`, геометрия, top-level call (импорт стража валидатора), дедуп против корпуса.
+  `$fn = 32;`, геометрия, top-level call (импорт стража валидатора), «учимся без
+  BOSL2» (external use/include — отсев, `--allow-external-libs`), дедуп против корпуса;
+  промпты без описаний синтезируются из кода (grade=synth_code).
   Без OpenSCAD пишет provisional `target_bbox` (принят валидатором не будет — защита от
   ложного GT); на машине владельца: `--measure auto` измеряет штатным runner'ом, дальше
-  `omni validate` → `build_corpus_v9.py --add`. Тесты `tests/test_repak_scad_scrape.py` (4/4).
+  `omni validate` → `build_corpus_v9.py --add`. Тесты `tests/test_repak_scad_scrape.py` (6/6).
 - **E2/E3 (2026-10-04): чистая база voxel снята, запущен v12 (E3-аугментация [SPECS]).**
   - **E0** `omni preflight --with-tests` — зелёный, **93 passed**.
   - **E1** `specs_probe_v2`: минер даёт корректные блоки (`flange_mined` → `flanges / [96,96,10] /

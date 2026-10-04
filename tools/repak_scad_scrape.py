@@ -16,6 +16,12 @@ target_bbox:
     `metadata.provisional_target=true`; такие строки заведомо НЕ пройдут
     bbox-проверку валидатора и не попадут в accepted (защита от ложного GT).
 
+Политика «учимся без BOSL2»: файлы с `use</include <` отсеиваются как
+`external_lib` (флаг `--allow-external-libs` отключает фильтр); файлы без
+Customizer/описания получают синтезированный из кода промпт
+(`metadata.prompt_grade=synth_code`) — только литеральные имена параметров
+и счётчики примитивов, никакой выдуманной семантики.
+
 Выход пригоден для: `python tools/omni.py validate --input <файл>` (нужен
 OpenSCAD), после чего `<файл>.validation.accepted.jsonl` подключается к
 корпусу `tools/build_corpus_v9.py --add` (имя обязано кончаться на
@@ -77,13 +83,14 @@ def normalize_code(text: str) -> str | None:
     return decoded
 
 
-def parse_customizer(text: str) -> dict[str, str]:
+def parse_customizer(text: str, require_block: bool = True) -> dict[str, str]:
     """Имена параметров и их комментарии из Customizer-подобных объявлений.
 
     Возвращает {name: описание или ''}; останавливается на первом теле
-    модуля/цикла, чтобы не ловать локальные переменные.
+    модуля/цикла, чтобы не ловать локальные переменные. `require_block=False`
+    снимает требование заголовка `/* [` — для синтезированного промпта.
     """
-    if "/* [" not in text and "/*[" not in text:
+    if require_block and "/* [" not in text and "/*[" not in text:
         return {}
     params: dict[str, str] = {}
     for line in text.splitlines():
@@ -107,9 +114,45 @@ def extract_title(text: str) -> str:
     return ""
 
 
-def build_prompt(stem: str, title: str, params: dict[str, str]) -> tuple[str, str]:
+_COMMENT_LINE = re.compile(r"//[^\n]*")
+_COMMENT_BLOCK = re.compile(r"/\*.*?\*/", re.S)
+_PRIM3D = ("cube", "sphere", "cylinder", "polyhedron", "linear_extrude", "rotate_extrude", "surface")
+_BOOL_OPS = ("difference", "union", "intersection", "hull", "minkowski")
+_MODULE_DEF = re.compile(r"^\s*module\s+([A-Za-z_]\w*)", re.M)
+
+
+def synth_prompt(stem: str, code: str) -> str:
+    """Машинное описание из самого кода: имя модуля/файла, параметры, композиция.
+
+    Никакой выдуманной семантики — только то, что буквально стоит в исходнике;
+    корректность геометрии/габарита после этого всё равно проверяет валидатор.
+    """
+    body = _COMMENT_BLOCK.sub(" ", _COMMENT_LINE.sub(" ", code))
+    modules = _MODULE_DEF.findall(body)
+    title = (modules[0] if modules else stem).replace("_", " ").replace("-", " ").strip()
+    if not title:
+        title = "OpenSCAD model"
+    bits: list[str] = []
+    params = parse_customizer(code, require_block=False)
+    named = [f"{name}={value.strip()}" for name, value in list(params.items())[:6]]
+    if named:
+        bits.append("parameters: " + ", ".join(named))
+    prim = {name: len(re.findall(rf"\b{name}\s*\(", body)) for name in _PRIM3D}
+    prim = {name: count for name, count in prim.items() if count}
+    if prim:
+        order = sorted(prim.items(), key=lambda kv: (-kv[1], kv[0]))[:3]
+        bits.append("built from " + ", ".join(f"{count}x {name}" for name, count in order))
+    bools = [op for op in _BOOL_OPS if re.search(rf"\b{op}\s*\(", body)]
+    if bools:
+        bits.append("combined with " + " and ".join(bools))
+    return f"{title}: " + "; ".join(bits) if bits else f"{title} (OpenSCAD model)"
+
+
+def build_prompt(stem: str, title: str, params: dict[str, str], code: str,
+                 allow_synth: bool) -> tuple[str, str]:
     """(текст промпта, оценка качества). Без кастомизатора и комментария —
-    машинный промпт по имени файла, grade='filename_only' (по умолчанию отсев)."""
+    синтез из кода (grade='synth_code'); при --no-synth-prompt такие файлы
+    отсеиваются (grade='filename_only')."""
     pretty = stem.replace("_", " ").replace("-", " ").strip()
     if params:
         bits = [f"{name} ({desc})" if desc else name for name, desc in list(params.items())[:6]]
@@ -117,6 +160,8 @@ def build_prompt(stem: str, title: str, params: dict[str, str]) -> tuple[str, st
         return f"{lead}, parameters: {', '.join(bits)}", "customizer"
     if title:
         return f"{title} (OpenSCAD model, {pretty})", "title_comment"
+    if allow_synth:
+        return synth_prompt(stem, code), "synth_code"
     return "", "filename_only"
 
 
@@ -171,12 +216,16 @@ def process_file(path: Path, base_dir: Path, args, runner, corpus_hashes: set[st
     digest = hashlib.sha256(code.encode("utf-8")).hexdigest()
     if digest in corpus_hashes:
         return "skip", None, "duplicate_of_corpus"
+    libs = sorted({m.split("/")[-1] for m in _LIB_USE.findall(code)})
+    if libs and not args.allow_external_libs:
+        # «учимся без BOSL2»: файл, не компилируемый standalone, не кандидат
+        return "skip", None, "external_lib"
     rel = path.relative_to(base_dir).as_posix()
     repo = rel.split("/", 1)[0].replace("__", "/", 1) if "/" in rel else "?"
     title = extract_title(code)
     params = parse_customizer(code)
-    prompt, grade = build_prompt(path.stem, title, params)
-    if grade == "filename_only" and not args.allow_filename_prompt:
+    prompt, grade = build_prompt(path.stem, title, params, code, allow_synth=not args.no_synth_prompt)
+    if grade == "filename_only":
         return "skip", None, "no_description"
     if not re.search(r"\b(cube|sphere|cylinder|polyhedron|linear_extrude|rotate_extrude|import|surface)\b", code):
         return "skip", None, "no_geometry_op"
@@ -215,7 +264,7 @@ def process_file(path: Path, base_dir: Path, args, runner, corpus_hashes: set[st
             "license": args.licenses.get(rel, "?"),
             "prompt_grade": grade,
             "customizer_params": len(params),
-            "needs_libs": sorted({m.split("/")[-1] for m in _LIB_USE.findall(code)}),
+            "needs_libs": libs,
             "provisional_target": provisional,
             "target_source": "placeholder" if provisional else "openscad_measured",
             "code_sha256": digest,
@@ -239,8 +288,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--min-code-chars", type=int, default=80)
     parser.add_argument("--measure", choices=("auto", "on", "off"), default="auto")
     parser.add_argument("--workers", type=int, default=4)
-    parser.add_argument("--allow-filename-prompt", action="store_true",
-                        help="разрешить промпты только из имени файла (grade=filename_only)")
+    parser.add_argument("--allow-external-libs", action="store_true",
+                        help="не отсеивать файлы с use/include (по умолчанию «учимся без BOSL2»)")
+    parser.add_argument("--no-synth-prompt", action="store_true",
+                        help="не синтезировать промпт из кода; файлы без описания тогда отсевятся")
     parser.add_argument("--overwrite", action="store_true")
     args = parser.parse_args(argv)
 
@@ -352,9 +403,10 @@ def main(argv: list[str] | None = None) -> int:
               "3. `python tools/reaudit_specs_corpus.py --input <новый combined>` — контроль"
               " промпт↔геометрия (машинные промпты могут не совпасть; тогда чинить промпт, не геометрию).",
               "",
-              "Лицензии пофайлово — в metadata каждой строки (из index.csv). Промптыgrade:"
-              f" customizer={sum(1 for r in rows if r['metadata']['prompt_grade'] == 'customizer')}, "
-              f"title={sum(1 for r in rows if r['metadata']['prompt_grade'] == 'title_comment')}.",
+              "Лицензии пофайлово — в metadata каждой строки (из index.csv). Промпты: "
+              f"customizer={sum(1 for r in rows if r['metadata']['prompt_grade'] == 'customizer')}, "
+              f"title_comment={sum(1 for r in rows if r['metadata']['prompt_grade'] == 'title_comment')}, "
+              f"synth_code={sum(1 for r in rows if r['metadata']['prompt_grade'] == 'synth_code')}.",
               ""]
     report.write_text("\n".join(lines), encoding="utf-8")
 

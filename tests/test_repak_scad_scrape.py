@@ -71,11 +71,14 @@ def test_repack_dir_mode_filters_and_stamps(tmp_path: Path) -> None:
     assert result.returncode == 0, result.stdout + result.stderr
     rows = _rows(out)
     ids = {row["id"] for row in rows}
-    assert len(rows) == 2 and len(ids) == 2, "good + title-only; dup/no-prompt/no-geom отсеяны"
+    assert len(rows) == 3 and len(ids) == 3, "good + title-only + synth; dup/no-geom/no-call отсеяны"
     assert all(row["layer"] == "voxel" for row in rows)
 
     by_grade = {row["metadata"]["prompt_grade"] for row in rows}
-    assert by_grade == {"customizer", "title_comment"}
+    assert by_grade == {"customizer", "title_comment", "synth_code"}
+    synth = next(r for r in rows if r["metadata"]["prompt_grade"] == "synth_code")
+    assert "cube" in synth["prompts"]["en"] and "anon block" in synth["prompts"]["en"]
+    assert "pad" not in synth["prompts"]["en"], "комменты-заглушки в промпт не попадают"
 
     good = next(r for r in rows if r["metadata"]["prompt_grade"] == "customizer")
     assert good["code"].startswith("$fn = 32;\n")
@@ -88,7 +91,7 @@ def test_repack_dir_mode_filters_and_stamps(tmp_path: Path) -> None:
     report = out.with_name(out.stem + ".report.md")
     assert report.is_file()
     text = report.read_text(encoding="utf-8")
-    for reason in ("duplicate_code", "no_description", "no_geometry_op", "no_top_level_call"):
+    for reason in ("duplicate_code", "no_geometry_op", "no_top_level_call"):
         assert reason in text
 
     # предупреждение о плейсхолдерах обязательно
@@ -115,6 +118,35 @@ def test_repack_tar_mode_deterministic_and_schema(tmp_path: Path) -> None:
         from src.data.schema import CADSample
         for row in _rows(out1):
             CADSample.model_validate(row)  # конвейер-parse_jsonl проглотит эти строки
+
+
+def test_repack_skips_external_libs_by_default(tmp_path: Path) -> None:
+    root = tmp_path / "scrape"
+    (root / "bosl__project").mkdir(parents=True)
+    (root / "bosl__project/with_bosl.scad").write_text(
+        "// Bracket made with BOSL2 helpers\ninclude <BOSL2/std.scad>\n"
+        "cube([20, 20, 5]);\n", encoding="utf-8")
+    out = tmp_path / "libgated.jsonl"
+    result = _run(["--in", str(root), "--out", str(out), "--measure", "off"])
+    assert result.returncode == 0
+    assert _rows(out) == []
+    text = out.with_name(out.stem + ".report.md").read_text(encoding="utf-8")
+    assert "external_lib" in text
+    out2 = tmp_path / "allowed.jsonl"
+    result = _run(["--in", str(root), "--out", str(out2), "--measure", "off",
+                   "--allow-external-libs"])
+    assert len(_rows(out2)) == 1
+    assert _rows(out2)[0]["metadata"]["needs_libs"] == ["std.scad"]
+
+
+def test_repack_no_synth_flag(tmp_path: Path) -> None:
+    root = _build_tree(tmp_path)
+    out = tmp_path / "nosynth.jsonl"
+    result = _run(["--in", str(root), "--out", str(out), "--measure", "off", "--no-synth-prompt"])
+    assert result.returncode == 0
+    assert len(_rows(out)) == 2  # good + title-only, как в строгом режиме
+    text = out.with_name(out.stem + ".report.md").read_text(encoding="utf-8")
+    assert "no_description" in text
 
 
 def test_repack_refuses_overwrite(tmp_path: Path) -> None:
