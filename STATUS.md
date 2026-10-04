@@ -17,6 +17,13 @@
   (`chain_v12.log`, 02:08). Разбор: `docs/E6A_BASELINE_DIVERGENCE.md`. Эталоном остаётся
   свежая база v9 (39/42 compile · bbox 5/42 · медиана 1.083). Побочно: v11 на
   `splits_v9_fixed` уже давал **bbox 13/42 при compile 40/42** — планка «хороших данных».
+- **Пайплайн v14 (2026-10-04, GPU-сессия): правки R1–R3 (бриф §2).**
+  R1 — seeded пер-эпохальная перестановка: `src/training/sampling.py` (`EpochShuffle`,
+  включена по умолчанию, seed 1234), встроена в `trainer.train()`; детерминизм сторожит
+  `tests/test_trainer_shuffle.py` (11 тестов, без torch). R2 — бюджет-дефолт 2000→1000
+  (`tools/train_spatial.py`, `tools/wsl_train.sh`), `SPLIT_DIR` стал обязательным
+  аргументом `wsl_train.sh`. R3 — `tools/wsl_train_chain_v14.sh` (v9-рецепт минус E3-флаги,
+  `SPLIT_DIR=splits_v14`, откат обоих слоёв, `setsid nohup`).
 - **v14-подготовка (2026-10-04, без-GPU сессия): чистка-2 политика, структура, бриф.**
   `tools/clean_corpus_v10.py` доработан по уроку E5: `--keep-origin`/`--cap-origin-frac`
   (семейства с долей кандидатов > капа спасаются целиком — threads/lbrackets больше не режем),

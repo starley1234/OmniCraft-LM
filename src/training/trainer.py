@@ -41,6 +41,7 @@ from src.training.lora import (
     freeze_module,
     set_active_adapter,
 )
+from src.training.sampling import EpochShuffle
 from src.training.spatial_stack import CANVAS_REGISTRY, SpatialStack
 
 GRID_VOXEL = 16
@@ -105,6 +106,10 @@ class TrainerConfig:
     max_vram_gb: float = 14.0  # hard ceiling; log lines flag every breach (Windows spills instead of OOM)
     save_every: int = 0  # 0 = save only at the end
     log_every: int = 1
+    # R1 (v14): seeded per-epoch permutation. v9/v10 consumed the corpus strictly
+    # sequentially, so every epoch repeated one order; shuffle=False restores that.
+    shuffle: bool = True
+    seed: int = 1234  # permutation seed; equal to the zero-point seed by default
 
     def __post_init__(self) -> None:
         validate_specs_noise(self.specs_noise, self.specs_degrade)
@@ -615,6 +620,7 @@ class SpatialTrainer:
                 "поднимите --max-tokens-per-forward или укоротите корпус"
             )
         cursor = 0
+        sampler = EpochShuffle(len(samples), seed=self.config.seed, enabled=self.config.shuffle)
         import time as _time
 
         last_log_time = _time.monotonic()
@@ -624,8 +630,7 @@ class SpatialTrainer:
             step_lm = torch.zeros((), device=self.device)
             step_aux = torch.zeros((), device=self.device)
             done_groups = 0  # сколько чанков реально дошло до backward на этом шаге
-            indices = [(cursor + offset) % len(samples) for offset in range(self.config.accumulate)]
-            cursor += self.config.accumulate
+            indices, cursor = sampler.take(cursor, self.config.accumulate)
             chunk_index_groups = self._pack_chunks(
                 [lengths[i] for i in indices],
                 self.config.max_tokens_per_forward,

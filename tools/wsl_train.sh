@@ -12,9 +12,10 @@ export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:T
 LAYER="${1:-voxel}"
 STEPS="${2:-600}"
 ACC="${3:-16}"
-BUDGET="${4:-2000}"   # token budget per forward; wire defaults to 1200 below
-SPLIT_DIR="${5:-splits_v6}"   # ВНИМАНИЕ: путь к сплиту был захардкожен на splits_v4,
-                              # из-за чего чейны v6/v7 обучались на старом корпусе.
+BUDGET="${4:-1000}"   # token budget per forward; measured ceiling for this box (wsl_budget_probe.sh)
+SPLIT_DIR="${5:?SPLIT_DIR is required as the 5th argument (v14: splits_v14). Refusing to default to a stale split.}"
+                      # ВНИМАНИЕ: путь к сплиту был захардкожен на splits_v4,
+                      # из-за чего чейны v6/v7 обучались на старом корпусе (v14: обязателен).
 LAMBDA_GEOM="${6:-}"   # опционально: вес aux-лосса (дефолт трейнера 0.1);
                        # 0 = aux выключен — для абляции живого aux (задача D, NEXT_SESSION_V9)
 SPECS_NOISE="${7:-}"   # E3: вероятность заменить [SPECS] блок на рантайм-минер того же промпта

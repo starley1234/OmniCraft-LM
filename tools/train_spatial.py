@@ -46,8 +46,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--max-tokens-per-forward",
         type=int,
-        default=2000,
-        help="token budget B*S per forward; CE logits keep ~4 copies (~4 MB per token on the 248320 vocab)",
+        default=1000,
+        help="token budget B*S per forward; CE logits keep ~4 copies (~4 MB per token on the 248320 vocab). "
+        "Measured ceiling for this box is 1000 (tools/wsl_budget_probe.sh); 1600 OOMs.",
     )
     parser.add_argument("--lr", type=float, default=2e-4)
     parser.add_argument("--warmup-steps", type=int, default=30)
