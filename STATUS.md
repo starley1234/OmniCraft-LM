@@ -24,6 +24,15 @@
   (`tools/train_spatial.py`, `tools/wsl_train.sh`), `SPLIT_DIR` стал обязательным
   аргументом `wsl_train.sh`. R3 — `tools/wsl_train_chain_v14.sh` (v9-рецепт минус E3-флаги,
   `SPLIT_DIR=splits_v14`, откат обоих слоёв, `setsid nohup`).
+- **Корпус v14 собран (2026-10-04, GPU-сессия): `combined_v14` = 79 879.**
+  Лёгкая чистка `clean_corpus_v10.py --cap-origin-frac 0.25` (удалено 1 278 из 75 157;
+  threads/lbrackets спасены целиком, 16 436 не режем). `tools/build_corpus_v14.py`:
+  +6 000 conv-пар «текст БЕЗ размеров» (1 500 прототипов × 4 формулировки, 0 цифр в
+  тексте — главный фикс §1.4); стрип-комментарии (p50 кода 1 418→745 симв.); 11 742
+  sketch/brep/assembly выведены из LM-сплита. LM-подмножество 68 137; `splits_v14` =
+  55 979 / 8 359 / 3 799 (train: voxel 48 345 / wire 7 634), 0 пересечений id,
+  20/20 проб компиляции после стрипа. Отчёты:
+  `runs/reaudit_specs/v14/{V14_DELETION_REPORT,V14_CORPUS_REPORT,clean_filter_report.md}`.
 - **v14-подготовка (2026-10-04, без-GPU сессия): чистка-2 политика, структура, бриф.**
   `tools/clean_corpus_v10.py` доработан по уроку E5: `--keep-origin`/`--cap-origin-frac`
   (семейства с долей кандидатов > капа спасаются целиком — threads/lbrackets больше не режем),
