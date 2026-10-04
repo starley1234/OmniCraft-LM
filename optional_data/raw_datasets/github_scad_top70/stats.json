@@ -1,0 +1,20 @@
+{
+ "scad_unique": 2123,
+ "customizer": 101,
+ "uses_library": 249,
+ "license_by_file": {
+  "LGPL-3.0": 700,
+  "NOASSERTION": 510,
+  "GPL-3.0": 265,
+  "MIT": 158,
+  "AGPL-3.0": 151,
+  "GPL-2.0": 146,
+  "BSD-2-Clause": 106,
+  "CC0-1.0": 44,
+  "BSD-3-Clause": 22,
+  "Apache-2.0": 13,
+  "LGPL-2.1": 6,
+  "Unlicense": 1,
+  "CC-BY-4.0": 1
+ }
+}
