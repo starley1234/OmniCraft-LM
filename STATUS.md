@@ -6,6 +6,13 @@
 **Обновлено:** 2026-10-04 · **Ветка:** `arena/01a10346-omnicraft-lm`
 
 ## Сейчас происходит
+- **v14-подготовка (2026-10-04, без-GPU сессия): чистка-2 политика, структура, бриф.**
+  `tools/clean_corpus_v10.py` доработан по уроку E5: `--keep-origin`/`--cap-origin-frac`
+  (семейства с долей кандидатов > капа спасаются целиком — threads/lbrackets больше не режем),
+  по-сплитовые дельты больше не дают ложного FAIL (informational при различии seed/ratios
+  манифестов, строгие — при равных). Тесты 6/6. Внешнее сырьё — в `optional_data/raw/`
+  (полки описаны в `optional_data/README.md`); мой `optional_data/raw_datasets` переименован.
+  План переобучения и готовый промпт исполнителю — `docs/TRAIN_BRIEF_v14.md`.
 - **E5/v13 (2026-10-04): корпус, очищенный от кандидатов ре-аудита (`splits_v10`) — приёмка НЕ пройдена.**
   - **Данных чистки на диске не было** (второй агент доставил только конвейер+тесты) → собран
     `tools/clean_corpus_v10.py`: удалено **16 436** кандидатов (lbrackets 7 476, threads 6 088, …),
@@ -27,24 +34,6 @@
 - **Страж окружения (2026-10-04):** `system_check`/preflight реально компилируют простую деталь через
   eval-раннер; нет STL → `[MISSING]` → preflight exit 3 с подсказкой про TMPDIR. Подключено в
   `tools/wsl_eval.sh` (`--openscad-only`). Тесты: `tests/test_system_check.py`.
-- **E4-удаление: чистка корпуса от «испорченных» строк автоматизирована (2026-10-04, без-GPU сессия).**
-  `tools/clean_corpus_v10.py` — конвейер строго по брифу: бэкапы (`combined_v9_fixed.backup.jsonl`,
-  `splits_v9_fixed.backup/`, sha256-сверка) → вердикт-CSV из `runs/reaudit_specs/candidates.csv`
-  (все id=`bad`, дедуп) → `filter_corpus_by_verdict.py` → `combined_v10.jsonl` (исходник цел) →
-  `split_dataset.py` → `splits_v10` → проверки (0 пересечений train с кандидатами, арифметика
-  строк, дельта по сплитам) → `runs/reaudit_specs/DELETION_REPORT.md`. Прогон — на машине с
-  `data/processed/` и `runs/` (в песочнице корпусов нет); тесты `tests/test_clean_corpus_v10.py`
-  (3/3, без torch). `src/training/*`/`train_spatial.py`/`wsl_train*.sh`/held-out не тронуты;
-  чейн-v13 указывает `splits_v10` явно.
-- **Репак OSS-scad в кандидатов: `tools/repak_scad_scrape.py` (2026-10-04, без-GPU сессия).**
-  Сырой скрейп `optional_data/raw_datasets/github_scad_top70` (2 123 scad, манифест+лицензии) →
-  JSONL-кандидаты схемы с машинными промптами из Customizer/заголовков; гейты: заголовок
-  `$fn = 32;`, геометрия, top-level call (импорт стража валидатора), «учимся без
-  BOSL2» (external use/include — отсев, `--allow-external-libs`), дедуп против корпуса;
-  промпты без описаний синтезируются из кода (grade=synth_code).
-  Без OpenSCAD пишет provisional `target_bbox` (принят валидатором не будет — защита от
-  ложного GT); на машине владельца: `--measure auto` измеряет штатным runner'ом, дальше
-  `omni validate` → `build_corpus_v9.py --add`. Тесты `tests/test_repak_scad_scrape.py` (6/6).
 - **E2/E3 (2026-10-04): чистая база voxel снята, запущен v12 (E3-аугментация [SPECS]).**
   - **E0** `omni preflight --with-tests` — зелёный, **93 passed**.
   - **E1** `specs_probe_v2`: минер даёт корректные блоки (`flange_mined` → `flanges / [96,96,10] /

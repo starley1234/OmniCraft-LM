@@ -157,3 +157,80 @@ def test_rerun_without_yes_is_refused(tmp_path: Path) -> None:
     assert "бэкап" in (second.stdout + second.stderr).lower()
     # данные не испорчены повторной попыткой
     assert len(_ids(tmp_path / "combined_v10.jsonl")) == 11
+
+
+def test_family_policy_keep_and_cap(tmp_path: Path) -> None:
+    env = _setup(tmp_path)  # bad ids: 0(flanges),3(para1),7(trusses),11(flanges),14(para1)
+    keep_out = tmp_path / "keep_run"
+    keep_out.mkdir()
+    result = subprocess.run(
+        [sys.executable, str(TOOL),
+         "--candidates", str(env["candidates"]), "--corpus", str(env["corpus"]),
+         "--splits", str(env["splits"]), "--verdict", str(keep_out / "v.csv"),
+         "--out-corpus", str(keep_out / "c.jsonl"), "--new-splits", str(keep_out / "s"),
+         "--report", str(keep_out / "R.md"), "--seed", "7",
+         "--train-ratio", "1.0", "--validation-ratio", "0.0", "--test-ratio", "0.0",
+         "--keep-origin", "flanges"],
+        capture_output=True, text=True, encoding="utf-8", errors="replace", cwd=REPO)
+    assert result.returncode == 0, result.stdout + result.stderr
+    report = (keep_out / "R.md").read_text(encoding="utf-8")
+    assert "удалено строк: **3**" in report and "спасено строк 2" in report
+
+
+def test_family_cap_saves_dominant(tmp_path: Path) -> None:
+    rows = [_row(i) for i in range(16)]
+    corpus = tmp_path / "combined_v9_fixed.jsonl"
+    _write_jsonl(corpus, rows)
+    old_splits = tmp_path / "splits_v9_fixed"
+    subprocess.run(
+        [sys.executable, str(SPLITTER), "--input", str(corpus), "--output-dir", str(old_splits),
+         "--seed", "7", "--train-ratio", "1.0", "--validation-ratio", "0.0", "--test-ratio", "0.0"],
+        check=True, capture_output=True, text=True, encoding="utf-8", cwd=REPO)
+    # para1: 5 из 6 строк bad → доля 0.83 > 0.5, семейство спасается целиком
+    with (tmp_path / "candidates.csv").open("w", encoding="utf-8", newline="") as stream:
+        stream.write("id,origin,style,stated_bbox,target_bbox,rel_err\n")
+        para = [r for r in rows if r["metadata"]["origin"] == "para1"][:5]
+        for row in para:
+            stream.write(f"{row['id']},para1,en,\"[1, 1, 1]\",\"[9, 9, 9]\",5.5\n")
+        stream.write(f"{rows[0]['id']},flanges,en,\"[1, 1, 1]\",\"[9, 9, 9]\",5.5\n")
+    out_dir = tmp_path / "cap_run"
+    out_dir.mkdir()
+    result = subprocess.run(
+        [sys.executable, str(TOOL),
+         "--candidates", str(tmp_path / "candidates.csv"), "--corpus", str(corpus),
+         "--splits", str(old_splits), "--verdict", str(out_dir / "v.csv"),
+         "--out-corpus", str(out_dir / "c.jsonl"), "--new-splits", str(out_dir / "s"),
+         "--report", str(out_dir / "R.md"), "--seed", "7",
+         "--train-ratio", "1.0", "--validation-ratio", "0.0", "--test-ratio", "0.0",
+         "--cap-origin-frac", "0.5"],
+        capture_output=True, text=True, encoding="utf-8", errors="replace", cwd=REPO)
+    assert result.returncode == 0, result.stdout + result.stderr
+    report = (out_dir / "R.md").read_text(encoding="utf-8")
+    assert "удалено строк: **1**" in report and "para1" in report and "спасено строк 5" in report
+    assert len(_ids(out_dir / "c.jsonl")) == 15
+
+
+def test_split_delta_informational_on_seed_mismatch(tmp_path: Path) -> None:
+    rows = [_row(i) for i in range(16)]
+    corpus = tmp_path / "combined_v9_fixed.jsonl"
+    _write_jsonl(corpus, rows)
+    old_splits = tmp_path / "splits_v9_fixed"
+    subprocess.run(
+        [sys.executable, str(SPLITTER), "--input", str(corpus), "--output-dir", str(old_splits),
+         "--seed", "9", "--train-ratio", "1.0", "--validation-ratio", "0.0", "--test-ratio", "0.0"],
+        check=True, capture_output=True, text=True, encoding="utf-8", cwd=REPO)
+    with (tmp_path / "candidates.csv").open("w", encoding="utf-8", newline="") as stream:
+        stream.write("id,origin,style,stated_bbox,target_bbox,rel_err\n")
+        for row in (rows[1], rows[5]):
+            stream.write(f"{row['id']},para1,en,\"[1, 1, 1]\",\"[10, 10, 10]\",9.9\n")
+    result = subprocess.run(
+        [sys.executable, str(TOOL),
+         "--candidates", str(tmp_path / "candidates.csv"), "--corpus", str(corpus),
+         "--splits", str(old_splits), "--verdict", str(tmp_path / "v.csv"),
+         "--out-corpus", str(tmp_path / "new.jsonl"), "--new-splits", str(tmp_path / "splits_v10"),
+         "--report", str(tmp_path / "R.md"), "--seed", "7",
+         "--train-ratio", "1.0", "--validation-ratio", "0.0", "--test-ratio", "0.0"],
+        capture_output=True, text=True, encoding="utf-8", errors="replace", cwd=REPO)
+    assert result.returncode == 0, result.stdout + result.stderr
+    report = (tmp_path / "R.md").read_text(encoding="utf-8")
+    assert "дельта informational" in report and "- [ ]" not in report

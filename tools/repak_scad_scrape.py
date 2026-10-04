@@ -1,6 +1,6 @@
 """Репак ссыпанных с GitHub .scad в JSONL-кандидатов схемы проекта (СЫРЬЁ).
 
-Канал: `optional_data/raw_datasets/github_scad_top70/` (тарболл или
+Канал: `optional_data/raw/github_scad_top70/` (тарболл или
 распакованное дерево) → `*.scad` → нормализация (`$fn = 32;` заголовок, LF)
 → промпт из Customizer-блока/описательного комментария → дедупликации
 (nominalized sha256; опционально против учебного корпуса) → кандидат-строки
@@ -26,12 +26,12 @@ Customizer/описания получают синтезированный из
 OpenSCAD), после чего `<файл>.validation.accepted.jsonl` подключается к
 корпусу `tools/build_corpus_v9.py --add` (имя обязано кончаться на
 `.validation.accepted.jsonl` — переименуйте при нужде). Строки СЫРЫЕ:
-лицензии смешанные, промпты машинные — см. `optional_data/raw_datasets/
+лицензии смешанные, промпты машинные — см. `optional_data/raw/
 СЫРЫЕ_ДАННЫЕ.md`.
 
     python tools/repak_scad_scrape.py \
-        --in optional_data/raw_datasets/github_scad_top70/files.tar.gz \
-        --index optional_data/raw_datasets/github_scad_top70/index.csv \
+        --in optional_data/raw/github_scad_top70/files.tar.gz \
+        --index optional_data/raw/github_scad_top70/index.csv \
         --out data/processed/scad_scrape_candidates.jsonl
 """
 from __future__ import annotations
@@ -276,9 +276,9 @@ def process_file(path: Path, base_dir: Path, args, runner, corpus_hashes: set[st
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--in", dest="src", type=Path,
-                        default=REPO / "optional_data/raw_datasets/github_scad_top70/files.tar.gz")
+                        default=REPO / "optional_data/raw/github_scad_top70/files.tar.gz")
     parser.add_argument("--index", type=Path,
-                        default=REPO / "optional_data/raw_datasets/github_scad_top70/index.csv")
+                        default=REPO / "optional_data/raw/github_scad_top70/index.csv")
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--corpus-dedup", type=Path, default=None,
                         help="учебный корпус (jsonl), чей код не повторяем")

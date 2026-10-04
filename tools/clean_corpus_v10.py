@@ -63,7 +63,11 @@ def _count_lines(path: Path) -> int:
 
 
 def _iter_ids(path: Path) -> list[str]:
-    ids: list[str] = []
+    return [sample_id for sample_id, _ in _iter_id_origin(path)]
+
+
+def _iter_id_origin(path: Path) -> list[tuple[str, str]]:
+    pairs: list[tuple[str, str]] = []
     with path.open(encoding="utf-8", newline="") as stream:
         for line_number, line in enumerate(stream, start=1):
             if not line.strip():
@@ -75,8 +79,20 @@ def _iter_ids(path: Path) -> list[str]:
             sample_id = row.get("id")
             if not isinstance(sample_id, str) or not sample_id:
                 raise StepError(f"{path}:{line_number}: строка без id")
-            ids.append(sample_id)
-    return ids
+            metadata = row.get("metadata") or {}
+            origin = str(metadata.get("origin") or metadata.get("kind") or "?")
+            pairs.append((sample_id, origin))
+    return pairs
+
+
+def _split_manifest(splits_dir: Path) -> dict:
+    manifest = splits_dir / "manifest.json"
+    if not manifest.is_file():
+        return {}
+    try:
+        return json.loads(manifest.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return {}
 
 
 def _run(cmd: list[str]) -> str:
@@ -179,6 +195,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--filter-json", type=Path, default=None,
                         help="JSON-отчёт фильтра (по умолчанию <report>.filter.json)")
     parser.add_argument("--seed", type=int, default=1234, help="seed сплита (как у splits_v9_fixed)")
+    parser.add_argument("--keep-origin", default="",
+                        help="семейства (metadata.origin), чьи кандидаты НЕ удалять, через запятую")
+    parser.add_argument("--cap-origin-frac", type=float, default=0.0,
+                        help="автоспасение: доля кандидатов внутри семейства выше доли — семейство целиком сохраняется (0=выкл, рекомендовано 0.25 для v14)")
     parser.add_argument("--train-ratio", type=float, default=None, help="переопределить долю train (для тестов)")
     parser.add_argument("--validation-ratio", type=float, default=None)
     parser.add_argument("--test-ratio", type=float, default=None)
@@ -205,12 +225,35 @@ def main(argv: list[str] | None = None) -> int:
     if not candidates:
         print("[ABORT] candidates.csv пуст — удалять нечего", file=sys.stderr)
         return 2
-    candidate_ids = [row["id"] for row in candidates]
-    corpus_ids = _iter_ids(args.corpus)
+    corpus_pairs = _iter_id_origin(args.corpus)
+    corpus_ids = [sample_id for sample_id, _ in corpus_pairs]
     corpus_id_set = set(corpus_ids)
     if len(corpus_ids) != len(corpus_id_set):
         print(f"[ABORT] в корпусе {len(corpus_ids)} строк, но id всего {len(corpus_id_set)} — дубликаты id",
               file=sys.stderr)
+        return 2
+
+    # --- политика сохранения семейств (E6-b: 22% удаление сломало compile) ---
+    id_origin = dict(corpus_pairs)
+    corpus_origin_counts = Counter(origin for _, origin in corpus_pairs)
+    keep_origins = {item.strip() for item in args.keep_origin.split(",") if item.strip()}
+    bad_by_origin = Counter(id_origin[row["id"]] for row in candidates if row["id"] in corpus_id_set)
+    drop_origins = set(keep_origins)
+    capped: list[tuple[str, int, int]] = []
+    if args.cap_origin_frac > 0:
+        for origin, count in bad_by_origin.items():
+            total = corpus_origin_counts.get(origin, 0)
+            if total and count / total > args.cap_origin_frac:
+                drop_origins.add(origin)
+                capped.append((origin, count, total))
+    saved = 0
+    if drop_origins:
+        before = len(candidates)
+        candidates = [row for row in candidates if id_origin.get(row["id"], "?") not in drop_origins]
+        saved = before - len(candidates)
+    candidate_ids = [row["id"] for row in candidates]
+    if not candidate_ids:
+        print("[ABORT] после политики сохранения не осталось ни одного bad-кандидата", file=sys.stderr)
         return 2
     known = [sample_id for sample_id in candidate_ids if sample_id in corpus_id_set]
     unknown = len(candidate_ids) - len(known)
@@ -301,17 +344,37 @@ def main(argv: list[str] | None = None) -> int:
     delta = old_counts["total"] - len(new_ids)
     checks.append(("шаг 5: строк ровно на удалённое число меньше", delta == removed,
                    f"{old_counts['total']} → {len(new_ids)} (Δ={delta}, removed={removed})"))
+    # Per-split дельта строгая только при совпадении параметров сплита (иначе
+    # групповой хэш перетасовывает группы между партитсиями — ложный FAIL, E5).
+    def _split_key(manifest: dict) -> tuple:
+        return (manifest.get("seed"), manifest.get("group_by"), manifest.get("bucket_size_mm"),
+                tuple(sorted((manifest.get("ratios") or {}).items())))
+    old_manifest, new_manifest = _split_manifest(args.splits), _split_manifest(args.new_splits)
+    strict_splits = bool(old_manifest) and bool(new_manifest) and _split_key(old_manifest) == _split_key(new_manifest)
     for name in ("train", "validation", "test"):
         gone = len([sample_id for sample_id in split_id_sets[name] if sample_id in candidate_id_set])
         new_count = len(new_split_sets[name])
         old_count = old_counts[name]
-        checks.append((f"шаг 5: {name}: −{gone} кандидатов, без потерь лишнего",
-                       new_count == old_count - gone, f"{old_count} → {new_count} (ожидалось −{gone})"))
+        exact = new_count == old_count - gone
+        if strict_splits:
+            checks.append((f"шаг 5: {name}: −{gone} кандидатов, без потерь лишнего", exact,
+                           f"{old_count} → {new_count} (ожидалось −{gone})"))
+        else:
+            checks.append((f"шаг 5: {name}: дельта informational (параметры сплитов различаются)", True,
+                           f"{old_count} → {new_count}, кандидатов из старого {name}: {gone}; "
+                           f"строгая сверка включится при равных seed/ratios/group_by"))
     split_total = sum(len(value) for value in new_split_sets.values())
     checks.append(("шаг 5: train+val+test == весь новый корпус", split_total == len(new_ids),
                    f"{split_total} vs {len(new_ids)}"))
 
     # --- отчёт
+    kept_by_cap = {origin for origin, _, _ in capped}
+    keep_note = (f"; keep-список: {', '.join(sorted(drop_origins - kept_by_cap))}"
+                 if drop_origins - kept_by_cap else "")
+    policy_note = (
+        f"- политика сохранения: спасено строк {saved}; семейства: "
+        + ", ".join(f"{o} ({count}/{total} кандидатов)" for o, count, total in capped) + keep_note
+    ) if saved else "- политика сохранения: не применялась (все кандидаты удалены)"
     lines = [
         "# Отчёт чистки корпуса по кандидатам ре-аудита [SPECS]",
         "",
@@ -329,6 +392,7 @@ def main(argv: list[str] | None = None) -> int:
         "",
         f"- удалено строк: **{removed}** (кандидатов в csv: {len(candidate_ids)} unique; "
         f"вне корпуса не найдено: {unknown})",
+        policy_note,
         f"- вердикт-файл: `{args.verdict}` (все кандидаты помечены `bad`, дедуп по id)",
         f"- новый корпус: `{args.out_corpus}` · новый сплит: `{args.new_splits}`",
         f"- бэкапы: `{backup_corpus}` · `{backup_splits}/`",
