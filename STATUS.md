@@ -6,6 +6,15 @@
 **Обновлено:** 2026-10-04 · **Ветка:** `arena/01a10346-omnicraft-lm`
 
 ## Сейчас происходит
+- **E4-удаление: чистка корпуса от «испорченных» строк автоматизирована (2026-10-04, без-GPU сессия).**
+  `tools/clean_corpus_v10.py` — конвейер строго по брифу: бэкапы (`combined_v9_fixed.backup.jsonl`,
+  `splits_v9_fixed.backup/`, sha256-сверка) → вердикт-CSV из `runs/reaudit_specs/candidates.csv`
+  (все id=`bad`, дедуп) → `filter_corpus_by_verdict.py` → `combined_v10.jsonl` (исходник цел) →
+  `split_dataset.py` → `splits_v10` → проверки (0 пересечений train с кандидатами, арифметика
+  строк, дельта по сплитам) → `runs/reaudit_specs/DELETION_REPORT.md`. Прогон — на машине с
+  `data/processed/` и `runs/` (в песочнице корпусов нет); тесты `tests/test_clean_corpus_v10.py`
+  (3/3, без torch). `src/training/*`/`train_spatial.py`/`wsl_train*.sh`/held-out не тронуты;
+  чейн-v13 указывает `splits_v10` явно.
 - **E2/E3 (2026-10-04): чистая база voxel снята, запущен v12 (E3-аугментация [SPECS]).**
   - **E0** `omni preflight --with-tests` — зелёный, **93 passed**.
   - **E1** `specs_probe_v2`: минер даёт корректные блоки (`flange_mined` → `flanges / [96,96,10] /

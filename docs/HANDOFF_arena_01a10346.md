@@ -30,6 +30,27 @@ python tools/reaudit_specs_corpus.py --input data/processed/combined_v9_fixed.js
 ```
 Если E1/E2 не дотянули — не «допиливать минер под промпт», а идти в E3 (это поведение модели).
 
+## E4-удаление: чистка корпуса по кандидатам (готово с 2026-10-04)
+
+Одним шагом на машине с данными (`runs/reaudit_specs/candidates.csv` обязателен):
+
+```powershell
+python tools/clean_corpus_v10.py --dry-run   # посмотреть объём и семейства
+python tools/clean_corpus_v10.py             # бэкапы → вердикты → фильтр → splits_v10 → проверки
+```
+
+Что делает (строго по брифу): 1) бэкап `combined_v9_fixed.jsonl` →
+`combined_v9_fixed.backup.jsonl` и `splits_v9_fixed/` → `splits_v9_fixed.backup/`
+(sha256-сверка); 2) вердикт-CSV `data/processed/verdicts_reaudit_v10.csv` (все id
+=`bad`, дедуп по id); 3) `tools/filter_corpus_by_verdict.py` → `combined_v10.jsonl`
+(исходник не перезаписывается); 4) `tools/split_dataset.py` (seed 1234,
+kind-and-dimension) → `splits_v10`; 5) проверки (0 пересечений train с кандидатами,
+арифметика строк, дельта train/val/test по группам) и
+`runs/reaudit_specs/DELETION_REPORT.md`. Повторный запуск без `--yes` отказывается
+перетирать бэкапы. `src/training/*`, `train_spatial.py`, `wsl_train*.sh`, held-out —
+не тронуты; чейн v13 запускает владелец, указав `splits_v10` явно. Тест:
+`tests/test_clean_corpus_v10.py` (3 теста, без torch).
+
 ## Очередь задач, которые я (агент без GPU) готов взять сразу
 1. **E3-патч как код-ревью-подсказка** (внедряет владелец): augmentation в
    `trainer.build_sequence` — ~60% блок истинный, ~30% `extract_specs_from_text(тот же
