@@ -131,3 +131,25 @@ AGENTS.md → STATUS.md → docs/TRAIN_BRIEF_v14.md (это бриф, выпол
 Если что-то из шагов 1–3 упирается (данные не сходятся, приёмка корпуса невозможна) —
 остановись и напиши отчёт, не импровизируй с удалениями.
 ```
+
+---
+
+## 7. Надбавка v15 (2026-10-05, arena-01a10346) — по итогу отчёта v14
+
+Приёмка v14 провалена только по wire-compile (16/42, планка 30 была моим
+завышением — реалистичная планка: **≥24/42** и не хуже базы 18). Всё, что нужно
+для v15, уже в репозитории:
+
+1. **Wire-сырьё.** `tools/gen_wire_families.py --count 4000 --seed 2026 --out
+   data/processed/wire_families_candidates.jsonl` → `omni validate` (OpenSCAD,
+   обычный путь `.accepted.jsonl`) → добавить accepted-строки в corpus-build v15
+   рядом с v14-рецептом. Families: pratt/warren/space_frame/tower/cable_stayed/gantry.
+2. **Conv-метрика.** Оценить обе базы на `optional_data/data/heldout_conv_gt.jsonl`
+   (12 строк; 4 безразмерные wire — масштаб только из oracle [SPECS]).
+   Предложить планку: compile ≥10/12 и bbox≤15% ≥6/12 (безразмерные — ≥2 из 4).
+3. **Гигиена чекпойнта.** Перед любой цепочкой с откатом: `python
+   tools/snapshot_checkpoint.py --layers voxel,wire --tag pre_v15` (отказ
+   перезаписи; sha256-манифест рядом с весами).
+
+Порядок: snapshot → corpus-build+validate → train (оба слоя, бюджет 1000) →
+eval на heldout_eval.jsonl + heldout_conv_gt.jsonl → приёмочная таблица.
