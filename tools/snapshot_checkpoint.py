@@ -75,7 +75,7 @@ def main(argv: list[str] | None = None) -> int:
         else:
             total = sum(f["bytes"] for f in manifest["files"])
             print(f"[snapshot] {layer}: {len(manifest['files'])} files, {total/1e6:.1f} MB "
-                  f"→ checkpoints/_pre_{args.tag}/{layer} (+SNAPSHOT.json)")
+                  f"-> checkpoints/_pre_{args.tag}/{layer} (+SNAPSHOT.json)")
     return 0
 
 

@@ -28,6 +28,34 @@
 
 ## Записи
 
+### v15 — 2026-10-06 (корпус v15: +6 wire-семейств; **wire-приёмка пройдена впервые**)
+- **Цель:** закрыть единственную непройденную планку v14 — `wire compile 16/42`
+  (задача [A] «новые wire-генераторы»).
+- **Данные:** `tools/gen_wire_families.py --count 12000 --seed 15000` → валидация
+  настоящим OpenSCAD: **11 980/12 000 accepted (99.8 %)**; шесть семейств ровно по ~2 000
+  (pratt, warren, space_frame, tower, cable_stayed, gantry). Корпус
+  `combined_v15_lm.jsonl` = 68 137 (LM-подмножество v14) + 11 980 = **80 117**
+  (voxel 59 283 / wire 20 834), сплит `splits_v15` (seed 1234, kind-and-dimension,
+  train 65 932). Отчёт: `runs/corpus_v15/V15_CORPUS_REPORT.md`.
+- **Правка кода:** `src/data/validation.py` — провенанс аналитических меток теперь
+  по источнику (`_ANALYTIC_SOURCES`), `wire_families_gen` зарегистрирован; без этого
+  все 12 000 строк падали в reject с «unsupported generator/version».
+- **Рецепт:** wire-only, с нуля от zero point (voxel-веса v14 не тронуты),
+  2600×16@1000, lr 2e-4, R1-shuffle. Чейн `tools/wsl_train_chain_v15.sh`,
+  обёртка на всю ночь — `tools/wsl_night_v15.sh`.
+- **Прогон A (`chain_v15.log`):** упал на шаге 1680/2600 с транзиентным
+  `CUDA error: unknown error` в backward; чекпойнт шага **1600** цел.
+  Eval: **compile 34/42 (81 %)**, watertight 33/42, bbox ≤15 % 4/42, медиана 0.818.
+- **Прогон B (`chain_v15b.log`, полные 2600 шагов, rc=0):** **compile 29/42 (69 %)**,
+  watertight 27/42, bbox ≤15 % 7/42, медиана 0.840 — переобучение: синтаксис хуже,
+  габарит чуть лучше.
+- **Итог:** активными оставлены веса прогона A (**step 1600**), снапшот —
+  `checkpoints/_pre_v15_s1600/wire`. **Приёмка wire (compile ≥30/42) пройдена впервые**
+  (v14: 16/42, свежая база v9: 18/42). Габарит не улучшился (4/42 против 6/42 у v14,
+  медиана та же) — это задача [B] scale-инъекции, не компиляции.
+- **Артефакты:** `data/processed/eval_wire_v15.jsonl` (= step1600),
+  `eval_wire_v15b_step2600.jsonl`, логи `runs/night_v15.log`, `runs/train_v15*/`.
+
 ### v14 — 2026-10-04 20:02 → 2026-10-05 01:11 (корпус v14: лёгкая чистка + dim-free conv-пары; voxel-приёмка пройдена, wire-compile — нет)
 - **Цель:** честный прогон «с нуля» на «хороших данных» (бриф `docs/TRAIN_BRIEF_v14.md`
   §1–§4): лёгкая чистка вместо −22 %, conv-пары «текст без размеров», sketch вне обучения,

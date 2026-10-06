@@ -477,19 +477,26 @@ class DatasetValidator:
         return {"actual_bbox": bbox, "bbox_relative_error": error}, errors, warnings
 
     _SUPPORTED_GENERATOR_VERSIONS: dict[str, tuple[int, ...]] = {
-        "voxel": (1,),
-        "wire": (1, 2),
+        "voxel_csg_gen": (1,),
+        "wire_truss_gen": (1, 2),
+        "wire_families_gen": (1,),
+    }
+
+    # layer -> generator sources whose analytic descriptors we can re-derive
+    _ANALYTIC_SOURCES: dict[str, tuple[str, ...]] = {
+        "voxel": ("voxel_csg_gen",),
+        "wire": ("wire_truss_gen", "wire_families_gen"),
     }
 
     @classmethod
     def _verify_generator_provenance(cls, sample: CADSample, descriptor: dict[str, Any]) -> str | None:
         """Recreate generated source by seed/index before trusting analytic labels."""
-        source_by_layer = {"voxel": "voxel_csg_gen", "wire": "wire_truss_gen"}
-        expected_source = source_by_layer.get(sample.layer)
-        if expected_source is None:
+        allowed_sources = cls._ANALYTIC_SOURCES.get(sample.layer)
+        if not allowed_sources:
             return f"analytic descriptors are not implemented for layer {sample.layer!r}"
-        supported_versions = cls._SUPPORTED_GENERATOR_VERSIONS.get(sample.layer, ())
-        if sample.metadata.get("source") != expected_source or sample.metadata.get(
+        source = sample.metadata.get("source")
+        supported_versions = cls._SUPPORTED_GENERATOR_VERSIONS.get(str(source), ())
+        if source not in allowed_sources or sample.metadata.get(
             "generator_version"
         ) not in supported_versions:
             return "analytic metrics require provenance from a supported generator/version"
@@ -504,6 +511,10 @@ class DatasetValidator:
                 from src.data.generators.voxel_csg_gen import VoxelCSGGenerator
 
                 regenerated = VoxelCSGGenerator(seed).generate(index)
+            elif source == "wire_families_gen":
+                from src.data.generators.wire_families_gen import WireFamiliesGenerator
+
+                regenerated = WireFamiliesGenerator(seed).generate(index)
             else:
                 from src.data.generators.wire_truss_gen import WireTrussGenerator
 

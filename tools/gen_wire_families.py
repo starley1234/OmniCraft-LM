@@ -46,7 +46,7 @@ def main(argv: list[str] | None = None) -> int:
         key = str(sample.metadata.get("kind", "?"))
         per_family[key] = per_family.get(key, 0) + 1
     summary = ", ".join(f"{k}: {v}" for k, v in sorted(per_family.items()))
-    print(f"[wire-fam] wrote {len(samples)} candidates → {args.out} ({summary})")
+    print(f"[wire-fam] wrote {len(samples)} candidates -> {args.out} ({summary})")
     print("[wire-fam] candidates only: run tools/omni.py validate --input <file> --out <clean> on a box with OpenSCAD")
     return 0
 
