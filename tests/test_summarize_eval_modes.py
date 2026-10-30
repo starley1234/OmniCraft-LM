@@ -15,7 +15,8 @@ import summarize_eval_modes as sem  # noqa: E402
 
 def write_run(directory: Path, tag: str, mode: str, rows: list[dict]) -> Path:
     path = directory / f"{tag}_{mode}.jsonl"
-    path.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows), encoding="utf-8")
+    payload = [dict(row, specs_mode=mode) for row in rows]
+    path.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in payload), encoding="utf-8")
     return path
 
 

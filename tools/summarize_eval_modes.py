@@ -87,8 +87,13 @@ def parse_name(path: Path) -> tuple[str, str]:
 def build_report(directory: Path, tolerance: float) -> str:
     runs: dict[str, dict[str, list[dict]]] = {}
     for path in sorted(directory.glob("*.jsonl")):
+        rows = load(path)
+        # В каталоге может лежать сам eval-set (например conv_gt_wire.jsonl):
+        # результаты всегда несут specs_mode, входные строки — нет.
+        if not rows or "specs_mode" not in rows[0]:
+            continue
         tag, mode = parse_name(path)
-        runs.setdefault(tag, {})[mode] = load(path)
+        runs.setdefault(tag, {})[mode] = rows
     if not runs:
         raise SystemExit(f"no *.jsonl in {directory}")
 

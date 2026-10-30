@@ -15,6 +15,10 @@
 5. Никаких Triton / static KV cache. CUDA = bfloat16, CPU = float32.
 6. Авторитет гиперпараметров — CLI-флаги `tools/train_spatial.py`; `configs/*.yaml` — декларативная справка, код их не читает.
 7. Контракт данных `[SPECS]` — ARCHITECTURE.md §8.1 (код — `src/runtime/specs_hook.py`; история — `docs/archive/AGENTS_CoG.md`). Открывать только если задача про схему/промпты/hook.
+8. Веса — авторитет WSL. `tools/wsl_sync.sh` не синхронизирует `checkpoints/`; забирать
+   веса в Windows только `tools/wsl_pull_weights.sh` (WSL → Windows + сверка sha256).
+   Снимок чекпойнта, снятый с Windows-зеркала, может содержать старые веса — см.
+   `docs/E7A_V15_CHECKPOINT_LOSS.md`.
 
 ## Команды — всё через один вход
 `python tools/omni.py [--json] [--tail N] <команда> [аргументы]` — вывод уходит в
