@@ -33,6 +33,7 @@ import torch
 
 from src.data.validation import has_top_level_object_statement
 from src.env.openscad_runner import CADExecutableNotFound, OpenSCADRunner
+from src.runtime.eval_specs import SPECS_MODES, specs_for_row
 from src.training.trainer import SPATIAL_TOKENS, SpatialTrainer, TrainerConfig
 
 
@@ -47,6 +48,16 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--max-new-tokens", type=int, default=1024)
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--bbox-tolerance", type=float, default=0.15)
+    parser.add_argument(
+        "--specs-mode",
+        choices=SPECS_MODES,
+        default="auto",
+        help=(
+            "auto: oracle bbox when the row has expected_bbox_mm, else mined (default); "
+            "mined: always the miner's reading of the text; "
+            "none: no [SPECS] block (canvas still gets the mined bbox)"
+        ),
+    )
     parser.add_argument("--device", choices=("cuda", "cpu"), default="cuda")
     return parser
 
@@ -96,21 +107,14 @@ def main() -> int:
     trigger = SPATIAL_TOKENS[args.layer]
     report_rows: list[dict] = []
     compiled = watertight = bbox_hits = 0
-    from src.runtime.specs_hook import build_prompt_with_specs, compose_specs, extract_specs_from_text
+    from src.runtime.specs_hook import build_prompt_with_specs
 
     for index, row in enumerate(rows):
         prompt = row["prompt"]
-        mined = extract_specs_from_text(prompt, canvas_hint=args.layer)
+        specs, bbox = specs_for_row(row, layer=args.layer, mode=args.specs_mode)
         expected = row.get("expected_bbox_mm")
-        bbox = (
-            (float(expected[0]), float(expected[1]), float(expected[2]))
-            if expected and len(expected) == 3 and all(float(v) > 0 for v in expected)
-            else mined.bbox
-        )
-        specs = compose_specs(
-            object_class=mined.object_class, bbox=bbox, canvas=args.layer, topology=mined.topology
-        )
-        text = f"{build_prompt_with_specs(prompt, specs)}{trigger}\n"
+        body = build_prompt_with_specs(prompt, specs) if specs is not None else f"{prompt}\n"
+        text = f"{body}{trigger}\n"
         inputs = trainer.tokenizer(text, add_special_tokens=False, return_tensors="pt")
         input_ids = inputs["input_ids"].to(trainer.device)
         attention = inputs["attention_mask"].to(trainer.device)
@@ -136,6 +140,8 @@ def main() -> int:
         code = extract_code(continuation)
         record = {
             "id": row.get("id", f"row_{index}"),
+            "specs_mode": args.specs_mode,
+            "specs_bbox": list(bbox),
             "code_chars": len(code),
             "expected_bbox_mm": expected,
             "code": code,
@@ -175,6 +181,7 @@ def main() -> int:
         for record in report_rows:
             stream.write(json.dumps(record, ensure_ascii=False) + "\n")
     print("---")
+    print(f"specs mode:    {args.specs_mode}")
     print(f"compile rate:  {compiled}/{total} ({(compiled / total * 100) if total else 0:.0f}%)")
     print(f"watertight:    {watertight}/{total}")
     print(f"bbox within {args.bbox_tolerance:.0%}: {bbox_hits}/{total}")
