@@ -3,9 +3,16 @@
 > Обновлять при каждом изменении контура (поставка, обучение, правка пайплайна).
 > Читать первым в новой сессии. История — в git и docs/archive/.
 
-**Обновлено:** 2026-10-30 · **Ветка:** `arena/01a10346-omnicraft-lm`
+**Обновлено:** 2026-10-31 · **Ветка:** `arena/01a10346-omnicraft-lm`
 
 ## Сейчас происходит
+- **Восстановление весов v15 wire ЗАПУЩЕНО (2026-10-31 00:07, WSL, отвязанно).**
+  `tools/wsl_train_chain_v15.sh 1600 1000 splits_v15 v15r`: rollback только wire →
+  zero point (v14-веса перед откатом сняты в `checkpoints/v15r_rollback/wire`),
+  затем wire 1600×16 на `splits_v15`. Лог: `~/omnicraft/chain_v15r.log`,
+  копия уедет в `runs/train_v15r/`. Цепочка сама делает `rsync` WSL → Windows и
+  eval wire в конце (ETA ~02:00–02:30). До её окончания: не запускать pytest
+  целиком, smoke, eval, любые WSL-скрипты.
 - **E7-a (2026-10-30): веса v15 wire на диске отсутствуют — активный `checkpoints/wire`
   оказался v14.** Текущий код + текущие веса воспроизводят `eval_wire_v14.jsonl`
   побайтово по compiled-флагам (42/42, compile 16/42), а v15 давал 34/42.
@@ -14,9 +21,9 @@
   настоящий снимок v15 (`checkpoints/_pre_v15b_rollback/wire`, 20.6 МБ) существовал
   только в WSL и был удалён синком Windows→WSL (`rsync --delete`) 06.10 в 18:13.
   Разбор и доказательства: `docs/E7A_V15_CHECKPOINT_LOSS.md`. Лечение:
-  `tools/wsl_sync.sh` больше не трогает `checkpoints/`, появился
-  `tools/wsl_pull_weights.sh` (WSL → Windows + сверка sha256). **Нужен повторный
-  wire-лег на `splits_v15`, 1600 шагов (~1.5–2 ч).**
+  `tools/wsl_sync.sh` больше не трогает `checkpoints/`, появились
+  `tools/wsl_pull_weights.sh` (WSL → Windows + сверка sha256) и
+  `tools/identify_checkpoint.py` (какие это веса, с чем совпадают).
 - **Диагностика [B] (2026-10-30, на v14-весах — база для сравнения).** В eval
   добавлен явный режим блока `[SPECS]`: `--specs-mode auto|mined|none`
   (`src/runtime/eval_specs.py`), сводка — `tools/summarize_eval_modes.py`,
