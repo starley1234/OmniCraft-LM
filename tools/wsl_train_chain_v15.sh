@@ -14,7 +14,7 @@ set -uo pipefail
 export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 cd "$HOME/omnicraft/repo"
 
-W_STEP="${1:-2600}"            # wire optimizer steps (x16) — ~2.4 эпохи на корпусе v15
+W_STEP="${1:-2000}"            # wire optimizer steps (x16) — 2000 оптимально (34/42 compile, 9/28 bbox)
 W_BUDGET="${2:-1000}"
 SPLIT_DIR="${3:-splits_v15}"
 TAG="${4:-v15}"
