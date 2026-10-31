@@ -343,6 +343,9 @@
 - `python tools/omni.py help` — единая точка входа (check/status/test/gen/validate/split/train/smoke/eval/preflight).
 - Коды выхода omni: 0 ок · 2 usage · 3 preflight · 4 нет предусловий · прочие = код скрипта (лечение — RUNBOOK §7).
 - `python tools/status.py --json` — машиночитаемый снимок состояния.
+- **2026-10-31:** файловая структура почищена. Старые чейны (v6–v14), одноразовые
+  утилиты и dataset-директории — в `tools/archive/` и `optional_data/raw/`.
+  Stale-документы — в `docs/archive/session_v1/`. README обновлён под продакшен-видение.
 - **2026-09-30:** детект процессов в `status.py` честный: pgrep-братчик `[t]rain_spatial`+
   (иначе паттерн матчил собственную обёртку bash и вечно рисовал живые train_spatial/wsl_train_chain);
   добавлен ключ `evaluate_generation` (WSL-eval теперь виден в статусе).

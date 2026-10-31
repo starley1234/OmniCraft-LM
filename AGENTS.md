@@ -42,9 +42,9 @@
 ## Карта репозитория
 - `src/model/` холсты, latent_bridge, hook_manager · `src/training/` trainer, LoRA, чекпойнты, aux-лоссы
 - `src/data/` schema.py (контракт JSONL), dataset.py, generators/ · `src/env/` CAD-раннеры (mock/openscad/build123d)
-- `src/runtime/` specs_hook ([SPECS] → hook) · `src/utils/` system_check, metrics
-- `tools/` CLI (omni.py — вход; остальные — его дети) · `tests/` pytest
-- `docs/RUNBOOK.md` полная инструкция человеку · `docs/archive/` история поставок (не открывать без нужды)
+- `src/runtime/` specs_hook, eval_specs · `src/utils/` system_check, metrics
+- `tools/` CLI (omni.py — вход; остальные — его дети) · `tools/archive/` одноразовые утилиты и старые чейны
+- `tests/` pytest · `docs/` актуальные документы · `docs/archive/` истории поставок и сессий
 - `data/`, `checkpoints/`, `optional_data/`, `runs/` — **ДАННЫЕ: не читать, не glob'ить, не grep'ать целиком** (тысячи файлов = смерть контекста)
 
 ## Экономия контекста (обязательные приёмы)
