@@ -6,6 +6,12 @@
 **Обновлено:** 2026-10-31 · **Ветка:** `main` (слита `arena/01a10346-omnicraft-lm`)
 
 ## Сейчас происходит
+- **Wire 2000 шагов — обучение ЗАПУЩЕНО (2026-10-31 09:18, WSL, отвязанно).**
+  `tools/wsl_train_chain_v15.sh 2000 1000 splits_v15 v15r_2k` — wire 2000×16,
+  rollback с сохранением v15r в `checkpoints/_pre_v15r_2k_rollback/wire`.
+  Лог: `~/omnicraft/chain_v15r_2k.log`, копия в `runs/train_v15r_2k/`.
+  Цепочка сама делает rsync WSL→Windows и eval wire в конце (ETA ~11:30–12:00).
+  **До окончания: не запускать pytest целиком, smoke, eval, любые WSL-скрипты.**
 - **Ветка `arena/01a10346-omnicraft-lm` слита в `main` (2026-10-31).**
   8 коммитов (cleanup → v15 wire → E7-a → v15r → STATUS) через fast-forward.
   Arena-ветка удалена локально и на origin. Вся работа продолжается в `main`.
