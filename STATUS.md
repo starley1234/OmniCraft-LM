@@ -3,9 +3,12 @@
 > Обновлять при каждом изменении контура (поставка, обучение, правка пайплайна).
 > Читать первым в новой сессии. История — в git и docs/archive/.
 
-**Обновлено:** 2026-10-31 · **Ветка:** `arena/01a10346-omnicraft-lm`
+**Обновлено:** 2026-10-31 · **Ветка:** `main` (слита `arena/01a10346-omnicraft-lm`)
 
 ## Сейчас происходит
+- **Ветка `arena/01a10346-omnicraft-lm` слита в `main` (2026-10-31).**
+  8 коммитов (cleanup → v15 wire → E7-a → v15r → STATUS) через fast-forward.
+  Arena-ветка удалена локально и на origin. Вся работа продолжается в `main`.
 - **E7-a: веса v15 wire ВОССТАНОВЛЕНЫ (2026-10-31 02:16, WSL, rc=0).**
   `tools/wsl_train_chain_v15.sh 1600 1000 splits_v15 v15r` — wire 1600×16,
   rollback только wire (v14 сохранён в `checkpoints/v15r_rollback/wire`).
@@ -340,7 +343,7 @@
 | Сплит (на диске) | `splits_v6`: train 28 308 (voxel 17 700 / wire 9 153 / sketch 1 455) / val 2 494 / test 3 733 |
 | Сплит (факт обучения v6 и v7!) | **splits_v4: 22 358 train-строк (voxel 13 205 / wire 9 153, sketch=0)** — `wsl_train.sh` до 2026-09-30 ночи указывал на него |
 | Grid builder | сетки-GT v9: покрытие train-строк `splits_v9` **100%** (45 093/45 093, 9 140 уникальных программ), дедуп по content-hash; в `voxel_grids.jsonl` 55 986 строк |
-| Чекпойнты (в синхроне WSL↔Windows, сверка --checksum 2026-10-02) | `zero_point` (seed 1234); **voxel@2900** (lm 0.029, aux 0.279), **wire@1600** (lm 0.005, aux 0.767) |
+| Чекпойнты (в синхроне WSL↔Windows, сверка sha256) | `zero_point` (seed 1234); **voxel@2900** (lm 0.029, aux 0.279), **wire@1600** (lm 0.015, aux 0.228, v15r 2026-10-31) |
 | Железо | RTX 5060 Ti, sm_120, 15.9 GiB, bf16; OpenSCAD 2025.12.17 + manifold |
 | Тесты | **70 зелёных**, `preflight --with-tests` зелёный 2026-10-01 |
 | Eval-скорость | WSL2 ~14 с/промпт vs Windows ~60 с/промпт (WDDM); eval → `tools/wsl_eval.sh` |
