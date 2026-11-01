@@ -42,6 +42,9 @@ logger = logging.getLogger("omnicraft.specs")
 
 STOP_TOKEN = "[/SPECS]"
 DEFAULT_BBOX = (100.0, 100.0, 100.0)
+# Canvas-specific fallback when the miner finds no dimensions; median of the v15 wire corpus
+# (combined_v15_lm, 20,834 wire records, 2026-10-31) — avoids 2× Z-bias of the cubic default.
+WIRE_DEFAULT_BBOX = (163.0, 49.8, 67.8)
 DEFAULT_CANVAS = "sketch"
 CANVASES = ("voxel", "wire", "sketch", "brep", "assembly")
 
@@ -413,7 +416,11 @@ def extract_specs_from_text(text: str, *, canvas_hint: str | None = None) -> Spe
         object_class = canvas
     else:
         class_src = "keyword"
-    if bbox_src == "default":
+    if bbox_src == "default" and canvas == "wire":
+        bbox = WIRE_DEFAULT_BBOX
+        bbox_src = "wire-default"
+        logger.warning("specs scale unknown; WIRE_DEFAULT_BBOX used (provenance=bbox:wire-default)")
+    elif bbox_src == "default":
         logger.warning("specs scale unknown; DEFAULT_BBOX used (provenance=bbox:default)")
     return Specs(
         object_class=object_class,

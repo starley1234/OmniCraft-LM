@@ -6,6 +6,7 @@ from src.runtime.specs_hook import (
     CANVASES,
     DEFAULT_BBOX,
     DEFAULT_CANVAS,
+    WIRE_DEFAULT_BBOX,
     Specs,
     build_prompt_with_specs,
     compose_specs,
@@ -150,6 +151,22 @@ def test_mine_no_dimensions_stays_honest() -> None:
     assert empty.bbox == DEFAULT_BBOX and empty.canvas == DEFAULT_CANVAS
     assert empty.object_class == empty.canvas  # trainer-style fallback, in vocabulary
     assert empty.topology == "closed profile + extrude/revolve"  # canonical for the default canvas
+
+
+def test_mine_wire_default_bbox_when_no_dimensions() -> None:
+    """Wire canvas prompts without dimensions get WIRE_DEFAULT_BBOX, not the cubic default."""
+    ru = extract_specs_from_text("сделай ферма для полки на верстаке", canvas_hint="wire")
+    assert ru.bbox == WIRE_DEFAULT_BBOX
+    assert ru.canvas == "wire"
+    assert "bbox:wire-default" in ru.provenance
+    en = extract_specs_from_text("need a light truss girder for a shelf", canvas_hint="wire")
+    assert en.bbox == WIRE_DEFAULT_BBOX
+    assert "bbox:wire-default" in en.provenance
+    # Voxel still gets the cubic default
+    vox = extract_specs_from_text("сделай круглый фланец", canvas_hint="voxel")
+    assert vox.bbox == DEFAULT_BBOX
+    assert vox.bbox != WIRE_DEFAULT_BBOX
+    assert "bbox:default" in vox.provenance
 
 
 def test_mine_never_contradicts_canvas() -> None:

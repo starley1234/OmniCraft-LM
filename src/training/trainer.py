@@ -317,7 +317,7 @@ class SpatialTrainer:
 
         Ground-truth code is never touched by any branch.
         """
-        from src.runtime.specs_hook import DEFAULT_BBOX, compose_specs, extract_specs_from_text
+        from src.runtime.specs_hook import DEFAULT_BBOX, WIRE_DEFAULT_BBOX, compose_specs, extract_specs_from_text
 
         object_class = str(sample.metadata.get("origin", sample.layer))
         roll = self._specs_roll(sample)
@@ -326,9 +326,10 @@ class SpatialTrainer:
                 self.prompt_text_for(sample), canvas_hint=self.config.layer
             )
         if roll < self.config.specs_noise + self.config.specs_degrade:
+            degrade_bbox = WIRE_DEFAULT_BBOX if sample.layer == "wire" else DEFAULT_BBOX
             return compose_specs(
                 object_class=sample.layer,
-                bbox=DEFAULT_BBOX,
+                bbox=degrade_bbox,
                 canvas=self.config.layer,
                 provenance="specs-degrade",
             )

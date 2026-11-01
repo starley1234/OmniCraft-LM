@@ -18,6 +18,7 @@ W_STEP="${1:-2000}"            # wire optimizer steps (x16) — 2000 оптим�
 W_BUDGET="${2:-1000}"
 SPLIT_DIR="${3:-splits_v15}"
 TAG="${4:-v15}"
+W_DEGRADE="${5:-0}"           # specs_degrade probability — 0.10 укрепляет синтаксис (вариант C, восстановление compile)
 LOG="$HOME/omnicraft/chain_${TAG}.log"
 WIN=/mnt/c/github/OmniCraft-LM
 
@@ -42,8 +43,8 @@ python tools/snapshot_checkpoint.py --layers wire --tag "${TAG}_rollback" >>"$LO
 python tools/train_spatial.py --layer wire --rollback-only >>"$LOG" 2>&1
 echo "[$(date +%T)] rollback (wire only) to zero point done" >>"$LOG"
 
-echo "[$(date +%T)] wire: ${W_STEP}x16 on ${SPLIT_DIR}" >>"$LOG"
-bash tools/wsl_train.sh wire "$W_STEP" 16 "$W_BUDGET" "$SPLIT_DIR" >>"$LOG" 2>&1
+echo "[$(date +%T)] wire: ${W_STEP}x16 on ${SPLIT_DIR} degrade=${W_DEGRADE}" >>"$LOG"
+bash tools/wsl_train.sh wire "$W_STEP" 16 "$W_BUDGET" "$SPLIT_DIR" "" "" "$W_DEGRADE" >>"$LOG" 2>&1
 RC_WIRE=$?
 echo "[$(date +%T)] wire done rc=${RC_WIRE}" >>"$LOG"
 if [ "$RC_WIRE" -ne 0 ]; then

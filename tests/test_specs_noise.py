@@ -15,6 +15,7 @@ import pytest
 from src.data.schema import CADSample, SampleVerification
 from src.runtime.specs_hook import (
     DEFAULT_BBOX,
+    WIRE_DEFAULT_BBOX,
     _default_topology,
     build_prompt_with_specs,
     compose_specs,
@@ -167,7 +168,7 @@ def test_degrade_one_yields_valid_layer_level_block() -> None:
     assert wire_specs.object_class == "wire"
     assert wire_specs.canvas == "wire"
     assert wire_specs.topology == _default_topology("wire")
-    assert wire_specs.bbox == DEFAULT_BBOX
+    assert wire_specs.bbox == WIRE_DEFAULT_BBOX
 
 
 @pytest.mark.parametrize(
